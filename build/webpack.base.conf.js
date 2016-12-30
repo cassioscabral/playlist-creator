@@ -50,7 +50,10 @@ module.exports = {
     loaders: [
       {
         test: /\.vue$/,
-        loader: 'vue'
+        loader: 'vue',
+        loaders: {
+          sass: 'vue-style-loader!css-loader!sass?indentedSyntax'
+        }
       },
       {
         test: /\.js$/,
