@@ -36,13 +36,11 @@ export default {
   methods: {
     // artist or genre
     selectResult (item, type = 'artist') {
-      console.log(`selected ${type}`, item)
       this.$emit(`selected-${type}`, item)
     }
   },
   watch: {
     artistSearchInput () {
-      console.log('artistSearchInput', this.artistSearchInput)
       spotifyApi.searchArtists(this.artistSearchInput, {limit: 5})
       .then(data => { this.searchResult = data.artists.items })
       .catch(err => { console.log(err) })
@@ -84,4 +82,5 @@ $font-size: 1.7rem
 .input
   height: 3rem
   font-size: $font-size
+  padding: 2px 0 2px 6px
 </style>

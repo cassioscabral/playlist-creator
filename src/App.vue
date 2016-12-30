@@ -62,7 +62,7 @@
       </div>
       <!-- end of playlist-manager -->
       <div class="player">
-        Player
+        <player></player>
       </div>
     </div>
   </div>
@@ -94,6 +94,7 @@ const spotifyApi = new SpotifyApi()
 
 import Search from './components/search'
 import SongList from './components/song-list'
+import Player from './components/player'
 
 export default {
   name: 'app',
@@ -123,7 +124,6 @@ export default {
   },
   methods: {
     updateCurrentSelectedArtist (artist) {
-      console.log('updateCurrentSelectedArtist', artist)
       this.selectedArtist = artist
     },
     login () {
@@ -142,9 +142,12 @@ export default {
       window.location = url
     }
   },
+  computed: {
+  },
   components: {
     Search,
-    SongList
+    SongList,
+    Player
   }
 }
 </script>

@@ -21,6 +21,8 @@ export default {
     return {
     }
   },
+  computed: {
+  },
   components: {
     Play
   }
