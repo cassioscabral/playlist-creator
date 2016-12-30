@@ -14,14 +14,19 @@
       </div>
     </header>
     <div class="playlist-creator">
-      <div class="search-area">
-
+      <div class="search-area vertical-space">
+        <search @selected-artist="updateCurrentSelectedArtist"></search>
       </div>
-      <div class="songs">
+      <div class="songs vertical-space">
         <div class="top-songs">
 
         </div>
-        <div class="browse-albums-and-songs">
+        <div class="browse-albums-and-songs vertical-space">
+          <div class="selected-artist-info">
+            <div class="artist">
+              selectedArtist: {{selectedArtist}}
+            </div>
+          </div>
           <div class="albums">
             ALBUMS
           </div>
@@ -72,11 +77,14 @@ function generateRandomString (length) {
   return text
 }
 
+import Search from './components/search'
+
 export default {
   name: 'app',
   data () {
     return {
-      accessToken: null
+      accessToken: null,
+      selectedArtist: ''
     }
   },
   mounted () {
@@ -88,6 +96,10 @@ export default {
     }
   },
   methods: {
+    updateCurrentSelectedArtist (artist) {
+      console.log('updateCurrentSelectedArtist', artist)
+      this.selectedArtist = artist
+    },
     login () {
       const stateKey = 'spotify_auth_state'
       const clientId = '49275dd30324422b8bbba8bdea0e7b8c' // Your client id
@@ -105,6 +117,7 @@ export default {
     }
   },
   components: {
+    Search
   }
 }
 </script>
@@ -131,4 +144,10 @@ export default {
   padding: 5px 10px
   outline: none
 
+.playlist-creator
+  display: flex
+  flex-direction: column
+
+.vertical-space
+  margin: 20px 0
 </style>
