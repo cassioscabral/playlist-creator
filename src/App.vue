@@ -5,7 +5,10 @@
         <h1>Playlist Creator</h1>
       </div>
       <div class="right">
-        <button class="button login-button">
+        <button
+          v-if="!accessToken"
+          class="button login-button"
+          @click="login">
           Login
         </button>
       </div>
@@ -50,8 +53,57 @@
 </template>
 
 <script>
+function getAccessToken () {
+  if (!window.location.hash) return
+  let r = new RegExp('([^&;=]+)=?([^&;]*)', 'g')
+  return window.location.hash.match(r)[0].split('#access_token=')[1]
+}
+/**
+ * Generates a random string containing numbers and letters
+ * @param  {number} length The length of the string
+ * @return {string} The generated string
+ */
+function generateRandomString (length) {
+  let text = ''
+  let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  for (var i = 0; i < length; i++) {
+    text += possible.charAt(Math.floor(Math.random() * possible.length))
+  }
+  return text
+}
+
 export default {
   name: 'app',
+  data () {
+    return {
+      accessToken: null
+    }
+  },
+  mounted () {
+    this.accessToken = getAccessToken()
+    if (this.accessToken) {
+      // TODO fetch me
+
+      // TODO set currentUser
+    }
+  },
+  methods: {
+    login () {
+      const stateKey = 'spotify_auth_state'
+      const clientId = '49275dd30324422b8bbba8bdea0e7b8c' // Your client id
+      const redirectUri = 'http://localhost:8080/' // Your redirect uri
+      const state = generateRandomString(16)
+      window.localStorage.setItem(stateKey, state)
+      const scope = 'user-read-private user-read-email'
+      let url = 'https://accounts.spotify.com/authorize'
+      url += '?response_type=token'
+      url += '&client_id=' + encodeURIComponent(clientId)
+      url += '&scope=' + encodeURIComponent(scope)
+      url += '&redirect_uri=' + encodeURIComponent(redirectUri)
+      url += '&state=' + encodeURIComponent(state)
+      window.location = url
+    }
+  },
   components: {
   }
 }
