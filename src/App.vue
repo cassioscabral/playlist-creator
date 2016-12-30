@@ -21,26 +21,37 @@
         <div class="top-songs">
 
         </div>
-        <div class="browse-albums-and-songs vertical-space">
+        <div class="browse-albums-and-songs vertical-space column">
           <div class="selected-artist-info">
             <div class="artist">
-              selectedArtist: {{selectedArtist}}
+              {{selectedArtist.name}}
             </div>
           </div>
-          <div class="albums">
-            ALBUMS
-          </div>
-          <div class="current-album column">
-            <div class="row">
-              <div class="current-album-title">
-                Album Title
+          <div class="row">
+            <div class="top-songs column">
+              <div class="text vertical-space">
+                Top Songs
               </div>
-              <div class="icons-actions">
-                Back to grid
-              </div>
+              <song-list
+                :songs="currentSelectedArtistTopTracks">
+              </song-list>
             </div>
-            <div class="current-album-songs column">
-              Songs from current album
+            <div class="albums column">
+              ALBUMS
+            </div>
+            <!-- after select an album -->
+            <div class="current-album column">
+              <div class="row">
+                <div class="current-album-title">
+                  Album Title
+                </div>
+                <div class="icons-actions">
+                  Back to grid
+                </div>
+              </div>
+              <div class="current-album-songs column">
+                Songs from current album
+              </div>
             </div>
           </div>
         </div>
@@ -77,14 +88,29 @@ function generateRandomString (length) {
   return text
 }
 
+const SpotifyApi = require('spotify-web-api-js')
+
+const spotifyApi = new SpotifyApi()
+
 import Search from './components/search'
+import SongList from './components/song-list'
 
 export default {
   name: 'app',
   data () {
     return {
       accessToken: null,
-      selectedArtist: ''
+      selectedArtist: '',
+      currentSelectedArtistTopTracks: []
+    }
+  },
+  watch: {
+    selectedArtist () {
+      if (this.selectedArtist.id) {
+        spotifyApi.getArtistTopTracks(this.selectedArtist.id, 'BR')
+        .then(data => { this.currentSelectedArtistTopTracks = data.tracks })
+        .catch(err => { console.log(err) })
+      }
     }
   },
   mounted () {
@@ -117,7 +143,8 @@ export default {
     }
   },
   components: {
-    Search
+    Search,
+    SongList
   }
 }
 </script>
@@ -148,6 +175,22 @@ export default {
   display: flex
   flex-direction: column
 
+.albums
+  flex: 2
+
+// utils
 .vertical-space
   margin: 20px 0
+
+.column
+  display: flex
+  flex-direction: column
+  flex: 1 0 auto
+
+.row
+  display: flex
+  flex-direction: row
+
+.clickable
+  cursor: pointer
 </style>
