@@ -18,14 +18,13 @@
         <search @selected-artist="updateCurrentSelectedArtist"></search>
       </div>
       <div class="songs vertical-space">
-        <div class="top-songs">
-
-        </div>
         <div class="browse-albums-and-songs vertical-space column">
           <div class="selected-artist-info">
-            <div class="artist">
-              {{selectedArtist.name}}
-            </div>
+            <artist-info
+              :selected-artist="selectedArtist"
+              :related-artists="relatedArtists"
+              @select-artist="updateCurrentSelectedArtist">
+            </artist-info>
           </div>
           <div class="row">
             <div class="top-songs column limit-height">
@@ -89,6 +88,7 @@ import Search from './components/search'
 import SongList from './components/song-list'
 import Player from './components/player'
 import AlbumBrowser from './components/album-browser'
+import ArtistInfo from './components/artist-info'
 import {uniqBy} from 'lodash'
 
 export default {
@@ -100,7 +100,8 @@ export default {
       currentSelectedArtistTopTracks: [],
       currentSelectedArtistAlbums: [],
       currentSelectedAlbum: {},
-      currentSelectedArtistAlbumTracks: []
+      currentSelectedArtistAlbumTracks: [],
+      relatedArtists: []
     }
   },
   watch: {
@@ -125,6 +126,11 @@ export default {
         .then(data => {
           this.currentSelectedArtistAlbums = uniqBy(data.items.filter(a => a.album_type === 'album'), 'name')
         })
+        .catch(err => { console.log(err) })
+
+        // related artists
+        spotifyApi.getArtistRelatedArtists(this.selectedArtist.id, 'BR')
+        .then(data => { this.relatedArtists = data.artists })
         .catch(err => { console.log(err) })
       }
     }
@@ -166,7 +172,8 @@ export default {
     Search,
     SongList,
     Player,
-    AlbumBrowser
+    AlbumBrowser,
+    ArtistInfo
   }
 }
 </script>
@@ -181,7 +188,7 @@ export default {
   max-width: 100%
 
 .browse-albums-and-songs
-  max-height: 400px
+  min-height: 400px
   overflow: auto
 
 .playlist-creator
@@ -190,6 +197,9 @@ export default {
 
 .albums
   flex: 2
+
+.selected-artist-info
+  min-height: 300px
 
 // utils
 .vertical-space
@@ -224,4 +234,30 @@ export default {
 .limit-height
   max-height: 400px
   overflow: auto
+
+.image
+  width: 70px
+  height: 70px
+
+.media-wrapper
+  display: flex
+  width: 100%
+  max-height: 400px
+  overflow-x: scroll
+  flex-wrap: wrap
+
+.media
+  display: flex
+  align-items: center
+  font-size: 1.3rem
+  margin-bottom: 0.5rem
+  margin-right: 1.2rem
+  &:last-child
+    margin-bottom: 0
+    margin-right: 0
+  img
+    margin-right: 5px
+
+.text
+  font-size: 1.4rem
 </style>

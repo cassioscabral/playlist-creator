@@ -1,10 +1,10 @@
 <template>
-<div class="album-browser column">
+<div class="album-browser column" v-if="albums.length > 0">
     <div
       v-for="album in albums"
       class="album clickable"
       @click="selectAlbum(album)">
-      <img :src="album.images[0].url" :alt="album.name">
+      <img class="image" :src="album.images[0].url" :alt="album.name">
       {{album.name}}
     </div>
 </div>
@@ -47,8 +47,6 @@ export default {
     margin-bottom: 0
     margin-right: 0
   img
-    width: 70px
-    height: 70px
     margin-right: 5px
 
 </style>
