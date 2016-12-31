@@ -2,7 +2,8 @@
 <div class="album-browser column">
     <div
       v-for="album in albums"
-      class="album">
+      class="album clickable"
+      @click="selectAlbum(album)">
       <img :src="album.images[0].url" :alt="album.name">
       {{album.name}}
     </div>
@@ -22,7 +23,9 @@ export default {
     }
   },
   methods: {
-
+    selectAlbum (album) {
+      this.$emit('select-album', album)
+    }
   }
 }
 </script>

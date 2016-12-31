@@ -36,9 +36,16 @@
                 :songs="currentSelectedArtistTopTracks">
               </song-list>
             </div>
+            <div class="current-album-songs column" v-if="currentSelectedArtistAlbumTracks.length > 0">
+              Album: {{currentSelectedAlbum.name}}
+              <song-list
+                :songs="currentSelectedArtistAlbumTracks">
+              </song-list>
+            </div>
             <div class="albums column">
               <album-browser
-                :albums="currentSelectedArtistAlbums">
+                :albums="currentSelectedArtistAlbums"
+                @select-album="selectAlbum">
               </album-browser>
             </div>
           </div>
@@ -91,10 +98,19 @@ export default {
       accessToken: null,
       selectedArtist: {},
       currentSelectedArtistTopTracks: [],
-      currentSelectedArtistAlbums: []
+      currentSelectedArtistAlbums: [],
+      currentSelectedAlbum: {},
+      currentSelectedArtistAlbumTracks: []
     }
   },
   watch: {
+    currentSelectedAlbum () {
+      this.currentSelectedAlbum
+      // album tracks
+      spotifyApi.getAlbumTracks(this.currentSelectedAlbum.id)
+      .then(data => { this.currentSelectedArtistAlbumTracks = data.items })
+      .catch(err => { console.log(err) })
+    },
     selectedArtist () {
       if (this.selectedArtist.id) {
         // TODO change 'BR' to geolocation data
@@ -122,6 +138,9 @@ export default {
     }
   },
   methods: {
+    selectAlbum (album) {
+      this.currentSelectedAlbum = album
+    },
     updateCurrentSelectedArtist (artist) {
       this.selectedArtist = artist
     },
