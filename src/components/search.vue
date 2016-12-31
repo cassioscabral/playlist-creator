@@ -6,7 +6,12 @@
       @keyup.alt.50="selectItemWithKey"
       @keyup.alt.51="selectItemWithKey"
       @keyup.alt.52="selectItemWithKey"
-      @keyup.alt.53="selectItemWithKey">
+      @keyup.alt.53="selectItemWithKey"
+      @keyup.meta.49="selectItemWithKey"
+      @keyup.meta.50="selectItemWithKey"
+      @keyup.meta.51="selectItemWithKey"
+      @keyup.meta.52="selectItemWithKey"
+      @keyup.meta.53="selectItemWithKey">
       <!-- list results -->
       <ul class="list-results">
         <li
