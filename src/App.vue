@@ -11,6 +11,10 @@
           @click="login">
           Login
         </button>
+        <div v-else class="user-info text">
+          <img :src="currentUser.images[0].url" alt="" class="image">
+          {{currentUser.display_name || currentUser.id }}
+        </div>
       </div>
     </header>
     <div class="playlist-creator">
@@ -85,6 +89,7 @@ const SpotifyApi = require('spotify-web-api-js')
 const spotifyApi = new SpotifyApi()
 
 import {store} from './stores'
+import { mapGetters } from 'vuex'
 import Search from './components/search'
 import SongList from './components/song-list'
 import Player from './components/player'
@@ -96,7 +101,6 @@ export default {
   name: 'app',
   data () {
     return {
-      accessToken: null,
       selectedArtist: {},
       currentSelectedArtistTopTracks: [],
       currentSelectedArtistAlbums: [],
@@ -137,12 +141,13 @@ export default {
     }
   },
   mounted () {
-    this.accessToken = getAccessToken()
-    if (this.accessToken) {
-      store.dispatch('saveAccessToken', {accessToken: this.accessToken})
-      // TODO fetch me
-
-      // TODO set currentUser
+    const accessToken = getAccessToken()
+    if (accessToken) {
+      store.dispatch('saveAccessToken', {accessToken: accessToken})
+      spotifyApi.setAccessToken(accessToken)
+      spotifyApi.getMe().then((me) => {
+        store.dispatch('saveCurrentUser', {currentUser: me})
+      })
     }
   },
   methods: {
@@ -169,6 +174,10 @@ export default {
     }
   },
   computed: {
+    ...mapGetters([
+      'accessToken',
+      'currentUser'
+    ])
   },
   components: {
     Search,
@@ -202,6 +211,12 @@ export default {
 
 .selected-artist-info
   min-height: 300px
+
+.user-info
+  display: flex
+  align-items: center
+  img
+    border-radius: 50%
 
 // utils
 .vertical-space

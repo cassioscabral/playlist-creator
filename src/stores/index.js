@@ -5,20 +5,28 @@ import player from './player'
 
 export const store = new Vuex.Store({
   state: {
-    accessToken: null
+    accessToken: '',
+    currentUser: {}
+  },
+  getters: {
+    accessToken: state => state.accessToken,
+    currentUser: state => state.currentUser
   },
   actions: {
     saveAccessToken ({commit}, {accessToken}) {
       commit('ADD_ACESS_TOKEN', {accessToken})
+    },
+    saveCurrentUser ({commit}, {currentUser}) {
+      commit('ADD_CURRENT_USER', {currentUser})
     }
   },
   mutations: {
     ADD_ACESS_TOKEN (state, {accessToken}) {
       state.accessToken = accessToken
+    },
+    ADD_CURRENT_USER (state, {currentUser}) {
+      state.currentUser = currentUser
     }
-  },
-  getters: {
-
   },
   modules: {
     player
