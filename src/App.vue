@@ -37,21 +37,9 @@
               </song-list>
             </div>
             <div class="albums column">
-              ALBUMS
-            </div>
-            <!-- after select an album -->
-            <div class="current-album column">
-              <div class="row">
-                <div class="current-album-title">
-                  Album Title
-                </div>
-                <div class="icons-actions">
-                  Back to grid
-                </div>
-              </div>
-              <div class="current-album-songs column">
-                Songs from current album
-              </div>
+              <album-browser
+                :albums="currentSelectedArtistAlbums">
+              </album-browser>
             </div>
           </div>
         </div>
@@ -61,9 +49,7 @@
         Playlist manager
       </div>
       <!-- end of playlist-manager -->
-      <div class="player">
-        <player></player>
-      </div>
+      <player></player>
     </div>
   </div>
 </template>
@@ -95,21 +81,34 @@ const spotifyApi = new SpotifyApi()
 import Search from './components/search'
 import SongList from './components/song-list'
 import Player from './components/player'
+import AlbumBrowser from './components/album-browser'
+import {uniqBy} from 'lodash'
 
 export default {
   name: 'app',
   data () {
     return {
       accessToken: null,
-      selectedArtist: '',
-      currentSelectedArtistTopTracks: []
+      selectedArtist: {},
+      currentSelectedArtistTopTracks: [],
+      currentSelectedArtistAlbums: []
     }
   },
   watch: {
     selectedArtist () {
       if (this.selectedArtist.id) {
+        // TODO change 'BR' to geolocation data
+
+        // top tracks
         spotifyApi.getArtistTopTracks(this.selectedArtist.id, 'BR')
         .then(data => { this.currentSelectedArtistTopTracks = data.tracks })
+        .catch(err => { console.log(err) })
+
+        // albums
+        spotifyApi.getArtistAlbums(this.selectedArtist.id, 'BR')
+        .then(data => {
+          this.currentSelectedArtistAlbums = uniqBy(data.items.filter(a => a.album_type === 'album'), 'name')
+        })
         .catch(err => { console.log(err) })
       }
     }
@@ -147,11 +146,12 @@ export default {
   components: {
     Search,
     SongList,
-    Player
+    Player,
+    AlbumBrowser
   }
 }
 </script>
-<style lang="sass" scoped>
+<style lang="sass">
 #app
   font-family: 'Avenir', Helvetica, Arial, sans-serif
   -webkit-font-smoothing: antialiased
@@ -159,6 +159,7 @@ export default {
   color: #2c3e50
   display: flex
   flex-direction: column
+  max-width: 100%
 
 .header
   display: flex
@@ -188,7 +189,7 @@ export default {
 .column
   display: flex
   flex-direction: column
-  flex: 1 0 auto
+  flex: 1 1 auto
 
 .row
   display: flex
