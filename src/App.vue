@@ -28,7 +28,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="top-songs column">
+            <div class="top-songs column limit-height">
               <div class="text vertical-space">
                 Top Songs
               </div>
@@ -36,13 +36,13 @@
                 :songs="currentSelectedArtistTopTracks">
               </song-list>
             </div>
-            <div class="current-album-songs column" v-if="currentSelectedArtistAlbumTracks.length > 0">
+            <div class="current-album-songs column limit-height" v-if="currentSelectedArtistAlbumTracks.length > 0">
               Album: {{currentSelectedAlbum.name}}
               <song-list
                 :songs="currentSelectedArtistAlbumTracks">
               </song-list>
             </div>
-            <div class="albums column">
+            <div class="albums column limit-height">
               <album-browser
                 :albums="currentSelectedArtistAlbums"
                 @select-album="selectAlbum">
@@ -180,19 +180,9 @@ export default {
   flex-direction: column
   max-width: 100%
 
-.header
-  display: flex
-  width: 100%
-  align-items: center
-  justify-content: space-between
-
-.button
-  cursor: pointer
-  border: none
-  font-size: 1.6rem
-  border-radius: 5px
-  padding: 5px 10px
-  outline: none
+.browse-albums-and-songs
+  max-height: 400px
+  overflow: auto
 
 .playlist-creator
   display: flex
@@ -216,4 +206,22 @@ export default {
 
 .clickable
   cursor: pointer
+
+.header
+  display: flex
+  width: 100%
+  align-items: center
+  justify-content: space-between
+
+.button
+  cursor: pointer
+  border: none
+  font-size: 1.6rem
+  border-radius: 5px
+  padding: 5px 10px
+  outline: none
+
+.limit-height
+  max-height: 400px
+  overflow: auto
 </style>
