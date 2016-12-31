@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex)
 import player from './player'
+import playlist from './playlist'
 
 export const store = new Vuex.Store({
   state: {
@@ -29,7 +30,8 @@ export const store = new Vuex.Store({
     }
   },
   modules: {
-    player
+    player,
+    playlist
   }
 })
 

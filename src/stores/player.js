@@ -1,11 +1,11 @@
 export default {
   state: {
-    playlist: [],
+    playerPlaylist: [],
     currentTrack: null,
     isPlaying: false
   },
   getters: {
-    playlist: state => state.playlist,
+    playerPlaylist: state => state.playerPlaylist,
     currentTrack: state => state.currentTrack,
     isPlaying: state => state.isPlaying
   },

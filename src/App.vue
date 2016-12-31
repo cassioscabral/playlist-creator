@@ -11,7 +11,7 @@
           @click="login">
           Login
         </button>
-        <div v-else class="user-info text">
+        <div v-if="currentUser.id && currentUser.images" class="user-info text">
           <img :src="currentUser.images[0].url" alt="" class="image">
           {{currentUser.display_name || currentUser.id }}
         </div>
@@ -55,9 +55,8 @@
         </div>
       </div>
       <!-- end of current-album -->
-      <div class="playlist-manager">
-        Playlist manager
-      </div>
+      <playlist-manager>
+      </playlist-manager>
       <!-- end of playlist-manager -->
       <player></player>
     </div>
@@ -95,6 +94,7 @@ import SongList from './components/song-list'
 import Player from './components/player'
 import AlbumBrowser from './components/album-browser'
 import ArtistInfo from './components/artist-info'
+import PlaylistManager from './components/playlist-manager'
 import {uniqBy} from 'lodash'
 
 export default {
@@ -184,7 +184,8 @@ export default {
     SongList,
     Player,
     AlbumBrowser,
-    ArtistInfo
+    ArtistInfo,
+    PlaylistManager
   }
 }
 </script>
@@ -217,6 +218,7 @@ export default {
   align-items: center
   img
     border-radius: 50%
+    margin-right: 0.5rem
 
 // utils
 .vertical-space
