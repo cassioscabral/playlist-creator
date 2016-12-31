@@ -84,6 +84,7 @@ const SpotifyApi = require('spotify-web-api-js')
 
 const spotifyApi = new SpotifyApi()
 
+import {store} from './stores'
 import Search from './components/search'
 import SongList from './components/song-list'
 import Player from './components/player'
@@ -138,6 +139,7 @@ export default {
   mounted () {
     this.accessToken = getAccessToken()
     if (this.accessToken) {
+      store.dispatch('saveAccessToken', {accessToken: this.accessToken})
       // TODO fetch me
 
       // TODO set currentUser

@@ -8,10 +8,14 @@ export const store = new Vuex.Store({
     accessToken: null
   },
   actions: {
-
+    saveAccessToken ({commit}, {accessToken}) {
+      commit('ADD_ACESS_TOKEN', {accessToken})
+    }
   },
   mutations: {
-
+    ADD_ACESS_TOKEN (state, {accessToken}) {
+      state.accessToken = accessToken
+    }
   },
   getters: {
 
