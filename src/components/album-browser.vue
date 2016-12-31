@@ -42,8 +42,10 @@ export default {
   align-items: center
   font-size: 1.3rem
   margin-bottom: 0.5rem
+  margin-right: 1.2rem
   &:last-child
     margin-bottom: 0
+    margin-right: 0
   img
     width: 70px
     height: 70px
