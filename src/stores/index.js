@@ -19,6 +19,9 @@ export const store = new Vuex.Store({
     },
     saveCurrentUser ({commit}, {currentUser}) {
       commit('ADD_CURRENT_USER', {currentUser})
+    },
+    cleanAccess ({commit}) {
+      commit('CLEAN_ACCESS')
     }
   },
   mutations: {
@@ -27,6 +30,10 @@ export const store = new Vuex.Store({
     },
     ADD_CURRENT_USER (state, {currentUser}) {
       state.currentUser = currentUser
+    },
+    CLEAN_ACCESS (state) {
+      state.accessToken = ''
+      state.currentUser = {}
     }
   },
   modules: {

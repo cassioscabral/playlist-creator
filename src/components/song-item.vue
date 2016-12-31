@@ -1,6 +1,7 @@
 <template>
 <div class="song-item">
   <play :song="song"></play>
+  <add-to-playlist :song="song"></add-to-playlist>
   <div class="song-name">
     {{song.name}}
   </div>
@@ -9,6 +10,7 @@
 
 <script>
 import Play from './play'
+import AddToPlaylist from './add-to-playlist'
 
 export default {
   name: 'song-item',
@@ -24,7 +26,8 @@ export default {
   computed: {
   },
   components: {
-    Play
+    Play,
+    AddToPlaylist
   }
 }
 </script>

@@ -1,13 +1,14 @@
 <template>
   <div class="playlist-manager">
-    Playlist Manager
-
     Playlist name: {{playlistName}}
     <ul>
       <li v-for="track in playlist">
         {{track.name}}
       </li>
     </ul>
+    <button class="button" @click="createPlaylist">
+      Create
+    </button>
   </div>
 </template>
 
@@ -27,6 +28,12 @@ export default {
       'playlist',
       'playlistName'
     ])
+  },
+  methods: {
+    createPlaylist () {
+      // better use the spotifyApi on the App where the token is set
+      this.$emit('create-playlist')
+    }
   }
 }
 </script>

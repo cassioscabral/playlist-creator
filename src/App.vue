@@ -55,7 +55,8 @@
         </div>
       </div>
       <!-- end of current-album -->
-      <playlist-manager>
+      <playlist-manager
+        @create-playlist="createPlaylist">
       </playlist-manager>
       <!-- end of playlist-manager -->
       <player></player>
@@ -145,12 +146,25 @@ export default {
     if (accessToken) {
       store.dispatch('saveAccessToken', {accessToken: accessToken})
       spotifyApi.setAccessToken(accessToken)
-      spotifyApi.getMe().then((me) => {
+      spotifyApi.getMe()
+      .then((me) => {
         store.dispatch('saveCurrentUser', {currentUser: me})
       })
+      .catch(e => { store.dispatch('cleanAccess') })
     }
   },
   methods: {
+    createPlaylist () {
+      spotifyApi.createPlaylist(this.currentUser.id, {name: this.playlistName})
+      .then((playlist) => {
+        spotifyApi.addTracksToPlaylist(
+          this.currentUser.id,
+          playlist.id,
+          this.playlist.map(t => t.uri)
+        )
+      })
+      .catch(e => { console.warn(e) })
+    },
     selectAlbum (album) {
       this.currentSelectedAlbum = album
     },
@@ -163,7 +177,7 @@ export default {
       const redirectUri = 'http://localhost:8080/' // Your redirect uri
       const state = generateRandomString(16)
       window.localStorage.setItem(stateKey, state)
-      const scope = 'user-read-private user-read-email'
+      const scope = 'user-read-private user-read-email playlist-modify-public playlist-modify-private playlist-read-private'
       let url = 'https://accounts.spotify.com/authorize'
       url += '?response_type=token'
       url += '&client_id=' + encodeURIComponent(clientId)
@@ -176,7 +190,9 @@ export default {
   computed: {
     ...mapGetters([
       'accessToken',
-      'currentUser'
+      'currentUser',
+      'playlist',
+      'playlistName'
     ])
   },
   components: {

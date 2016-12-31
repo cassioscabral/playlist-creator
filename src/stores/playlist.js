@@ -11,6 +11,9 @@ export default {
     push ({commit}, {track}) {
       commit('PUSH', {track})
     },
+    remove ({commit}, {track}) {
+      commit('REMOVE', {track})
+    },
     changePlaylistName ({commit}, {name}) {
       commit('CHANGE_PLAYLIST_NAME', {name})
     }
@@ -18,6 +21,9 @@ export default {
   mutations: {
     PUSH (state, {track}) {
       state.playlist = [...state.playlist, track]
+    },
+    REMOVE (state, {track}) {
+      state.playlist = state.playlist.filter(t => t.id !== track.id)
     },
     CHANGE_PLAYLIST_NAME (state, {name}) {
       state.playlistName = `${name}`
