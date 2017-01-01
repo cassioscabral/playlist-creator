@@ -4,7 +4,7 @@
       v-for="album in albums"
       class="album clickable"
       @click="selectAlbum(album)">
-      <img class="image" :src="album.images[0].url" :alt="album.name">
+      <img v-if="album.images.length > 0" class="image" :src="album.images[1].url" :alt="album.name">
       {{album.name}}
     </div>
 </div>

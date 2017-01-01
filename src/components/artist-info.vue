@@ -1,9 +1,11 @@
 <template>
 <div class="artist-info" v-if="selectedArtist.id">
-  <div class="current-artist vertical-space">
+  <div class="row current-artist vertical-space">
+    <div class="column">
+      <img class="image" :src="selectedArtist.images[1].url" :alt="selectedArtist.name">
+    </div>
     <div class="column text">
       {{selectedArtist.name}}
-      <img class="image" :src="selectedArtist.images[0].url" :alt="selectedArtist.name">
     </div>
   </div>
   <div class="vertical-space text">
@@ -16,7 +18,7 @@
       v-for="artist in relatedArtists"
       class="artist media clickable"
       @click="selectArtist(artist)">
-      <img class="image" :src="artist.images[0].url" :alt="artist.name">
+      <img class="image" :src="artist.images[1].url" :alt="artist.name">
       {{artist.name}}
     </div>
   </div>
@@ -51,4 +53,9 @@ export default {
 .related-artists
   display: flex
   flex-wrap: wrap
+
+.current-artist
+  justify-content: space-between
+  align-items: center
+  width: 20%
 </style>

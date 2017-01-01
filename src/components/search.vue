@@ -29,8 +29,8 @@
           v-for="(result, index) in searchResult"
           :ref="`item${index}`"
           :tabindex="0">
-          <div class="square-preview" v-if="result && result.images && result.images[0]">
-            <img :src="result.images[0].url" alt="">
+          <div class="square-preview" v-if="result && result.images && result.images[1]">
+            <img :src="result.images[1].url" alt="">
           </div>
           <div class="name">
             <div class="left">
