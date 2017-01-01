@@ -7,7 +7,6 @@
 <script>
 import { store } from 'src/stores'
 import { mapGetters } from 'vuex'
-import { includes } from 'lodash'
 
 export default {
   name: 'add-to-playlist',
@@ -28,7 +27,7 @@ export default {
     thisSongIsOnPlaylist () {
       if (!this.song) return false
       if (!this.playlist) return false
-      return includes(this.playlist, this.song.id)
+      return this.playlist.find(t => t.id === this.song.id)
     }
   },
   watch: {

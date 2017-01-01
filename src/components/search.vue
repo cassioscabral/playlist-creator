@@ -67,7 +67,6 @@ export default {
       this.isSearching = false
     },
     selectItemWithKey (e) {
-      console.log('selectItemWithKey', e)
       const {keyCode} = e
       // codes 49 to 54 represent 1 to 5
       if (keyCode > 48 || keyCode < 55) {
