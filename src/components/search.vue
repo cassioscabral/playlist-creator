@@ -1,7 +1,13 @@
 <template>
   <div class="search">
     <div class="artist-search">
-      <input type="text" v-model="artistSearchInput" class="input" placeholder="artist" autofocus
+      <input
+      type="text"
+      v-model="artistSearchInput"
+      class="artist-input input"
+      placeholder="artist"
+      autofocus
+      @focus="isSearching = true"
       @keyup.alt.49="selectItemWithKey"
       @keyup.alt.50="selectItemWithKey"
       @keyup.alt.51="selectItemWithKey"
@@ -13,12 +19,16 @@
       @keyup.meta.52="selectItemWithKey"
       @keyup.meta.53="selectItemWithKey">
       <!-- list results -->
-      <ul class="list-results">
+      <ul class="list-results"
+        :class="{'is-active': isSearching}">
         <li
           class="result-item"
           @click="selectResult(result)"
+          @keyup.enter="selectResult(result)"
+          @keyup.space="selectResult(result)"
           v-for="(result, index) in searchResult"
-          :ref="`item${index}`">
+          :ref="`item${index}`"
+          :tabindex="0">
           <div class="square-preview" v-if="result && result.images && result.images[0]">
             <img :src="result.images[0].url" alt="">
           </div>
@@ -46,13 +56,15 @@ export default {
   data () {
     return {
       artistSearchInput: '',
-      searchResult: []
+      searchResult: [],
+      isSearching: false
     }
   },
   methods: {
     // artist or genre
     selectResult (item, type = 'artist') {
       this.$emit(`selected-${type}`, item)
+      this.isSearching = false
     },
     selectItemWithKey (e) {
       console.log('selectItemWithKey', e)
@@ -62,22 +74,11 @@ export default {
         this.selectResult(this.searchResult[keyCode - 49])
       }
     }
-    // createItemEventListeners () {
-    //   console.log('this.$refs.item1', this.$refs.item1)
-    //   let [item1] = this.$refs.item1
-    //   this.$nextTick(() => {
-    //     console.log('item1', item1)
-    //     item1.addEventListener('keyup', (e) => {
-    //       console.log(e)
-    //     })
-    //   })
-    // }
   },
   watch: {
     artistSearchInput () {
       spotifyApi.searchArtists(this.artistSearchInput, {limit: 5})
       .then(data => { this.searchResult = data.artists.items })
-      // .then(this.createItemEventListeners)
       .catch(err => { console.log(err) })
     }
   }
@@ -86,6 +87,7 @@ export default {
 
 <style lang="sass" scoped>
 $font-size: 1.7rem
+
 .artist-search
   width: 80%
   display: flex
@@ -96,11 +98,18 @@ $font-size: 1.7rem
   justify-content: center
 
 .list-results
+  opacity: 0
+  height: 0
+  visibility: hidden
   margin: 0
   display: flex
   padding: 0
   flex-direction: column
   justify-content: space-between
+  &.is-active
+    opacity: 1
+    height: auto
+    visibility: visible
   .result-item
     display: flex
     list-style: none
@@ -119,8 +128,18 @@ $font-size: 1.7rem
       margin-right: 10px
     &:hover
       background: #afc3d5
+    &:focus
+      background: blue
+
 .input
   height: 3rem
   font-size: $font-size
   padding: 2px 0 2px 6px
+
+// .artist-input
+//   &:focus ~ .list-results,
+//   &:active ~ .list-results
+//     opacity: 1
+//     height: auto
+//     visibility: visible
 </style>

@@ -40,7 +40,9 @@
               </song-list>
             </div>
             <div class="current-album-songs column limit-height" v-if="currentSelectedArtistAlbumTracks.length > 0">
-              Album: {{currentSelectedAlbum.name}}
+              <div class="text vertical-space">
+                {{currentSelectedAlbum.name}}
+              </div>
               <song-list
                 :songs="currentSelectedArtistAlbumTracks">
               </song-list>
