@@ -1,5 +1,5 @@
 <template>
-  <div class="playlist-manager">
+  <div class="playlist-manager" v-if="!playlistIsEmpty">
     Playlist name: {{playlistName}}
     <ul>
       <li v-for="track in playlist">
@@ -26,7 +26,8 @@ export default {
       'accessToken',
       'currentUser',
       'playlist',
-      'playlistName'
+      'playlistName',
+      'playlistIsEmpty'
     ])
   },
   methods: {

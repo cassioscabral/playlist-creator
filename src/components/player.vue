@@ -1,6 +1,5 @@
 <template>
 <div class="player">
-  Player
   <audio controls
     ref="audio"
     v-if="currentTrack"

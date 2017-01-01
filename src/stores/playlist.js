@@ -5,7 +5,8 @@ export default {
   },
   getters: {
     playlist: state => state.playlist,
-    playlistName: state => state.playlistName
+    playlistName: state => state.playlistName,
+    playlistIsEmpty: state => state.playlist.length === 0
   },
   actions: {
     push ({commit}, {track}) {

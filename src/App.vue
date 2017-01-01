@@ -31,7 +31,7 @@
             </artist-info>
           </div>
           <div class="row">
-            <div class="top-songs column limit-height">
+            <div class="top-songs column limit-height" v-if="currentSelectedArtistTopTracks.length > 0">
               <div class="text vertical-space">
                 Top Songs
               </div>
