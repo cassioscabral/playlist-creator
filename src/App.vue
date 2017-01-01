@@ -297,4 +297,7 @@ export default {
 
 .text
   font-size: 1.4rem
+
+.circle
+  border-radius: 50%
 </style>

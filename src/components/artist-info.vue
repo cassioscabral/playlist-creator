@@ -2,15 +2,13 @@
 <div class="artist-info" v-if="selectedArtist.id">
   <div class="row current-artist vertical-space">
     <div class="column">
-      <img class="image" :src="selectedArtist.images[1].url" :alt="selectedArtist.name">
+      <img class="image circle" :src="selectedArtist.images[1].url" :alt="selectedArtist.name">
     </div>
     <div class="column text">
       {{selectedArtist.name}}
     </div>
   </div>
-  <div class="vertical-space text">
-    Related with {{selectedArtist.name}}
-  </div>
+  <div class="vertical-space text">Related with {{selectedArtist.name}}</div>
   <!-- Could be reused on album-browser  -->
   <div class="related-artists media-wrapper column">
 
@@ -18,7 +16,7 @@
       v-for="artist in relatedArtists"
       class="artist media clickable"
       @click="selectArtist(artist)">
-      <img class="image" :src="artist.images[1].url" :alt="artist.name">
+      <img class="image circle" :src="artist.images[1].url" :alt="artist.name">
       {{artist.name}}
     </div>
   </div>

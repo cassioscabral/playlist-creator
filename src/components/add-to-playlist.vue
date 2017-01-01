@@ -46,7 +46,7 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-.play
+.add-to-playlist
   font-size: 1.8rem
   cursor: pointer
 </style>

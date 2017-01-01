@@ -39,4 +39,5 @@ export default {
 
 .song-name
   margin-left: 5px
+  font-size: 1.2rem
 </style>
