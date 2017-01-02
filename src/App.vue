@@ -185,14 +185,12 @@ export default {
     }
   },
   methods: {
-    createPlaylist () {
-      spotifyApi.createPlaylist(this.currentUser.id, {name: this.playlistName})
+    createPlaylist (name) {
+      spotifyApi.createPlaylist(this.currentUser.id, {name})
       .then((playlist) => {
-        spotifyApi.addTracksToPlaylist(
-          this.currentUser.id,
-          playlist.id,
-          this.playlist.map(t => t.uri)
-        )
+        store.dispatch('replace', {playlistTracks: []})
+        store.dispatch('changePlaylistName', {name})
+        store.dispatch('setPlaylistObject', {playlist})
       })
       .catch(e => { console.warn(e) })
     },

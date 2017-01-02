@@ -51,7 +51,7 @@ export default {
 .related-artists
   display: flex
   flex-wrap: wrap
-  overflow: hidden
+  overflow: auto
   border-bottom: 1px solid black
 
 .current-artist

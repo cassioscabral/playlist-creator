@@ -1,8 +1,17 @@
 <template>
-  <div class="playlist-manager" v-if="!playlistIsEmpty">
+  <div class="playlist-manager">
     <div class="column user-playlists" v-if="userPlaylists">
       <div class="text vertical-space">
-        My Playlists
+        My Playlists:
+      </div>
+      <div class="text vertical-space">
+        <input type="text" class="input" v-model="name" @keyup.enter="isEditing = false" @change="changePlaylistName({name})">
+        <button
+          class="button"
+          @click="createPlaylist"
+          :disabled="this.name.length === 0">
+          ➕
+        </button>
       </div>
       <ul>
         <li
@@ -18,11 +27,11 @@
         <div  v-if="!isEditing" class="name" @click="isEditing = true">
           Playlist name: {{playlistName}}
         </div>
-        <input v-else type="text" class="input" v-model="name" @keyup.enter="isEditing = false" @change="changePlaylistName({name})">
+
       </div>
       <song-list :songs="playlist"></song-list>
-      <button class="button" @click="createPlaylist">
-        Create
+      <button v-if="this.playlist.length > 0" class="button" @click="addTracksToPlaylist">
+        Save
       </button>
     </div>
   </div>
@@ -51,18 +60,17 @@ export default {
     ])
   },
   methods: {
-    createPlaylist () {
-      if (this.currentUser.id) {
-        // better use the spotifyApi on the App component where the token is set
-        this.$emit('create-playlist')
-      } else {
-        window.alert('Please Login to create your playlist')
-      }
-    },
     ...mapActions([
       'changePlaylistName',
-      'loadPlaylist'
-    ])
+      'loadPlaylist',
+      'addTracksToPlaylist'
+    ]),
+    createPlaylist () {
+      if (this.currentUser.id && this.name.length > 0) {
+        // better use the spotifyApi on the App component where the token is set
+        this.$emit('create-playlist', this.name)
+      }
+    }
   },
   components: {
     SongList
