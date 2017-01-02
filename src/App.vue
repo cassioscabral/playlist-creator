@@ -116,12 +116,17 @@ export default {
     currentSelectedAlbum () {
       this.currentSelectedAlbum
       // album tracks
-      spotifyApi.getAlbumTracks(this.currentSelectedAlbum.id)
-      .then(data => { this.currentSelectedArtistAlbumTracks = data.items })
-      .catch(err => { console.log(err) })
+      if (this.currentSelectedAlbum.id) {
+        spotifyApi.getAlbumTracks(this.currentSelectedAlbum.id)
+        .then(data => { this.currentSelectedArtistAlbumTracks = data.items })
+        .catch(err => { console.log(err) })
+      }
     },
     selectedArtist () {
       if (this.selectedArtist.id) {
+        // reset currentSelectedAlbum
+        this.currentSelectedAlbum = {}
+        this.currentSelectedArtistAlbumTracks = []
         // TODO change 'BR' to geolocation data
 
         // top tracks
@@ -242,10 +247,13 @@ export default {
 .vertical-space
   margin: 20px 0
 
+.sm-vertical-space
+  margin: 20px 0
+
 .column
   display: flex
   flex-direction: column
-  flex: 1 1 auto
+  flex: 1 0.3 auto
 
 .row
   display: flex
@@ -300,4 +308,9 @@ export default {
 
 .circle
   border-radius: 50%
+
+.mr-5
+  margin-right: 5px
+  &:last-child
+    margin-right: 0
 </style>

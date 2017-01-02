@@ -1,7 +1,7 @@
 <template>
-<div class="song-item">
-  <play :song="song"></play>
-  <add-to-playlist :song="song"></add-to-playlist>
+<div class="song-item sm-vertical-space">
+  <play :song="song" class="mr-5"></play>
+  <add-to-playlist class="mr-5" :song="song"></add-to-playlist>
   <div class="song-name">
     {{song.name}}
   </div>

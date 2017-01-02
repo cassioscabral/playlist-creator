@@ -76,9 +76,11 @@ export default {
   },
   watch: {
     artistSearchInput () {
-      spotifyApi.searchArtists(this.artistSearchInput, {limit: 5})
-      .then(data => { this.searchResult = data.artists.items })
-      .catch(err => { console.log(err) })
+      if (this.artistSearchInput.length > 0) {
+        spotifyApi.searchArtists(this.artistSearchInput, {limit: 5})
+        .then(data => { this.searchResult = data.artists.items })
+        .catch(err => { console.log(err) })
+      }
     }
   }
 }
@@ -128,7 +130,7 @@ $font-size: 1.7rem
     &:hover
       background: #afc3d5
     &:focus
-      background: blue
+      background: #afc3d5
 
 .input
   height: 3rem
