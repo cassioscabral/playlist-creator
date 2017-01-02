@@ -41,6 +41,7 @@
             </div>
             <div class="current-album-songs column limit-height" v-if="currentSelectedArtistAlbumTracks.length > 0">
               <div class="text vertical-space">
+                <img v-if="currentSelectedAlbum.images.length > 0" class="image" :src="currentSelectedAlbum.images[1].url" :alt="currentSelectedAlbum.name">
                 {{currentSelectedAlbum.name}}
               </div>
               <song-list
@@ -109,10 +110,19 @@ export default {
       currentSelectedArtistAlbums: [],
       currentSelectedAlbum: {},
       currentSelectedArtistAlbumTracks: [],
-      relatedArtists: []
+      relatedArtists: [],
+      userPlaylists: []
     }
   },
   watch: {
+    accessToken () {
+      // session expired
+      if (this.accessToken === '') {
+        if (window.confirm('Your session is over, do wish to login again?')) {
+          this.login()
+        }
+      }
+    },
     currentSelectedAlbum () {
       this.currentSelectedAlbum
       // album tracks
@@ -149,15 +159,29 @@ export default {
     }
   },
   mounted () {
-    const accessToken = getAccessToken()
+    const accessToken = getAccessToken() // comes from URL
     if (accessToken) {
-      store.dispatch('saveAccessToken', {accessToken: accessToken})
+      store.dispatch('saveAccessToken', {accessToken})
       spotifyApi.setAccessToken(accessToken)
       spotifyApi.getMe()
       .then((me) => {
         store.dispatch('saveCurrentUser', {currentUser: me})
+        return me
       })
       .catch(e => { store.dispatch('cleanAccess') })
+    } else {
+      spotifyApi.setAccessToken(this.accessToken) // from vuex
+    }
+
+    // set user playlists
+    if (this.currentUser.id) {
+      spotifyApi.getUserPlaylists(this.currentUser.id, {limit: 50})
+      .then(data => {
+        // get only playlists owned by the user
+        const playlists = data.items.filter(i => i.owner.id === this.currentUser.id)
+        store.dispatch('saveUserPlaylists', {playlists})
+      })
+      .catch(e => { console.warn(e) })
     }
   },
   methods: {
@@ -248,7 +272,7 @@ export default {
   margin: 20px 0
 
 .sm-vertical-space
-  margin: 20px 0
+  margin: 7px 0
 
 .column
   display: flex

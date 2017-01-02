@@ -3,15 +3,19 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 import player from './player'
 import playlist from './playlist'
+import createPersistedState from 'vuex-persistedstate'
 
 export const store = new Vuex.Store({
+  plugins: [createPersistedState()],
   state: {
     accessToken: '',
-    currentUser: {}
+    currentUser: {},
+    userPlaylists: []
   },
   getters: {
     accessToken: state => state.accessToken,
-    currentUser: state => state.currentUser
+    currentUser: state => state.currentUser,
+    userPlaylists: state => state.userPlaylists
   },
   actions: {
     saveAccessToken ({commit}, {accessToken}) {
@@ -19,6 +23,9 @@ export const store = new Vuex.Store({
     },
     saveCurrentUser ({commit}, {currentUser}) {
       commit('ADD_CURRENT_USER', {currentUser})
+    },
+    saveUserPlaylists ({commit}, {playlists}) {
+      commit('ADD_USER_PLAYLISTS', {playlists})
     },
     cleanAccess ({commit}) {
       commit('CLEAN_ACCESS')
@@ -30,6 +37,9 @@ export const store = new Vuex.Store({
     },
     ADD_CURRENT_USER (state, {currentUser}) {
       state.currentUser = currentUser
+    },
+    ADD_USER_PLAYLISTS (state, {playlists}) {
+      state.userPlaylists = playlists
     },
     CLEAN_ACCESS (state) {
       state.accessToken = ''

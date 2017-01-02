@@ -1,3 +1,7 @@
+const SpotifyApi = require('spotify-web-api-js')
+
+const spotifyApi = new SpotifyApi()
+
 export default {
   state: {
     playlist: [],
@@ -15,8 +19,25 @@ export default {
     remove ({commit}, {track}) {
       commit('REMOVE', {track})
     },
+    replace ({commit}, {playlistTracks}) {
+      commit('REPLACE_PLAYLIST', {playlistTracks})
+    },
     changePlaylistName ({commit}, {name}) {
       commit('CHANGE_PLAYLIST_NAME', {name})
+    },
+    loadPlaylist ({commit}, {accessToken, userId, playlist}) {
+      spotifyApi.setAccessToken(accessToken)
+      spotifyApi.getPlaylistTracks(userId, playlist.id)
+      .then((data) => {
+        const playlistTracks = data.items.map(i => i.track)
+        commit('REPLACE_PLAYLIST', {playlistTracks})
+        return playlistTracks
+      })
+      .then(() => { commit('CHANGE_PLAYLIST_NAME', {name: playlist.name}) })
+      .catch(e => {
+        console.warn(e)
+        commit('CLEAN_ACCESS')
+      })
     }
   },
   mutations: {
@@ -28,6 +49,9 @@ export default {
     },
     CHANGE_PLAYLIST_NAME (state, {name}) {
       state.playlistName = `${name}`
+    },
+    REPLACE_PLAYLIST (state, {playlistTracks}) {
+      state.playlist = playlistTracks
     }
   }
 }

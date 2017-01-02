@@ -36,6 +36,10 @@ export default {
 .song-item
   display: flex
   align-items: center
+  border-bottom: 1px solid rgba(#2c3e50, 0.82)
+  padding-bottom: 2px
+  &:last-child
+    border-bottom: none
 
 .song-name
   margin-left: 5px

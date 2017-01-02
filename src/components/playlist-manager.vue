@@ -1,15 +1,30 @@
 <template>
   <div class="playlist-manager" v-if="!playlistIsEmpty">
-    <div class="text vertical-space">
-      <div  v-if="!isEditing" class="name" @click="isEditing = true">
-        Playlist name: {{playlistName}}
+    <div class="column user-playlists" v-if="userPlaylists">
+      <div class="text vertical-space">
+        My Playlists
       </div>
-      <input v-else type="text" class="input" v-model="name" @keyup.enter="isEditing = false" @change="changePlaylistName({name})">
+      <ul>
+        <li
+          class="clickable"
+          v-for="playlist in userPlaylists"
+          @click="loadPlaylist({accessToken, userId: currentUser.id, playlist})">
+          {{playlist.name}}
+        </li>
+      </ul>
     </div>
-    <song-list :songs="playlist"></song-list>
-    <button class="button" @click="createPlaylist">
-      Create
-    </button>
+    <div class="current-playlist column">
+      <div class="text vertical-space">
+        <div  v-if="!isEditing" class="name" @click="isEditing = true">
+          Playlist name: {{playlistName}}
+        </div>
+        <input v-else type="text" class="input" v-model="name" @keyup.enter="isEditing = false" @change="changePlaylistName({name})">
+      </div>
+      <song-list :songs="playlist"></song-list>
+      <button class="button" @click="createPlaylist">
+        Create
+      </button>
+    </div>
   </div>
 </template>
 
@@ -31,16 +46,22 @@ export default {
       'currentUser',
       'playlist',
       'playlistName',
-      'playlistIsEmpty'
+      'playlistIsEmpty',
+      'userPlaylists'
     ])
   },
   methods: {
     createPlaylist () {
-      // better use the spotifyApi on the App where the token is set
-      this.$emit('create-playlist')
+      if (this.currentUser.id) {
+        // better use the spotifyApi on the App component where the token is set
+        this.$emit('create-playlist')
+      } else {
+        window.alert('Please Login to create your playlist')
+      }
     },
     ...mapActions([
-      'changePlaylistName'
+      'changePlaylistName',
+      'loadPlaylist'
     ])
   },
   components: {
@@ -49,5 +70,14 @@ export default {
 }
 </script>
 
-<style lang="css">
+<style lang="sass">
+.playlist-manager
+  display: flex
+
+.user-playlists
+  width: 30%
+
+.current-playlist
+  width: 70%
+
 </style>

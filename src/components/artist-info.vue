@@ -51,6 +51,8 @@ export default {
 .related-artists
   display: flex
   flex-wrap: wrap
+  overflow: hidden
+  border-bottom: 1px solid black
 
 .current-artist
   justify-content: space-between
