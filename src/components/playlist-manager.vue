@@ -8,7 +8,7 @@
         <li
           class="clickable"
           v-for="playlist in userPlaylists"
-          @click="loadPlaylist({accessToken, userId: currentUser.id, playlist})">
+          @click="loadPlaylist({playlist})">
           {{playlist.name}}
         </li>
       </ul>

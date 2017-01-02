@@ -118,7 +118,7 @@ export default {
     accessToken () {
       // session expired
       if (this.accessToken === '') {
-        if (window.confirm('Your session is over, do wish to login again?')) {
+        if (window.confirm('Your session is over, do you wish to login again?')) {
           this.login()
         }
       }

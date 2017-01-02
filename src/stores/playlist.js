@@ -25,9 +25,9 @@ export default {
     changePlaylistName ({commit}, {name}) {
       commit('CHANGE_PLAYLIST_NAME', {name})
     },
-    loadPlaylist ({commit}, {accessToken, userId, playlist}) {
-      spotifyApi.setAccessToken(accessToken)
-      spotifyApi.getPlaylistTracks(userId, playlist.id)
+    loadPlaylist ({commit, rootState}, {playlist}) {
+      spotifyApi.setAccessToken(rootState.accessToken)
+      spotifyApi.getPlaylistTracks(rootState.currentUser.id, playlist.id)
       .then((data) => {
         const playlistTracks = data.items.map(i => i.track)
         commit('REPLACE_PLAYLIST', {playlistTracks})
