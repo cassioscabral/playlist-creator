@@ -17,7 +17,12 @@ export default {
   },
   actions: {
     push ({commit}, {track}) {
-      commit('PUSH', {track})
+      spotifyApi.getAudioFeaturesForTrack(track.id)
+      .then(data => {
+        console.log(data)
+        track.features = data
+        commit('PUSH', {track})
+      })
     },
     remove ({commit}, {track}) {
       commit('REMOVE', {track})

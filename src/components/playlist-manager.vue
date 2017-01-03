@@ -33,7 +33,7 @@
           Playlist name: {{playlistName}}
         </div>
       </div>
-      <song-list :songs="playlist"></song-list>
+      <song-list :songs="playlist" :show-features="true"></song-list>
       <button v-if="this.playlist.length > 0" class="button" @click="addTracksToPlaylist">
         Save
       </button>
