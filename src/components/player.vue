@@ -3,13 +3,16 @@
   <audio controls
     ref="audio"
     v-if="currentTrack"
-    :src="currentTrack.preview_url">
+    :src="currentTrack.preview_url"
+    @play="play({track: currentTrack})"
+    @ended="pause({track: currentTrack})"
+    @pause="pause({track: currentTrack})">
   </audio>
 </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'player',
@@ -18,11 +21,21 @@ export default {
 
     }
   },
+  mounted () {
+    const audio = this.$refs.audio
+    audio.volume = 0.5
+  },
   computed: {
     ...mapGetters([
       'playlist',
       'currentTrack',
       'isPlaying'
+    ])
+  },
+  methods: {
+    ...mapActions([
+      'play',
+      'pause'
     ])
   },
   watch: {

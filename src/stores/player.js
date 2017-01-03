@@ -11,6 +11,9 @@ export default {
   },
   actions: {
     play ({commit}, {track}) {
+      commit('PLAY', {track})
+    },
+    playTrack ({commit}, {track}) {
       commit('PLAY_TRACK', {track})
     },
     pause ({commit}, {track}) {
@@ -20,6 +23,9 @@ export default {
   mutations: {
     PLAY_TRACK (state, {track}) {
       state.currentTrack = Object.assign({}, track)
+      state.isPlaying = true
+    },
+    PLAY (state, {track}) {
       state.isPlaying = true
     },
     PAUSE (state, {track}) {

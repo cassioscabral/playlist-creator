@@ -181,7 +181,10 @@ export default {
         const playlists = data.items.filter(i => i.owner.id === this.currentUser.id)
         store.dispatch('saveUserPlaylists', {playlists})
       })
-      .catch(e => { console.warn(e) })
+      .catch(e => {
+        console.warn(e)
+        store.dispatch('cleanAccess')
+      })
     }
   },
   methods: {
@@ -192,7 +195,11 @@ export default {
         store.dispatch('changePlaylistName', {name})
         store.dispatch('setPlaylistObject', {playlist})
       })
-      .catch(e => { console.warn(e) })
+      .catch(e => {
+        console.error(e)
+        store.dispatch('cleanAccess')
+        window.alert('Please login again')
+      })
     },
     selectAlbum (album) {
       this.currentSelectedAlbum = album

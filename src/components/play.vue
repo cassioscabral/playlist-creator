@@ -38,7 +38,7 @@ export default {
       if (this.thisSongIsPlaying) {
         store.dispatch('pause', {track: this.song})
       } else {
-        store.dispatch('play', {track: this.song})
+        store.dispatch('playTrack', {track: this.song})
       }
     }
   }

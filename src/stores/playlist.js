@@ -50,8 +50,11 @@ export default {
         commit('CLEAN_ACCESS')
       })
     },
-    addTracksToPlaylist ({state, commit, rootState}) {
-      if (!rootState.accessToken) return false
+    addTracksToPlaylist ({state, commit, rootState, dispatch}) {
+      if (!rootState.accessToken) {
+        dispatch('cleanAccess')
+        window.alert('Please login again')
+      }
 
       const newTracks = differenceBy(state.playlist, state.originalPlaylist, 'id').map(t => t.uri)
 

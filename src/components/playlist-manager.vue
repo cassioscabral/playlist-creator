@@ -24,10 +24,14 @@
     </div>
     <div class="current-playlist column">
       <div class="text vertical-space">
-        <div  v-if="!isEditing" class="name" @click="isEditing = true">
+        <!-- TODO add change playlist name feature -->
+        <!-- <div  v-if="!isEditing" class="name" @click="(isEditing = true) && (name = playlistName)">
           Playlist name: {{playlistName}}
         </div>
-
+        <input v-else type="text" class="input" v-model="name" @keyup.enter="isEditing = false" @change="changePlaylistName({name})"> -->
+        <div  class="name">
+          Playlist name: {{playlistName}}
+        </div>
       </div>
       <song-list :songs="playlist"></song-list>
       <button v-if="this.playlist.length > 0" class="button" @click="addTracksToPlaylist">
