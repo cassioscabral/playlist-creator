@@ -1,5 +1,5 @@
 {
-  "name": "playlist-manager",
+  "name": "playlist-creator",
   "version": "1.0.0",
   "description": "Playlist manager using Spotify API",
   "author": "Cassio Cabral <cassioscabral@gmail.com>",

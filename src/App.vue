@@ -210,7 +210,7 @@ export default {
     login () {
       const stateKey = 'spotify_auth_state'
       const clientId = '49275dd30324422b8bbba8bdea0e7b8c' // Your client id
-      const redirectUri = 'http://localhost:8080/' // Your redirect uri
+      let redirectUri = window.location.href // 'http://localhost:8080/' // Your redirect uri
       const state = generateRandomString(16)
       window.localStorage.setItem(stateKey, state)
       const scope = 'user-read-private user-read-email playlist-modify-public playlist-modify-private playlist-read-private'
@@ -282,7 +282,7 @@ export default {
 .column
   display: flex
   flex-direction: column
-  flex: 1 0.3 auto
+  flex: 1 1 auto
 
 .row
   display: flex
@@ -377,5 +377,15 @@ export default {
 }
 ::-webkit-scrollbar-corner {
   background: transparent;
+}
+
+/* Media querys*/
+@media (max-width: 600px) {
+  .row {
+    flex-wrap: wrap;
+  }
+  .column {
+    width: 100%;
+  }
 }
 </style>
