@@ -1,6 +1,14 @@
 <template>
   <div class="add-to-playlist" @click="toggle">
-    {{thisSongIsOnPlaylist ? '✓' : '➕'}}
+    <div class="on-playlist"
+      @mouseover="mouseOver = true"
+      @mouseleave="mouseOver = false"
+      v-if="thisSongIsOnPlaylist">
+      {{mouseOver ? '✕' : '✓'}}
+    </div>
+    <div v-else class="not-on-playlist">
+      ➕
+    </div>
   </div>
 </template>
 
@@ -17,6 +25,7 @@ export default {
   },
   data () {
     return {
+      mouseOver: false
     }
   },
   computed: {

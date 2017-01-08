@@ -33,6 +33,9 @@
           Playlist name: {{playlistName}}
         </div>
       </div>
+      <orderable-table>
+
+      </orderable-table>
       <song-list :songs="playlist" :show-features="true"></song-list>
       <button v-if="this.playlist.length > 0" class="button" @click="addTracksToPlaylist">
         Save
@@ -44,6 +47,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import SongList from './song-list'
+import OrderableTable from './table/orderable-table'
 
 export default {
   name: 'playlist-manager',
@@ -77,7 +81,8 @@ export default {
     }
   },
   components: {
-    SongList
+    SongList,
+    OrderableTable
   }
 }
 </script>
