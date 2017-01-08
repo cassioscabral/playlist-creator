@@ -6,8 +6,8 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(object, index) in objects">
-        <td v-for="header in headers">{{get(object, header.key)}}</td>
+      <tr v-for="(item, index) in items">
+        <td v-for="header in headers">{{get(item, header.key)}}</td>
       </tr>
     </tbody>
   </table>
@@ -24,18 +24,29 @@ export default {
       this.objects = results
     })
   },
+  props: {
+    headers: {
+      type: Array // of objects {key: 'name.first', label: 'name'}
+    },
+    orderBy: {
+      type: Array // of strings ['name.first', 'name.last']
+    },
+    items: {
+      type: Array // of objects
+    }
+  },
   data () {
     return {
-      headers: [
-        {key: 'name.first', label: 'name'},
-        {key: 'name.last', label: 'surname'},
-        {key: 'gender'},
-        {key: 'phone+cell', label: 'contacts'},
-        {key: 'picture.thumbnail', label: 'avatar'},
-        {key: 'nat', label: 'nationality'}
-      ],
-      orderBy: `['name.first', 'name.last']`,
-      objects: []
+      // headers: [
+      //   {key: 'name.first', label: 'name'},
+      //   {key: 'name.last', label: 'surname'},
+      //   {key: 'gender'},
+      //   {key: 'phone+cell', label: 'contacts'},
+      //   {key: 'picture.thumbnail', label: 'avatar'},
+      //   {key: 'nat', label: 'nationality'}
+      // ],
+      // orderBy: `['name.first', 'name.last']`,
+      // items: []
     }
   },
   methods: {

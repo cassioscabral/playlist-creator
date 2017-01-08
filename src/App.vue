@@ -59,6 +59,7 @@
       </div>
       <!-- end of current-album -->
       <playlist-manager
+        v-if="this.accessToken"
         @create-playlist="createPlaylist">
       </playlist-manager>
       <!-- end of playlist-manager -->

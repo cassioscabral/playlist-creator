@@ -45,13 +45,27 @@ export default {
       spotifyApi.getPlaylistTracks(rootState.currentUser.id, playlist.id)
       .then((data) => {
         const playlistTracks = data.items.map(i => i.track)
-        commit('REPLACE_PLAYLIST', {playlistTracks})
-        commit('REPLACE_ORIGINAL_PLAYLIST', {playlistTracks})
         return playlistTracks
       })
-      .then(() => { commit('CHANGE_PLAYLIST_NAME', {name: playlist.name}) })
+      .then(playlistTracks => {
+        const trackIds = playlistTracks.map(t => t.id)
+        spotifyApi.getAudioFeaturesForTracks(trackIds)
+        .then(({audio_features: features}) => {
+          return playlistTracks.map((t, index) => {
+            t.features = features[index]
+            return t
+          })
+        })
+        .then(tracksWithFeatures => {
+          commit('REPLACE_PLAYLIST', {playlistTracks: tracksWithFeatures})
+          commit('REPLACE_ORIGINAL_PLAYLIST', {playlistTracks: tracksWithFeatures})
+        })
+      })
+      .then(() => {
+        commit('CHANGE_PLAYLIST_NAME', {name: playlist.name})
+      })
       .catch(e => {
-        console.warn(e)
+        console.error(e)
         commit('CLEAN_ACCESS')
       })
     },

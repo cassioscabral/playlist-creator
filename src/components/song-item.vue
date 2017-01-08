@@ -12,7 +12,7 @@
     <div class="song-duration">
       {{msToTime(song.duration_ms)}}
     </div>
-    <div class="features" v-if="showFeatures && song.features.uri">
+    <div class="features" v-if="showFeatures && song.features && song.features.uri">
       <div class="happiness valence">
         {{song.features.valence}}
       </div>

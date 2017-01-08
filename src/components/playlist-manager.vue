@@ -33,7 +33,9 @@
           Playlist name: {{playlistName}}
         </div>
       </div>
-      <orderable-table>
+      <orderable-table
+        :headers="tableHeaders"
+        :items="playlist">
 
       </orderable-table>
       <song-list :songs="playlist" :show-features="true"></song-list>
@@ -65,7 +67,29 @@ export default {
       'playlistName',
       'playlistIsEmpty',
       'userPlaylists'
-    ])
+    ]),
+    // headers: [
+    //   {key: 'name.first', label: 'name'},
+    //   {key: 'name.last', label: 'surname'},
+    //   {key: 'gender'},
+    //   {key: 'phone+cell', label: 'contacts'},
+    //   {key: 'picture.thumbnail', label: 'avatar'},
+    //   {key: 'nat', label: 'nationality'}
+    // ],
+    // orderBy: `['name.first', 'name.last']`,
+    // items: []
+    tableHeaders () {
+      return [
+        {key: 'name', label: 'Name'},
+        {key: 'artists[0].name', label: 'Artist'},
+        {key: 'features.duration_ms', label: 'Duration'},
+        {key: 'features.valence', label: 'Happiness'},
+        {key: 'features.instrumentalness', label: 'Instrumentalness'},
+        {key: 'features.energy', label: 'Energy'},
+        {key: 'features.speechiness', label: 'Speechiness'},
+        {key: 'features.tempo', label: 'Tempo(BPM)'}
+      ]
+    }
   },
   methods: {
     ...mapActions([
