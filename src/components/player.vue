@@ -22,8 +22,12 @@ export default {
     }
   },
   mounted () {
-    const audio = this.$refs.audio
-    audio.volume = 0.5
+    this.$nextTick(() => {
+      const audio = this.$refs.audio
+      if (audio) {
+        audio.volume = 0.5
+      }
+    })
   },
   computed: {
     ...mapGetters([
