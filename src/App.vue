@@ -211,7 +211,7 @@ export default {
     login () {
       const stateKey = 'spotify_auth_state'
       const clientId = '49275dd30324422b8bbba8bdea0e7b8c' // Your client id
-      let redirectUri = window.location.href // 'http://localhost:8080/' // Your redirect uri
+      let redirectUri = window.location.origin + '/' // Your redirect uri
       const state = generateRandomString(16)
       window.localStorage.setItem(stateKey, state)
       const scope = 'user-read-private user-read-email playlist-modify-public playlist-modify-private playlist-read-private'

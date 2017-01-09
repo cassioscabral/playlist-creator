@@ -6,7 +6,11 @@ import {differenceBy} from 'lodash'
 export default {
   state: {
     playlist: [],
+    // to be used on undo action
+    previousPlaylist: null,
+    // originalPlaylist is the one before save
     originalPlaylist: [],
+    orderedBy: [],
     playlistName: 'My Playlist',
     playlistObject: {}
   },
@@ -85,6 +89,17 @@ export default {
         })
         .catch(e => { console.error(e) })
       }
+    },
+    reorder ({state, commit}, {playlist}) {
+      // save previousPlaylist
+      commit('UPDATE_PREVIOUS_PLAYLIST', {playlist: state.playlist})
+      // reordered playlist
+      commit('REPLACE_PLAYLIST', {playlistTracks: playlist})
+    },
+    undo ({commit, state}) {
+      // reordered playlist
+      commit('REPLACE_PLAYLIST', {playlistTracks: state.previousPlaylist})
+      commit('UPDATE_PREVIOUS_PLAYLIST', {playlist: null})
     }
   },
   mutations: {
@@ -105,6 +120,9 @@ export default {
     },
     SET_PLAYLIST_OBJ (state, {playlist}) {
       state.playlistObject = playlist
+    },
+    UPDATE_PREVIOUS_PLAYLIST (state, {playlist}) {
+      state.previousPlaylist = playlist
     }
   }
 }

@@ -30,12 +30,14 @@
         </div>
         <input v-else type="text" class="input" v-model="name" @keyup.enter="isEditing = false" @change="changePlaylistName({name})"> -->
         <div  class="name">
-          Playlist name: {{playlistName}}
+          {{playlistName}}
         </div>
       </div>
       <orderable-table
         :headers="tableHeaders"
-        :items="playlist">
+        :items="playlist"
+        :order-by="orderedBy"
+        @reorder="reorderBy">
 
       </orderable-table>
       <song-list :songs="playlist" :show-features="true"></song-list>
@@ -47,16 +49,19 @@
 </template>
 
 <script>
+import {store} from '../stores'
 import { mapGetters, mapActions } from 'vuex'
 import SongList from './song-list'
 import OrderableTable from './table/orderable-table'
+import {orderBy} from 'lodash'
 
 export default {
   name: 'playlist-manager',
   data () {
     return {
       isEditing: false,
-      name: this.playlistName || ''
+      name: this.playlistName || '',
+      orderedBy: []
     }
   },
   computed: {
@@ -65,19 +70,8 @@ export default {
       'currentUser',
       'playlist',
       'playlistName',
-      'playlistIsEmpty',
       'userPlaylists'
     ]),
-    // headers: [
-    //   {key: 'name.first', label: 'name'},
-    //   {key: 'name.last', label: 'surname'},
-    //   {key: 'gender'},
-    //   {key: 'phone+cell', label: 'contacts'},
-    //   {key: 'picture.thumbnail', label: 'avatar'},
-    //   {key: 'nat', label: 'nationality'}
-    // ],
-    // orderBy: `['name.first', 'name.last']`,
-    // items: []
     tableHeaders () {
       return [
         {key: 'name', label: 'Name'},
@@ -95,12 +89,34 @@ export default {
     ...mapActions([
       'changePlaylistName',
       'loadPlaylist',
-      'addTracksToPlaylist'
+      'addTracksToPlaylist',
+      'reorder'
     ]),
     createPlaylist () {
       if (this.currentUser.id && this.name.length > 0) {
         // better use the spotifyApi on the App component where the token is set
         this.$emit('create-playlist', this.name)
+      }
+    },
+    reorderBy (header) {
+      let reorderedPlaylist = []
+      if (this.orderedBy.includes(header.key)) {
+        if (this.orderedBy.includes('desc')) {
+          // remove from orderedBy
+          this.orderedBy = []
+          this.reorderBy(header)
+        } else { // change order
+          this.orderedBy.push('desc')
+          let [property, order] = this.orderedBy
+          reorderedPlaylist = orderBy(this.playlist, [property], [order])
+          store.dispatch('reorder', {playlist: reorderedPlaylist})
+        }
+      } else {
+        this.orderedBy = []
+        this.orderedBy.push(header.key)
+        let [property] = this.orderedBy
+        reorderedPlaylist = orderBy(this.playlist, [property], ['asc'])
+        store.dispatch('reorder', {playlist: reorderedPlaylist})
       }
     }
   },
