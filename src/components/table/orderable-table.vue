@@ -4,7 +4,9 @@
       <tr class="tr">
         <th></th>
         <th></th>
-        <th class="th" @click="reorderBy(header)" v-for="header in headers">{{header.label || header.key}}</th>
+        <th class="th" @click="reorderBy(header)" v-for="header in headers">
+          {{header.label || header.key}}
+        </th>
       </tr>
     </thead>
     <tbody class="tbody">
@@ -54,11 +56,21 @@ export default {
     get,
     reorderBy (header) {
       this.$emit('reorder', header)
+    },
+    icon (header) {
+      if (this.orderBy[0] === header.key) {
+        if (this.orderBy[1]) {
+          return this.orderBy[1] === 'asc' ? '▴' : '▾'
+        }
+      }
+      return ''
     }
   },
   components: {
     Play,
     AddToPlaylist
+  },
+  computed: {
   }
 }
 </script>
