@@ -31,6 +31,7 @@
         <input v-else type="text" class="input" v-model="name" @keyup.enter="isEditing = false" @change="changePlaylistName({name})"> -->
         <div  class="name">
           {{playlistName}} ({{totalSongs}}) ({{msToTime(totalDurationPlaylist)}})
+          <span class="clickable" v-if="previousPlaylist"><a @click="undo">undo</a></span>
         </div>
       </div>
       <orderable-table
@@ -72,7 +73,8 @@ export default {
       'playlistName',
       'userPlaylists',
       'totalDurationPlaylist',
-      'totalSongs'
+      'totalSongs',
+      'previousPlaylist'
     ]),
     tableHeaders () {
       return [
@@ -92,7 +94,8 @@ export default {
       'changePlaylistName',
       'loadPlaylist',
       'addTracksToPlaylist',
-      'reorder'
+      'reorder',
+      'undo'
     ]),
     createPlaylist () {
       if (this.currentUser.id && this.name.length > 0) {

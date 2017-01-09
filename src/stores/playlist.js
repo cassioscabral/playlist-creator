@@ -19,7 +19,8 @@ export default {
     playlistName: state => state.playlistName,
     playlistIsEmpty: state => state.playlist.length === 0,
     totalDurationPlaylist: ({playlist}) => playlist.reduce((a, b) => a + b.duration_ms, 0),
-    totalSongs: ({playlist}) => playlist.length
+    totalSongs: ({playlist}) => playlist.length,
+    previousPlaylist: ({previousPlaylist}) => previousPlaylist
   },
   actions: {
     push ({commit}, {track}) {
