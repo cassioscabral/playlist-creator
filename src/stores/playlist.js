@@ -17,7 +17,9 @@ export default {
   getters: {
     playlist: state => state.playlist,
     playlistName: state => state.playlistName,
-    playlistIsEmpty: state => state.playlist.length === 0
+    playlistIsEmpty: state => state.playlist.length === 0,
+    totalDurationPlaylist: ({playlist}) => playlist.reduce((a, b) => a + b.duration_ms, 0),
+    totalSongs: ({playlist}) => playlist.length
   },
   actions: {
     push ({commit}, {track}) {

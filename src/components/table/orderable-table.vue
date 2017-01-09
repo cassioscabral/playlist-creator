@@ -2,19 +2,37 @@
   <table class="table">
     <thead class="thead">
       <tr class="tr">
+        <th></th>
+        <th></th>
         <th class="th" @click="reorderBy(header)" v-for="header in headers">{{header.label || header.key}}</th>
       </tr>
     </thead>
     <tbody class="tbody">
       <tr class="tr" v-for="(item, index) in items">
-        <td class="td" v-for="header in headers">{{get(item, header.key)}}</td>
+        <td>
+          <play :song="item" class="mr-5"></play>
+        </td>
+        <td>
+          <add-to-playlist :song="item"></add-to-playlist>
+        </td>
+        <td class="td" v-for="header in headers">
+          <span v-if="header.parser">
+            {{header.parser(get(item, header.key))}}
+          </span>
+          <span v-else>
+            {{get(item, header.key)}}
+          </span>
+        </td>
       </tr>
     </tbody>
   </table>
 </template>
 
 <script>
+import Play from '../play'
+import AddToPlaylist from '../add-to-playlist'
 import {get} from 'lodash'
+
 export default {
   name: 'orderable-table',
   props: {
@@ -38,7 +56,9 @@ export default {
       this.$emit('reorder', header)
     }
   },
-  computed: {
+  components: {
+    Play,
+    AddToPlaylist
   }
 }
 </script>

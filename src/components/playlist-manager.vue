@@ -30,7 +30,7 @@
         </div>
         <input v-else type="text" class="input" v-model="name" @keyup.enter="isEditing = false" @change="changePlaylistName({name})"> -->
         <div  class="name">
-          {{playlistName}}
+          {{playlistName}} ({{totalSongs}}) ({{msToTime(totalDurationPlaylist)}})
         </div>
       </div>
       <orderable-table
@@ -40,7 +40,6 @@
         @reorder="reorderBy">
 
       </orderable-table>
-      <song-list :songs="playlist" :show-features="true"></song-list>
       <button v-if="this.playlist.length > 0" class="button" @click="addTracksToPlaylist">
         Save
       </button>
@@ -54,6 +53,7 @@ import { mapGetters, mapActions } from 'vuex'
 import SongList from './song-list'
 import OrderableTable from './table/orderable-table'
 import {orderBy} from 'lodash'
+import {msToTime} from 'src/utils'
 
 export default {
   name: 'playlist-manager',
@@ -70,13 +70,15 @@ export default {
       'currentUser',
       'playlist',
       'playlistName',
-      'userPlaylists'
+      'userPlaylists',
+      'totalDurationPlaylist',
+      'totalSongs'
     ]),
     tableHeaders () {
       return [
         {key: 'name', label: 'Name'},
         {key: 'artists[0].name', label: 'Artist'},
-        {key: 'features.duration_ms', label: 'Duration'},
+        {key: 'features.duration_ms', label: 'Duration', parser: this.msToTime},
         {key: 'features.valence', label: 'Happiness'},
         {key: 'features.instrumentalness', label: 'Instrumentalness'},
         {key: 'features.energy', label: 'Energy'},
@@ -118,7 +120,8 @@ export default {
         reorderedPlaylist = orderBy(this.playlist, [property], ['asc'])
         store.dispatch('reorder', {playlist: reorderedPlaylist})
       }
-    }
+    },
+    msToTime
   },
   components: {
     SongList,
