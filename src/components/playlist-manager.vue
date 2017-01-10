@@ -31,7 +31,7 @@
         <input v-else type="text" class="input" v-model="name" @keyup.enter="isEditing = false" @change="changePlaylistName({name})"> -->
         <div  class="name">
           {{playlistName}} ({{totalSongs}}) ({{msToTime(totalDurationPlaylist)}})
-          <span class="clickable" v-if="previousPlaylist"><a @click="undo">undo ↺</a></span>
+          <span class="clickable" v-if="previousPlaylist"><a @click="undo() && cleanOrderedBy()">undo ↺</a></span>
         </div>
       </div>
       <orderable-table
@@ -97,6 +97,9 @@ export default {
       'reorder',
       'undo'
     ]),
+    cleanOrderedBy () {
+      this.orderedBy = []
+    },
     createPlaylist () {
       if (this.currentUser.id && this.name.length > 0) {
         // better use the spotifyApi on the App component where the token is set

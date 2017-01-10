@@ -4,7 +4,7 @@
       <tr class="tr">
         <th></th>
         <th></th>
-        <th class="th" @click="reorderBy(header)" v-for="header in headers">
+        <th class="th" @click="reorderBy(header)" v-for="header in headerWithIcons">
           {{header.label || header.key}}
         </th>
       </tr>
@@ -17,7 +17,7 @@
         <td>
           <add-to-playlist :song="item"></add-to-playlist>
         </td>
-        <td class="td" v-for="header in headers">
+        <td class="td" v-for="header in headerWithIcons">
           <span v-if="header.parser">
             {{header.parser(get(item, header.key))}}
           </span>
@@ -57,6 +57,7 @@ export default {
     reorderBy (header) {
       this.$emit('reorder', header)
     },
+    // TODO maybe generate all the labels with the icons inside a computed property
     icon (header) {
       if (this.orderBy[0] === header.key) {
         if (this.orderBy[1]) {
@@ -71,6 +72,29 @@ export default {
     AddToPlaylist
   },
   computed: {
+    headerWithIcons () {
+      let [key, order = 'asc'] = this.orderBy
+      return this.headers.map(h => {
+        if (h.key === key) {
+          let copyH = Object.assign({}, h)
+          if (order === 'asc') {
+            if (copyH.label.includes('▾')) {
+              copyH.label[copyH.label.length - 1] = '▴'
+            } else {
+              copyH.label += '▴'
+            }
+          } else {
+            if (copyH.label.includes('▴')) {
+              copyH.label[copyH.label.length - 1] = '▾'
+            } else {
+              copyH.label += '▾'
+            }
+          }
+          return copyH
+        }
+        return h
+      })
+    }
   }
 }
 </script>
