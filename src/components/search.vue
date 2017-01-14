@@ -36,7 +36,7 @@
             <div class="left">
               {{result.name}}
             </div>
-            <div class="right">
+            <div class="right" v-if="index < maximumShortcut">
               Alt + {{index + 1}}
             </div>
           </div>
@@ -57,7 +57,8 @@ export default {
     return {
       artistSearchInput: '',
       searchResult: [],
-      isSearching: false
+      isSearching: false,
+      maximumShortcut: 5
     }
   },
   methods: {
@@ -77,9 +78,12 @@ export default {
   watch: {
     artistSearchInput () {
       if (this.artistSearchInput.length > 0) {
-        spotifyApi.searchArtists(this.artistSearchInput, {limit: 5})
+        this.isSearching = true
+        spotifyApi.searchArtists(this.artistSearchInput, {limit: 10})
         .then(data => { this.searchResult = data.artists.items })
         .catch(err => { console.log(err) })
+      } else {
+        this.isSearching = false
       }
     }
   }
@@ -107,6 +111,10 @@ $font-size: 1.7rem
   padding: 0
   flex-direction: column
   justify-content: space-between
+  transition: all 0.5s ease-in-out
+  .result-item
+    opacity: 0
+    font-size: 0
   &.is-active
     opacity: 1
     height: auto
@@ -115,6 +123,7 @@ $font-size: 1.7rem
     display: flex
     list-style: none
     padding: 4px 0
+    opacity: 1
     font-size: $font-size
     cursor: pointer
     border-bottom: 1px solid #d9d9d9
@@ -137,10 +146,4 @@ $font-size: 1.7rem
   font-size: $font-size
   padding: 2px 0 2px 6px
 
-// .artist-input
-//   &:focus ~ .list-results,
-//   &:active ~ .list-results
-//     opacity: 1
-//     height: auto
-//     visibility: visible
 </style>
