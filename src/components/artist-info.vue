@@ -2,10 +2,10 @@
 <div class="artist-info" v-if="selectedArtist.id">
   <div class="row current-artist vertical-space">
     <div class="column">
-      <img class="image circle" :src="selectedArtist.images[1].url" :alt="selectedArtist.name">
       <div class="text vertical-space">
         {{selectedArtist.name}}
       </div>
+      <img class="image" :src="selectedArtist.images[1].url" :alt="selectedArtist.name">
     </div>
 
     <div class="top-songs column limit-height" v-if="topTracks.length > 0">
@@ -73,6 +73,5 @@ export default {
 
 .current-artist
   justify-content: space-between
-  align-items: center
 
 </style>
