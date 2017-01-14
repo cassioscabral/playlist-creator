@@ -1,7 +1,7 @@
 const SpotifyApi = require('spotify-web-api-js')
 
 const spotifyApi = new SpotifyApi()
-import {differenceBy} from 'lodash'
+import {differenceBy, chunk} from 'lodash'
 
 export default {
   state: {
@@ -80,6 +80,7 @@ export default {
       if (!rootState.accessToken) {
         dispatch('cleanAccess')
         window.alert('Please login again')
+        return
       }
 
       const newTracks = differenceBy(state.playlist, state.originalPlaylist, 'id').map(t => t.uri)
@@ -103,6 +104,33 @@ export default {
       // reordered playlist
       commit('REPLACE_PLAYLIST', {playlistTracks: state.previousPlaylist})
       commit('UPDATE_PREVIOUS_PLAYLIST', {playlist: null})
+    },
+
+    /**
+     * SpotifyApi only accepts requests with a maximum of 100 tracks per requests
+     * Since the creator can reorder the playlist, the easy way to save this is to replace 100 tracks and add
+     * the rest in 100 batches using  addTracksToPlaylist after replaceTracksInPlaylist.
+     * @param {any} {state, commit}
+     * @param {Object} {playlist}
+     */
+    savePlaylist ({state, commit, rootState, dispatch}, {maximumPerRequest = 100}) {
+      if (!rootState.accessToken) {
+        dispatch('cleanAccess')
+        window.alert('Please login again')
+        return
+      }
+      spotifyApi.setAccessToken(rootState.accessToken)
+      const userId = rootState.currentUser.id
+      const playlistId = state.playlistObject.id
+      const playlistURIs = state.playlist.map(track => track.uri)
+      const chunks = chunk(playlistURIs, maximumPerRequest)
+      chunks.forEach(async (chunk, i) => {
+        if (i === 0) { // first
+          await spotifyApi.replaceTracksInPlaylist(userId, playlistId, chunk)
+        } else { // rest
+          await spotifyApi.addTracksToPlaylist(userId, playlistId, chunk)
+        }
+      })
     }
   },
   mutations: {

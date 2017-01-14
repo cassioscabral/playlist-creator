@@ -41,7 +41,7 @@
         @reorder="reorderBy">
 
       </orderable-table>
-      <button v-if="this.playlist.length > 0" class="button" @click="addTracksToPlaylist">
+      <button v-if="this.playlist.length > 0" class="button" @click="savePlaylist">
         Save
       </button>
     </div>
@@ -95,7 +95,8 @@ export default {
       'loadPlaylist',
       'addTracksToPlaylist',
       'reorder',
-      'undo'
+      'undo',
+      'savePlaylist'
     ]),
     cleanOrderedBy () {
       this.orderedBy = []
