@@ -27,18 +27,12 @@
             <artist-info
               :selected-artist="selectedArtist"
               :related-artists="relatedArtists"
+              :top-tracks="currentSelectedArtistTopTracks"
               @select-artist="updateCurrentSelectedArtist">
             </artist-info>
           </div>
           <div class="row">
-            <div class="top-songs column limit-height" v-if="currentSelectedArtistTopTracks.length > 0">
-              <div class="text vertical-space">
-                Top Songs
-              </div>
-              <song-list
-                :songs="currentSelectedArtistTopTracks">
-              </song-list>
-            </div>
+
             <div class="current-album-songs column limit-height" v-if="currentSelectedArtistAlbumTracks.length > 0">
               <div class="text vertical-space">
                 <img v-if="currentSelectedAlbum.images.length > 0" class="image" :src="currentSelectedAlbum.images[1].url" :alt="currentSelectedAlbum.name">

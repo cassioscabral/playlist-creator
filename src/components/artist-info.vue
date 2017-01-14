@@ -3,9 +3,18 @@
   <div class="row current-artist vertical-space">
     <div class="column">
       <img class="image circle" :src="selectedArtist.images[1].url" :alt="selectedArtist.name">
+      <div class="text vertical-space">
+        {{selectedArtist.name}}
+      </div>
     </div>
-    <div class="column text">
-      {{selectedArtist.name}}
+
+    <div class="top-songs column limit-height" v-if="topTracks.length > 0">
+      <div class="text vertical-space">
+        Top Songs
+      </div>
+      <song-list
+        :songs="topTracks">
+      </song-list>
     </div>
   </div>
   <div class="vertical-space text">Related with {{selectedArtist.name}}</div>
@@ -24,6 +33,8 @@
 </template>
 
 <script>
+import SongList from './song-list'
+
 export default {
   name: 'artist-info',
   props: {
@@ -31,6 +42,9 @@ export default {
       type: Object
     },
     relatedArtists: {
+      type: Array
+    },
+    topTracks: {
       type: Array
     }
   },
@@ -43,6 +57,9 @@ export default {
     selectArtist (artist) {
       this.$emit('select-artist', artist)
     }
+  },
+  components: {
+    SongList
   }
 }
 </script>
@@ -57,5 +74,5 @@ export default {
 .current-artist
   justify-content: space-between
   align-items: center
-  width: 20%
+
 </style>
