@@ -46,6 +46,9 @@ export default {
     changePlaylistName ({commit}, {name}) {
       commit('CHANGE_PLAYLIST_NAME', {name})
     },
+    resetAll ({commit}) {
+      commit('RESET_ALL')
+    },
     loadPlaylist ({commit, rootState}, {playlist}) {
       commit('SET_PLAYLIST_OBJ', {playlist})
       spotifyApi.setAccessToken(rootState.accessToken)
@@ -105,19 +108,22 @@ export default {
       commit('REPLACE_PLAYLIST', {playlistTracks: state.previousPlaylist})
       commit('UPDATE_PREVIOUS_PLAYLIST', {playlist: null})
     },
-
     /**
      * SpotifyApi only accepts requests with a maximum of 100 tracks per requests
      * Since the creator can reorder the playlist, the easy way to save this is to replace 100 tracks and add
-     * the rest in 100 batches using  addTracksToPlaylist after replaceTracksInPlaylist.
-     * @param {any} {state, commit}
-     * @param {Object} {playlist}
+     * the rest in 100 batches using  addTracksToPlaylist after replaceTracksInPlaylist
+     * @param {any} {state, commit, rootState, dispatch}
+     * @param {any} {maximumPerRequest = 100}
      */
-    savePlaylist ({state, commit, rootState, dispatch}, {maximumPerRequest = 100}) {
+    async savePlaylist ({state, commit, rootState, dispatch}, {maximumPerRequest = 100}) {
       if (!rootState.accessToken) {
         dispatch('cleanAccess')
         window.alert('Please login again')
         return
+      }
+
+      if (!state.playlistObject.id) { // playlist was not created
+        await dispatch('createPlaylist', {name: state.playlistName})
       }
       spotifyApi.setAccessToken(rootState.accessToken)
       const userId = rootState.currentUser.id
@@ -130,6 +136,24 @@ export default {
         } else { // rest
           await spotifyApi.addTracksToPlaylist(userId, playlistId, chunk)
         }
+      })
+    },
+    createPlaylist ({state, dispatch, rootState}, {name}) {
+      if (!rootState.accessToken || !rootState.currentUser) {
+        dispatch('cleanAccess')
+        window.alert('Please login again')
+        return
+      }
+
+      return spotifyApi.createPlaylist(rootState.currentUser.id, {name})
+      .then((playlist) => {
+        dispatch('changePlaylistName', {name})
+        dispatch('setPlaylistObject', {playlist})
+      })
+      .catch(e => {
+        console.error(e)
+        dispatch('cleanAccess')
+        window.alert('Please login again')
       })
     }
   },
@@ -154,6 +178,14 @@ export default {
     },
     UPDATE_PREVIOUS_PLAYLIST (state, {playlist}) {
       state.previousPlaylist = playlist
+    },
+    RESET_ALL (state) {
+      state.playlist = []
+      state.previousPlaylist = null
+      state.originalPlaylist = []
+      state.orderedBy = []
+      state.playlistName = 'My Playlist'
+      state.playlistObject = {}
     }
   }
 }

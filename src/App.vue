@@ -154,6 +154,7 @@ export default {
     }
   },
   mounted () {
+    // store.dispatch('resetAll')
     const accessToken = getAccessToken() // comes from URL
     if (accessToken) {
       store.dispatch('saveAccessToken', {accessToken})
@@ -184,17 +185,7 @@ export default {
   },
   methods: {
     createPlaylist (name) {
-      spotifyApi.createPlaylist(this.currentUser.id, {name})
-      .then((playlist) => {
-        store.dispatch('replace', {playlistTracks: []})
-        store.dispatch('changePlaylistName', {name})
-        store.dispatch('setPlaylistObject', {playlist})
-      })
-      .catch(e => {
-        console.error(e)
-        store.dispatch('cleanAccess')
-        window.alert('Please login again')
-      })
+      store.dispatch('createPlaylist', {name})
     },
     selectAlbum (album) {
       this.currentSelectedAlbum = album
