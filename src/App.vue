@@ -253,6 +253,7 @@ export default {
 .playlist-creator
   display: flex
   flex-direction: column
+  margin-bottom: 50px
 
 .albums
   flex: 2
