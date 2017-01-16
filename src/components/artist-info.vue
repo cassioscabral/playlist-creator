@@ -4,11 +4,12 @@
     <div class="column">
       <img class="image" :src="selectedArtist.images[1].url" :alt="selectedArtist.name">
       <div class="text vertical-space">
-        {{selectedArtist.name}}
+        <span class="clickable" @click="unselectGenre">{{selectedArtist.name}}</span>
         <div class="genres">
           <span
-            class="genre"
-            v-for="genre in selectedArtist.genres">
+            class="genre clickable"
+            v-for="genre in selectedArtist.genres"
+            @click="selectGenre(genre)">
             {{genre}}
           </span>
         </div>
@@ -24,22 +25,42 @@
       </song-list>
     </div>
   </div>
-  <div class="vertical-space text">Related with {{selectedArtist.name}}</div>
+  <div class="vertical-space text">
+
+    <span v-if="selectedGenre">
+      <span class="clickable" @click="unselectGenre">{{selectedArtist.name}}</span> > {{selectedGenre}}
+    </span>
+    <span v-else>Related with {{selectedArtist.name}}</span>
+
+  </div>
   <!-- Could be reused on album-browser  -->
   <div class="related-artists media-wrapper column">
 
     <div
       v-for="artist in relatedArtists"
       class="artist media clickable"
+      v-show="!selectedGenre"
       @click="selectArtist(artist)">
       <img class="image circle" :src="artist.images[1].url" :alt="artist.name">
       {{artist.name}}
     </div>
+
+    <div
+      v-if="selectedGenre"
+      v-for="artist in genreResults"
+      class="artist media clickable"
+      @click="selectArtist(artist)">
+      <img class="image circle" :src="artist.images[1].url" :alt="artist.name">
+      {{artist.name}}
+    </div>
+
+
   </div>
 </div>
 </template>
 
 <script>
+import spotifyApi from '../loaders/spotifyApi'
 import SongList from './song-list'
 
 export default {
@@ -57,12 +78,21 @@ export default {
   },
   data () {
     return {
-
+      selectedGenre: null, // reset when selectedArtist changes
+      genreResults: []
     }
   },
   methods: {
     selectArtist (artist) {
       this.$emit('select-artist', artist)
+    },
+    async selectGenre (genre) {
+      this.selectedGenre = genre
+      let {artists} = await spotifyApi.searchArtists(`genre:${genre.replace(' ', '+')}`)
+      this.genreResults = artists.items
+    },
+    unselectGenre () {
+      this.selectedGenre = null
     }
   },
   components: {

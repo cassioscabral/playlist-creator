@@ -82,9 +82,9 @@ function generateRandomString (length) {
   return text
 }
 
-const SpotifyApi = require('spotify-web-api-js')
+// const SpotifyApi = require('spotify-web-api-js')
 
-const spotifyApi = new SpotifyApi()
+// const spotifyApi = new SpotifyApi()
 
 import {store} from './stores'
 import { mapGetters } from 'vuex'
@@ -95,6 +95,7 @@ import AlbumBrowser from './components/album-browser'
 import ArtistInfo from './components/artist-info'
 import PlaylistManager from './components/playlist-manager'
 import {uniqBy} from 'lodash'
+import spotifyApi from './loaders/spotifyApi'
 
 export default {
   name: 'app',
@@ -287,6 +288,8 @@ export default {
 
 .clickable
   cursor: pointer
+  &:hover
+    text-decoration: underline
 
 .header
   display: flex
