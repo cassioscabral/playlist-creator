@@ -43,7 +43,7 @@
         </li>
       </ul>
       <input class="checkbox clickable" type="checkbox" v-model="searchingGenres">
-      <span v-show="searchingGenres && artistSearchInput.length > 0">genre search</span>
+      <span v-show="searchingGenres && artistSearchInput.length > 0">genre</span>
       </input>
     </div>
   </div>

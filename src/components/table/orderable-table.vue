@@ -4,7 +4,7 @@
       <tr class="tr">
         <th></th>
         <th></th>
-        <th class="th" @click="reorderBy(header)" v-for="header in headerWithIcons">
+        <th class="th" :colspan="header.colspan || 1" @click="reorderBy(header)" v-for="header in headerWithIcons">
           {{header.label || header.key}}
         </th>
       </tr>
@@ -17,7 +17,7 @@
         <td>
           <add-to-playlist :song="item"></add-to-playlist>
         </td>
-        <td class="td" v-for="header in headerWithIcons">
+        <td class="td" :colspan="header.colspan || 1" v-for="header in headerWithIcons">
           <span v-if="header.parser">
             {{header.parser(get(item, header.key))}}
           </span>
@@ -111,7 +111,7 @@ export default {
       border-bottom: none
 
 .td, .th
-  padding: 0.5rem
+  padding: 0.4rem
   text-align: left
 
 th

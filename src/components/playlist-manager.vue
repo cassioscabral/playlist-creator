@@ -2,7 +2,7 @@
   <div class="playlist-manager">
     <div class="column user-playlists" v-if="userPlaylists">
       <div class="text vertical-space">
-        My Playlists:
+        My Playlists
       </div>
       <div class="text vertical-space">
         <input type="text" class="input" v-model="name" @keyup.enter="isEditing = false" @change="changePlaylistName({name})">
@@ -13,9 +13,10 @@
           ➕
         </button>
       </div>
-      <ul>
+      <ul class="playlists">
         <li
-          class="clickable"
+          class="playlist clickable"
+          :class="{'is-selected': playlistObject.id === playlist.id}"
           v-for="playlist in userPlaylists"
           @click="loadPlaylist({playlist})">
           {{playlist.name}}
@@ -74,16 +75,19 @@ export default {
       'userPlaylists',
       'totalDurationPlaylist',
       'totalSongs',
-      'previousPlaylist'
+      'previousPlaylist',
+      'playlistObject'
     ]),
     tableHeaders () {
       return [
-        {key: 'name', label: 'Name'},
-        {key: 'artists[0].name', label: 'Artist'},
+        {key: 'name', label: 'Name', colspan: 2},
+        {key: 'artists[0].name', label: 'Artist', colspan: 2},
         {key: 'features.duration_ms', label: 'Duration', parser: this.msToTime},
         {key: 'features.valence', label: 'Happiness'},
         {key: 'features.instrumentalness', label: 'Instrumentalness'},
         {key: 'features.energy', label: 'Energy'},
+        {key: 'features.acousticness', label: 'Acousticness'},
+        {key: 'features.danceability', label: 'Danceability'},
         {key: 'features.speechiness', label: 'Speechiness'},
         {key: 'features.tempo', label: 'Tempo(BPM)'}
       ]
@@ -142,12 +146,30 @@ export default {
   display: flex
 
 .user-playlists
-  width: 30%
+  width: 20%
 
 .current-playlist
-  width: 70%
+  width: 80%
 
 .save-button
   background: #1ED760
+  width: 20%
+  align-self: flex-end
 
+
+
+.playlists
+  padding: 0 0.4rem
+  .playlist
+    text-decoration: none
+    list-style: none
+    padding: 0.5rem 0 0.5rem 0.5rem
+    margin: 0
+    border-bottom: 1px solid black
+    &:hover
+      background: #1ED760
+    &:last-child
+      border-bottom: none
+    &.is-selected
+      background: #91f5b5
 </style>

@@ -21,7 +21,7 @@
       <div class="search-area vertical-space">
         <search @selected-artist="updateCurrentSelectedArtist"></search>
       </div>
-      <div class="songs vertical-space">
+      <div class="songs vertical-space" v-if="selectedArtist && selectedArtist.id">
         <div class="browse-albums-and-songs vertical-space column">
           <div class="selected-artist-info">
             <artist-info
