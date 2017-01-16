@@ -1,12 +1,14 @@
 <template>
   <div class="search">
+    <span v-show="artistSearchInput.length > 0">genre</span>
+    <input class="checkbox clickable" type="checkbox" v-model="searchingGenres">
     <div class="artist-search">
       <input
       autofocus
       type="text"
       v-model="artistSearchInput"
       class="artist-input input"
-      :placeholder="searchingGenres ? 'genre' : 'artist'"
+      :placeholder="searchPlaceholder"
       @focus="isSearching = true"
       @keyup.esc="isSearching = false"
       @keyup.alt.49="selectItemWithKey"
@@ -42,8 +44,6 @@
           </div>
         </li>
       </ul>
-      <input class="checkbox clickable" type="checkbox" v-model="searchingGenres">
-      <span v-show="artistSearchInput.length > 0">genre</span>
       </input>
     </div>
   </div>
@@ -75,6 +75,11 @@ export default {
       if (keyCode > 48 || keyCode < 55) {
         this.selectResult(this.searchResult[keyCode - 49])
       }
+    }
+  },
+  computed: {
+    searchPlaceholder () {
+      return this.searchingGenres ? 'genre' : 'artist'
     }
   },
   watch: {

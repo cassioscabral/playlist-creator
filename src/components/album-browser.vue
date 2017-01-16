@@ -1,5 +1,9 @@
 <template>
-<div class="album-browser column" v-if="albums.length > 0">
+<div
+  class="album-browser column"
+  ref="albums"
+  v-if="albums.length > 0"
+  @mousewheel.prevent="mousewheel">
     <div
       v-for="album in albums"
       class="album clickable"
@@ -24,6 +28,11 @@ export default {
   methods: {
     selectAlbum (album) {
       this.$emit('select-album', album)
+    },
+    mousewheel (e) {
+      const {deltaY} = e
+
+      this.$refs.albums.scrollLeft -= deltaY / 5
     }
   }
 }
