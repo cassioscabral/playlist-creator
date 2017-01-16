@@ -4,13 +4,19 @@
       <div class="text vertical-space">
         My Playlists
       </div>
-      <div class="text vertical-space">
-        <input type="text" class="input" v-model="name" @keyup.enter="isEditing = false" @change="changePlaylistName({name})">
+      <div class="create-playlist text vertical-space">
+        <input
+          type="text"
+          class="input"
+          v-model.trim="name"
+          placeholder="Playlist name"
+          @keyup.enter="isEditing = false"
+          @change="changePlaylistName({name})">
         <button
-          class="button"
-          @click="createPlaylist"
+          class="button add-button spotify-green"
+          @click="createPlaylist({name, clean: true})"
           :disabled="this.name.length === 0">
-          ➕
+          Create
         </button>
       </div>
       <ul class="playlists">
@@ -42,7 +48,7 @@
         @reorder="reorderBy">
 
       </orderable-table>
-      <button class="button save-button" @click="savePlaylist">
+      <button class="button save-button spotify-green" @click="savePlaylist">
         Save
       </button>
     </div>
@@ -100,16 +106,11 @@ export default {
       'addTracksToPlaylist',
       'reorder',
       'undo',
-      'savePlaylist'
+      'savePlaylist',
+      'createPlaylist'
     ]),
     cleanOrderedBy () {
       this.orderedBy = []
-    },
-    createPlaylist () {
-      if (this.currentUser.id && this.name.length > 0) {
-        // better use the spotifyApi on the App component where the token is set
-        this.$emit('create-playlist', this.name)
-      }
     },
     reorderBy (header) {
       let reorderedPlaylist = []
@@ -172,4 +173,18 @@ export default {
       border-bottom: none
     &.is-selected
       background: #91f5b5
+      &:hover
+        background: #1ED760
+
+.create-playlist
+  display: flex
+  flex-wrap: wrap
+  .input
+    margin: 2% 0
+    width: 98%
+  .add-button
+    width: 98%
+    margin: 2% 0
+
+
 </style>

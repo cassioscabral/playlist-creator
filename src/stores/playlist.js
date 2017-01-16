@@ -83,7 +83,7 @@ export default {
     addTracksToPlaylist ({state, commit, rootState, dispatch}) {
       if (!rootState.accessToken) {
         dispatch('cleanAccess')
-        window.alert('Please login again')
+        window.alertify.warning('Please login again')
         return
       }
 
@@ -118,10 +118,9 @@ export default {
      */
     async savePlaylist ({state, commit, rootState, dispatch}, {maximumPerRequest = 100}) {
       const {currentUser} = rootState
-      const playlistObject = state.playlistObject
       if (!rootState.accessToken) {
         dispatch('cleanAccess')
-        window.alert('Please login again')
+        window.alertify.warning('Please login again')
         return
       }
 
@@ -130,7 +129,7 @@ export default {
       }
       spotifyApi.setAccessToken(rootState.accessToken)
       const userId = currentUser.id
-      const playlistId = playlistObject.id
+      const playlistId = state.playlistObject.id
       const playlistURIs = state.playlist.map(track => track.uri)
       const chunks = chunk(playlistURIs, maximumPerRequest)
       try {
@@ -152,23 +151,44 @@ export default {
         window.alertify.warning('Please login again')
       }
     },
-    createPlaylist ({state, dispatch, rootState}, {name}) {
+    async createPlaylist ({state, dispatch, rootState, commit}, {name, clean = false}) {
       if (!rootState.accessToken || !rootState.currentUser) {
-        dispatch('cleanAccess')
-        window.alert('Please login again')
+        await dispatch('cleanAccess')
+        window.alertify.warning('Please login again')
         return
       }
+      // clean the playlist
+      if (clean) {
+        commit('CLEAN_PLAYLIST')
+      }
 
-      return spotifyApi.createPlaylist(rootState.currentUser.id, {name})
-      .then((playlist) => {
-        dispatch('changePlaylistName', {name})
-        dispatch('setPlaylistObject', {playlist})
-      })
-      .catch(e => {
-        console.error(e)
-        dispatch('cleanAccess')
-        window.alert('Please login again')
-      })
+      try {
+        const playlist = await spotifyApi.createPlaylist(rootState.currentUser.id, {name})
+        await dispatch('changePlaylistName', {name})
+        await dispatch('setPlaylistObject', {playlist})
+        await dispatch('pushPlaylist', {playlist})
+        return playlist
+      } catch (error) {
+        console.error(error)
+        await dispatch('cleanAccess')
+        window.alertify.warning('Please login again')
+      }
+
+      // return spotifyApi.createPlaylist(rootState.currentUser.id, {name})
+      // .then((playlist) => {
+      //   dispatch('changePlaylistName', {name})
+      //   dispatch('setPlaylistObject', {playlist})
+      //   return playlist
+      // })
+      // .then((playlist) => {
+      //   dispatch('pushPlaylist', {playlist})
+      //   return playlist
+      // })
+      // .catch(e => {
+      //   console.error(e)
+      //   dispatch('cleanAccess')
+      //   window.alertify.warning('Please login again')
+      // })
     }
   },
   mutations: {
@@ -200,6 +220,9 @@ export default {
       state.orderedBy = []
       state.playlistName = 'My Playlist'
       state.playlistObject = {}
+    },
+    CLEAN_PLAYLIST (state) {
+      state.playlist = []
     }
   }
 }

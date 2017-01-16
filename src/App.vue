@@ -53,8 +53,7 @@
       </div>
       <!-- end of current-album -->
       <playlist-manager
-        v-if="this.accessToken"
-        @create-playlist="createPlaylist">
+        v-if="this.accessToken">
       </playlist-manager>
       <!-- end of playlist-manager -->
       <player></player>
@@ -138,19 +137,19 @@ export default {
         // top tracks
         spotifyApi.getArtistTopTracks(this.selectedArtist.id, 'BR')
         .then(data => { this.currentSelectedArtistTopTracks = data.tracks })
-        .catch(err => { console.log(err) })
+        .catch(err => { console.error(err) })
 
         // albums
         spotifyApi.getArtistAlbums(this.selectedArtist.id, 'BR')
         .then(data => {
           this.currentSelectedArtistAlbums = uniqBy(data.items.filter(a => a.album_type === 'album'), 'name')
         })
-        .catch(err => { console.log(err) })
+        .catch(err => { console.error(err) })
 
         // related artists
         spotifyApi.getArtistRelatedArtists(this.selectedArtist.id, 'BR')
         .then(data => { this.relatedArtists = data.artists })
-        .catch(err => { console.log(err) })
+        .catch(err => { console.error(err) })
       }
     }
   },
@@ -183,8 +182,8 @@ export default {
         // playlist might not exist and the user just reload
         let playlistWasDeleted = playlists.filter(p => p.id === this.playlistObject.id).length === 0
         if (this.playlist.length !== 0 && playlistWasDeleted) {
-          window.alert('If you deleted this playlist on Spotify, create a new one before please')
-          // store.dispatch('resetPlaylistStore')
+          window.alertify.warning('Your playlist was deleted on Spotify, create a new one')
+          store.dispatch('resetPlaylistStore')
         }
       })
       .catch(e => {
@@ -194,9 +193,6 @@ export default {
     }
   },
   methods: {
-    createPlaylist (name) {
-      store.dispatch('createPlaylist', {name})
-    },
     selectAlbum (album) {
       this.currentSelectedAlbum = album
     },
@@ -269,6 +265,8 @@ export default {
   img
     border-radius: 50%
     margin-right: 0.5rem
+    width: 50px
+    height: 50px
 
 // utils
 .vertical-space
@@ -310,6 +308,15 @@ export default {
   padding: 5px 10px
   outline: none
 
+.input
+  height: 2.3rem
+  font-size: 1.7rem
+  max-width: 100%
+  padding: 0
+  margin: 0
+  line-height: 1
+  box-sizing: border-box
+
 .limit-height
   max-height: 400px
   overflow: auto
@@ -347,6 +354,12 @@ export default {
   margin-right: 5px
   &:last-child
     margin-right: 0
+
+.spotify-green
+  background: #1ED760
+  color: black
+  &:hover
+    background: #31f778
 </style>
 
 <style type="text/css">

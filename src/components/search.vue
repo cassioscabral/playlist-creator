@@ -43,7 +43,7 @@
         </li>
       </ul>
       <input class="checkbox clickable" type="checkbox" v-model="searchingGenres">
-      <span v-show="searchingGenres && artistSearchInput.length > 0">genre</span>
+      <span v-show="artistSearchInput.length > 0">genre</span>
       </input>
     </div>
   </div>
@@ -84,7 +84,7 @@ export default {
         let searchInput = this.searchingGenres ? `genre:${this.artistSearchInput.replace(' ', '+')}` : this.artistSearchInput
         spotifyApi.searchArtists(searchInput, {limit: 10})
         .then(data => { this.searchResult = data.artists.items })
-        .catch(err => { console.log(err) })
+        .catch(err => { console.error(err) })
       } else {
         this.isSearching = false
       }
