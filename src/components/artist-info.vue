@@ -2,10 +2,17 @@
 <div class="artist-info" v-if="selectedArtist.id">
   <div class="row current-artist vertical-space">
     <div class="column">
+      <img class="image" :src="selectedArtist.images[1].url" :alt="selectedArtist.name">
       <div class="text vertical-space">
         {{selectedArtist.name}}
+        <div class="genres">
+          <span
+            class="genre"
+            v-for="genre in selectedArtist.genres">
+            {{genre}}
+          </span>
+        </div>
       </div>
-      <img class="image" :src="selectedArtist.images[1].url" :alt="selectedArtist.name">
     </div>
 
     <div class="top-songs column limit-height" v-if="topTracks.length > 0">
@@ -74,4 +81,13 @@ export default {
 .current-artist
   justify-content: space-between
 
+.genres
+  display: flex
+  align-items: center
+.genre
+  border-radius: 16px
+  background-color: #84bd00
+  color: #000
+  padding: 0 1rem
+  margin: 0.3rem
 </style>
