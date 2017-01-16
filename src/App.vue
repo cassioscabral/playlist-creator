@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" ref="app">
     <header class="header">
       <div class="left">
         <h1>Playlist Creator</h1>
