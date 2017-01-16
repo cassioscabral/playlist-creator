@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" ref="app">
     <header class="header">
       <div class="left">
         <h1>Playlist Creator</h1>
@@ -21,24 +21,18 @@
       <div class="search-area vertical-space">
         <search @selected-artist="updateCurrentSelectedArtist"></search>
       </div>
-      <div class="songs vertical-space">
+      <div class="songs vertical-space" v-if="selectedArtist && selectedArtist.id">
         <div class="browse-albums-and-songs vertical-space column">
           <div class="selected-artist-info">
             <artist-info
               :selected-artist="selectedArtist"
               :related-artists="relatedArtists"
+              :top-tracks="currentSelectedArtistTopTracks"
               @select-artist="updateCurrentSelectedArtist">
             </artist-info>
           </div>
           <div class="row">
-            <div class="top-songs column limit-height" v-if="currentSelectedArtistTopTracks.length > 0">
-              <div class="text vertical-space">
-                Top Songs
-              </div>
-              <song-list
-                :songs="currentSelectedArtistTopTracks">
-              </song-list>
-            </div>
+
             <div class="current-album-songs column limit-height" v-if="currentSelectedArtistAlbumTracks.length > 0">
               <div class="text vertical-space">
                 <img v-if="currentSelectedAlbum.images.length > 0" class="image" :src="currentSelectedAlbum.images[1].url" :alt="currentSelectedAlbum.name">
@@ -59,7 +53,7 @@
       </div>
       <!-- end of current-album -->
       <playlist-manager
-        @create-playlist="createPlaylist">
+        v-if="this.accessToken">
       </playlist-manager>
       <!-- end of playlist-manager -->
       <player></player>
@@ -87,9 +81,9 @@ function generateRandomString (length) {
   return text
 }
 
-const SpotifyApi = require('spotify-web-api-js')
+// const SpotifyApi = require('spotify-web-api-js')
 
-const spotifyApi = new SpotifyApi()
+// const spotifyApi = new SpotifyApi()
 
 import {store} from './stores'
 import { mapGetters } from 'vuex'
@@ -100,6 +94,7 @@ import AlbumBrowser from './components/album-browser'
 import ArtistInfo from './components/artist-info'
 import PlaylistManager from './components/playlist-manager'
 import {uniqBy} from 'lodash'
+import spotifyApi from './loaders/spotifyApi'
 
 export default {
   name: 'app',
@@ -129,7 +124,7 @@ export default {
       if (this.currentSelectedAlbum.id) {
         spotifyApi.getAlbumTracks(this.currentSelectedAlbum.id)
         .then(data => { this.currentSelectedArtistAlbumTracks = data.items })
-        .catch(err => { console.log(err) })
+        .catch(err => { console.error(err) })
       }
     },
     selectedArtist () {
@@ -140,25 +135,26 @@ export default {
         // TODO change 'BR' to geolocation data
 
         // top tracks
-        spotifyApi.getArtistTopTracks(this.selectedArtist.id, 'BR')
+        spotifyApi.getArtistTopTracks(this.selectedArtist.id, 'US')
         .then(data => { this.currentSelectedArtistTopTracks = data.tracks })
-        .catch(err => { console.log(err) })
+        .catch(err => { console.error(err) })
 
         // albums
-        spotifyApi.getArtistAlbums(this.selectedArtist.id, 'BR')
+        spotifyApi.getArtistAlbums(this.selectedArtist.id)
         .then(data => {
           this.currentSelectedArtistAlbums = uniqBy(data.items.filter(a => a.album_type === 'album'), 'name')
         })
-        .catch(err => { console.log(err) })
+        .catch(err => { console.error(err) })
 
         // related artists
-        spotifyApi.getArtistRelatedArtists(this.selectedArtist.id, 'BR')
+        spotifyApi.getArtistRelatedArtists(this.selectedArtist.id)
         .then(data => { this.relatedArtists = data.artists })
-        .catch(err => { console.log(err) })
+        .catch(err => { console.error(err) })
       }
     }
   },
   mounted () {
+    // store.dispatch('resetAll')
     const accessToken = getAccessToken() // comes from URL
     if (accessToken) {
       store.dispatch('saveAccessToken', {accessToken})
@@ -180,6 +176,15 @@ export default {
         // get only playlists owned by the user
         const playlists = data.items.filter(i => i.owner.id === this.currentUser.id)
         store.dispatch('saveUserPlaylists', {playlists})
+        return playlists
+      })
+      .then(playlists => {
+        // playlist might not exist and the user just reload
+        let playlistWasDeleted = playlists.filter(p => p.id === this.playlistObject.id).length === 0
+        if (this.playlist.length !== 0 && playlistWasDeleted) {
+          window.alertify.warning('Your playlist was deleted on Spotify, create a new one')
+          store.dispatch('resetPlaylistStore')
+        }
       })
       .catch(e => {
         console.warn(e)
@@ -188,19 +193,6 @@ export default {
     }
   },
   methods: {
-    createPlaylist (name) {
-      spotifyApi.createPlaylist(this.currentUser.id, {name})
-      .then((playlist) => {
-        store.dispatch('replace', {playlistTracks: []})
-        store.dispatch('changePlaylistName', {name})
-        store.dispatch('setPlaylistObject', {playlist})
-      })
-      .catch(e => {
-        console.error(e)
-        store.dispatch('cleanAccess')
-        window.alert('Please login again')
-      })
-    },
     selectAlbum (album) {
       this.currentSelectedAlbum = album
     },
@@ -210,7 +202,7 @@ export default {
     login () {
       const stateKey = 'spotify_auth_state'
       const clientId = '49275dd30324422b8bbba8bdea0e7b8c' // Your client id
-      let redirectUri = window.location.href // 'http://localhost:8080/' // Your redirect uri
+      let redirectUri = window.location.origin + '/' // Your redirect uri
       const state = generateRandomString(16)
       window.localStorage.setItem(stateKey, state)
       const scope = 'user-read-private user-read-email playlist-modify-public playlist-modify-private playlist-read-private'
@@ -228,7 +220,8 @@ export default {
       'accessToken',
       'currentUser',
       'playlist',
-      'playlistName'
+      'playlistName',
+      'playlistObject'
     ])
   },
   components: {
@@ -242,14 +235,22 @@ export default {
 }
 </script>
 <style lang="sass">
+@import './assets/colors'
+
+body
+  color: $base-color
+  background: $base-background
+  margin: 0
+  padding: 0
+
 #app
   font-family: 'Avenir', Helvetica, Arial, sans-serif
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
-  color: #2c3e50
   display: flex
   flex-direction: column
   max-width: 100%
+  margin: 0.5rem
 
 .browse-albums-and-songs
   min-height: 400px
@@ -258,6 +259,7 @@ export default {
 .playlist-creator
   display: flex
   flex-direction: column
+  margin-bottom: 50px
 
 .albums
   flex: 2
@@ -271,6 +273,8 @@ export default {
   img
     border-radius: 50%
     margin-right: 0.5rem
+    width: 50px
+    height: 50px
 
 // utils
 .vertical-space
@@ -290,6 +294,13 @@ export default {
 
 .clickable
   cursor: pointer
+  &:hover
+    text-decoration: underline
+
+.checkbox
+  transform: scale(1.4)
+  padding: 4px
+  margin: 4px
 
 .header
   display: flex
@@ -304,6 +315,15 @@ export default {
   border-radius: 5px
   padding: 5px 10px
   outline: none
+
+.input
+  height: 2.3rem
+  font-size: 1.7rem
+  max-width: 100%
+  padding: 0
+  margin: 0
+  line-height: 1
+  box-sizing: border-box
 
 .limit-height
   max-height: 400px
@@ -342,6 +362,12 @@ export default {
   margin-right: 5px
   &:last-child
     margin-right: 0
+
+.spotify-green
+  background: #1ED760
+  color: black
+  &:hover
+    background: #31f778
 </style>
 
 <style type="text/css">

@@ -1,13 +1,16 @@
 <template>
   <div class="search">
+    <span v-show="artistSearchInput.length > 0">genre</span>
+    <input class="checkbox clickable" type="checkbox" v-model="searchingGenres">
     <div class="artist-search">
       <input
+      autofocus
       type="text"
       v-model="artistSearchInput"
       class="artist-input input"
-      placeholder="artist"
-      autofocus
+      :placeholder="searchPlaceholder"
       @focus="isSearching = true"
+      @keyup.esc="isSearching = false"
       @keyup.alt.49="selectItemWithKey"
       @keyup.alt.50="selectItemWithKey"
       @keyup.alt.51="selectItemWithKey"
@@ -18,7 +21,6 @@
       @keyup.meta.51="selectItemWithKey"
       @keyup.meta.52="selectItemWithKey"
       @keyup.meta.53="selectItemWithKey">
-      <!-- list results -->
       <ul class="list-results"
         :class="{'is-active': isSearching}">
         <li
@@ -36,20 +38,19 @@
             <div class="left">
               {{result.name}}
             </div>
-            <div class="right">
+            <div class="right" v-if="index < maximumShortcut">
               Alt + {{index + 1}}
             </div>
           </div>
         </li>
       </ul>
+      </input>
     </div>
   </div>
 </template>
 
 <script>
-const SpotifyApi = require('spotify-web-api-js')
-
-const spotifyApi = new SpotifyApi()
+import spotifyApi from '../loaders/spotifyApi'
 
 export default {
   name: 'search',
@@ -57,7 +58,9 @@ export default {
     return {
       artistSearchInput: '',
       searchResult: [],
-      isSearching: false
+      isSearching: false,
+      maximumShortcut: 5,
+      searchingGenres: false
     }
   },
   methods: {
@@ -74,12 +77,21 @@ export default {
       }
     }
   },
+  computed: {
+    searchPlaceholder () {
+      return this.searchingGenres ? 'genre' : 'artist'
+    }
+  },
   watch: {
     artistSearchInput () {
       if (this.artistSearchInput.length > 0) {
-        spotifyApi.searchArtists(this.artistSearchInput, {limit: 5})
+        this.isSearching = true
+        let searchInput = this.searchingGenres ? `genre:${this.artistSearchInput.replace(' ', '+')}` : this.artistSearchInput
+        spotifyApi.searchArtists(searchInput, {limit: 10})
         .then(data => { this.searchResult = data.artists.items })
-        .catch(err => { console.log(err) })
+        .catch(err => { console.error(err) })
+      } else {
+        this.isSearching = false
       }
     }
   }
@@ -87,6 +99,8 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+@import '../assets/colors'
+
 $font-size: 1.7rem
 
 .artist-search
@@ -107,6 +121,10 @@ $font-size: 1.7rem
   padding: 0
   flex-direction: column
   justify-content: space-between
+  transition: all 0.5s ease-in-out
+  .result-item
+    opacity: 0
+    font-size: 0
   &.is-active
     opacity: 1
     height: auto
@@ -115,9 +133,10 @@ $font-size: 1.7rem
     display: flex
     list-style: none
     padding: 4px 0
+    opacity: 1
     font-size: $font-size
     cursor: pointer
-    border-bottom: 1px solid #d9d9d9
+    border-bottom: 1px solid $base-color
     .name
       display: flex
       justify-content: space-between
@@ -128,19 +147,13 @@ $font-size: 1.7rem
       height: 38px
       margin-right: 10px
     &:hover
-      background: #afc3d5
+      background: $base-hover
     &:focus
-      background: #afc3d5
+      background: $base-hover
 
 .input
   height: 3rem
   font-size: $font-size
   padding: 2px 0 2px 6px
 
-// .artist-input
-//   &:focus ~ .list-results,
-//   &:active ~ .list-results
-//     opacity: 1
-//     height: auto
-//     visibility: visible
 </style>

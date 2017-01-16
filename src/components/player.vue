@@ -69,5 +69,11 @@ export default {
 }
 </script>
 
-<style lang="css">
+<style lang="sass">
+.player
+  position: fixed
+  bottom: 0
+  height: 40px
+  width: 100%
+  opacity: 0.8
 </style>
