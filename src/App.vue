@@ -176,6 +176,15 @@ export default {
         // get only playlists owned by the user
         const playlists = data.items.filter(i => i.owner.id === this.currentUser.id)
         store.dispatch('saveUserPlaylists', {playlists})
+        return playlists
+      })
+      .then(playlists => {
+        // playlist might not exist and the user just reload
+        let playlistWasDeleted = playlists.filter(p => p.id === this.playlistObject.id).length === 0
+        if (this.playlist.length !== 0 && playlistWasDeleted) {
+          window.alert('If you deleted this playlist on Spotify, create a new one before please')
+          // store.dispatch('resetPlaylistStore')
+        }
       })
       .catch(e => {
         console.warn(e)
@@ -214,7 +223,8 @@ export default {
       'accessToken',
       'currentUser',
       'playlist',
-      'playlistName'
+      'playlistName',
+      'playlistObject'
     ])
   },
   components: {

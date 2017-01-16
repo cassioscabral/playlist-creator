@@ -41,7 +41,7 @@
         @reorder="reorderBy">
 
       </orderable-table>
-      <button v-if="this.playlist.length > 0" class="button" @click="savePlaylist">
+      <button class="button save-button" @click="savePlaylist">
         Save
       </button>
     </div>
@@ -146,5 +146,8 @@ export default {
 
 .current-playlist
   width: 70%
+
+.save-button
+  background: #1ED760
 
 </style>

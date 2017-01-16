@@ -1,22 +1,21 @@
 const SpotifyApi = require('spotify-web-api-js')
-
 const spotifyApi = new SpotifyApi()
 import {differenceBy, chunk} from 'lodash'
-
 export default {
   state: {
-    playlist: [],
+    playlist: [], // hold all the tracks
     // to be used on undo action
     previousPlaylist: null,
     // originalPlaylist is the one before save
     originalPlaylist: [],
     orderedBy: [],
     playlistName: 'My Playlist',
-    playlistObject: {}
+    playlistObject: {} // playlist object from Spotify
   },
   getters: {
     playlist: state => state.playlist,
     playlistName: state => state.playlistName,
+    playlistObject: state => state.playlistObject,
     playlistIsEmpty: state => state.playlist.length === 0,
     totalDurationPlaylist: ({playlist}) => playlist.reduce((a, b) => a + b.duration_ms, 0),
     totalSongs: ({playlist}) => playlist.length,
@@ -26,7 +25,6 @@ export default {
     push ({commit}, {track}) {
       spotifyApi.getAudioFeaturesForTrack(track.id)
       .then(data => {
-        console.log(data)
         track.features = data
         commit('PUSH', {track})
       })
@@ -47,6 +45,9 @@ export default {
       commit('CHANGE_PLAYLIST_NAME', {name})
     },
     resetAll ({commit}) {
+      commit('RESET_ALL')
+    },
+    resetPlaylistStore ({commit}) {
       commit('RESET_ALL')
     },
     loadPlaylist ({commit, rootState}, {playlist}) {
@@ -116,6 +117,8 @@ export default {
      * @param {any} {maximumPerRequest = 100}
      */
     async savePlaylist ({state, commit, rootState, dispatch}, {maximumPerRequest = 100}) {
+      const {currentUser} = rootState
+      const playlistObject = state.playlistObject
       if (!rootState.accessToken) {
         dispatch('cleanAccess')
         window.alert('Please login again')
@@ -126,17 +129,28 @@ export default {
         await dispatch('createPlaylist', {name: state.playlistName})
       }
       spotifyApi.setAccessToken(rootState.accessToken)
-      const userId = rootState.currentUser.id
-      const playlistId = state.playlistObject.id
+      const userId = currentUser.id
+      const playlistId = playlistObject.id
       const playlistURIs = state.playlist.map(track => track.uri)
       const chunks = chunk(playlistURIs, maximumPerRequest)
-      chunks.forEach(async (chunk, i) => {
-        if (i === 0) { // first
-          await spotifyApi.replaceTracksInPlaylist(userId, playlistId, chunk)
-        } else { // rest
-          await spotifyApi.addTracksToPlaylist(userId, playlistId, chunk)
+      try {
+        if (playlistURIs.length === 0) {
+          await spotifyApi.replaceTracksInPlaylist(userId, playlistId, [])
+        } else {
+          chunks.forEach(async (chunk, i) => {
+            if (i === 0) { // first
+              await spotifyApi.replaceTracksInPlaylist(userId, playlistId, chunk)
+            } else { // rest
+              await spotifyApi.addTracksToPlaylist(userId, playlistId, chunk)
+            }
+          })
+          window.alertify.success('Saved')
         }
-      })
+      } catch (err) {
+        console.error(err)
+        dispatch('cleanAccess')
+        window.alertify.warning('Please login again')
+      }
     },
     createPlaylist ({state, dispatch, rootState}, {name}) {
       if (!rootState.accessToken || !rootState.currentUser) {
@@ -159,7 +173,7 @@ export default {
   },
   mutations: {
     PUSH (state, {track}) {
-      state.playlist = [...state.playlist, track]
+      state.playlist.push(track)
     },
     REMOVE (state, {track}) {
       state.playlist = state.playlist.filter(t => t.id !== track.id)

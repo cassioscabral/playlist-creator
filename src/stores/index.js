@@ -29,6 +29,9 @@ export const store = new Vuex.Store({
     },
     cleanAccess ({commit}) {
       commit('CLEAN_ACCESS')
+    },
+    pushPlaylist ({commit}, {playlist}) {
+      commit('PUSH_PLAYLIST', {playlist})
     }
   },
   mutations: {
@@ -44,6 +47,9 @@ export const store = new Vuex.Store({
     CLEAN_ACCESS (state) {
       state.accessToken = ''
       state.currentUser = {}
+    },
+    PUSH_PLAYLIST (state, {playlist}) {
+      state.userPlaylists.unshift(playlist)
     }
   },
   modules: {
