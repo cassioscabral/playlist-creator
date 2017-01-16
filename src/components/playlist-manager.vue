@@ -90,7 +90,7 @@ export default {
         {key: 'artists[0].name', label: 'Artist', colspan: 2},
         {key: 'features.duration_ms', label: 'Duration', parser: this.msToTime},
         {key: 'features.valence', label: 'Happiness'},
-        {key: 'features.instrumentalness', label: 'Instrumentalness'},
+        {key: 'features.instrumentalness', label: 'Instrumental'},
         {key: 'features.energy', label: 'Energy'},
         {key: 'features.acousticness', label: 'Acousticness'},
         {key: 'features.danceability', label: 'Danceability'},
@@ -143,6 +143,8 @@ export default {
 </script>
 
 <style lang="sass">
+@import '../assets/colors'
+
 .playlist-manager
   display: flex
 
@@ -166,15 +168,15 @@ export default {
     list-style: none
     padding: 0.5rem 0 0.5rem 0.5rem
     margin: 0
-    border-bottom: 1px solid black
+    border-bottom: 1px solid $base-color
     &:hover
-      background: #1ED760
+      background: $base-hover
     &:last-child
       border-bottom: none
     &.is-selected
-      background: #91f5b5
+      background: $base-selected
       &:hover
-        background: #1ED760
+        background: $base-hover
 
 .create-playlist
   display: flex

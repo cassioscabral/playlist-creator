@@ -2,12 +2,13 @@
   <div class="search">
     <div class="artist-search">
       <input
+      autofocus
       type="text"
       v-model="artistSearchInput"
       class="artist-input input"
       :placeholder="searchingGenres ? 'genre' : 'artist'"
-      autofocus
       @focus="isSearching = true"
+      @keyup.esc="isSearching = false"
       @keyup.alt.49="selectItemWithKey"
       @keyup.alt.50="selectItemWithKey"
       @keyup.alt.51="selectItemWithKey"
@@ -18,7 +19,6 @@
       @keyup.meta.51="selectItemWithKey"
       @keyup.meta.52="selectItemWithKey"
       @keyup.meta.53="selectItemWithKey">
-      <!-- list results -->
       <ul class="list-results"
         :class="{'is-active': isSearching}">
         <li
@@ -94,6 +94,8 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+@import '../assets/colors'
+
 $font-size: 1.7rem
 
 .artist-search
@@ -129,7 +131,7 @@ $font-size: 1.7rem
     opacity: 1
     font-size: $font-size
     cursor: pointer
-    border-bottom: 1px solid #d9d9d9
+    border-bottom: 1px solid $base-color
     .name
       display: flex
       justify-content: space-between
@@ -140,9 +142,9 @@ $font-size: 1.7rem
       height: 38px
       margin-right: 10px
     &:hover
-      background: #afc3d5
+      background: $base-hover
     &:focus
-      background: #afc3d5
+      background: $base-hover
 
 .input
   height: 3rem

@@ -124,7 +124,7 @@ export default {
       if (this.currentSelectedAlbum.id) {
         spotifyApi.getAlbumTracks(this.currentSelectedAlbum.id)
         .then(data => { this.currentSelectedArtistAlbumTracks = data.items })
-        .catch(err => { console.log(err) })
+        .catch(err => { console.error(err) })
       }
     },
     selectedArtist () {
@@ -135,19 +135,19 @@ export default {
         // TODO change 'BR' to geolocation data
 
         // top tracks
-        spotifyApi.getArtistTopTracks(this.selectedArtist.id, 'BR')
+        spotifyApi.getArtistTopTracks(this.selectedArtist.id, 'US')
         .then(data => { this.currentSelectedArtistTopTracks = data.tracks })
         .catch(err => { console.error(err) })
 
         // albums
-        spotifyApi.getArtistAlbums(this.selectedArtist.id, 'BR')
+        spotifyApi.getArtistAlbums(this.selectedArtist.id)
         .then(data => {
           this.currentSelectedArtistAlbums = uniqBy(data.items.filter(a => a.album_type === 'album'), 'name')
         })
         .catch(err => { console.error(err) })
 
         // related artists
-        spotifyApi.getArtistRelatedArtists(this.selectedArtist.id, 'BR')
+        spotifyApi.getArtistRelatedArtists(this.selectedArtist.id)
         .then(data => { this.relatedArtists = data.artists })
         .catch(err => { console.error(err) })
       }
@@ -235,14 +235,22 @@ export default {
 }
 </script>
 <style lang="sass">
+@import './assets/colors'
+
+body
+  color: $base-color
+  background: $base-background
+  margin: 0
+  padding: 0
+
 #app
   font-family: 'Avenir', Helvetica, Arial, sans-serif
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
-  color: #2c3e50
   display: flex
   flex-direction: column
   max-width: 100%
+  margin: 0.5rem
 
 .browse-albums-and-songs
   min-height: 400px

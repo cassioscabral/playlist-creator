@@ -107,11 +107,13 @@ export default {
 </script>
 
 <style lang="sass">
+@import '../assets/colors'
+
 .related-artists
   display: flex
   flex-wrap: wrap
   overflow: auto
-  border-bottom: 1px solid black
+  border-bottom: 1px solid $base-color
 
 .current-artist
   justify-content: space-between
