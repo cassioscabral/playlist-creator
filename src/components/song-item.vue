@@ -6,7 +6,7 @@
     <div class="song-name">
       {{song.name}}
     </div>
-    <div class="song-artist">
+    <div v-if="showArtistName" class="song-artist">
       {{song.artists[0].name}}
     </div>
     <div class="song-duration">
@@ -29,6 +29,12 @@ export default {
       type: Object
     },
     showFeatures: {
+      type: Boolean,
+      default () {
+        false
+      }
+    },
+    showArtistName: {
       type: Boolean,
       default () {
         false
