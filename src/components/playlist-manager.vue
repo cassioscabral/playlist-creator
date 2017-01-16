@@ -40,7 +40,10 @@
           {{playlistName}} ({{totalSongs}}) ({{msToTime(totalDurationPlaylist)}})
           <span class="clickable" v-if="previousPlaylist"><a @click="undo() && cleanOrderedBy()">undo ↺</a></span>
         </div>
-        <canvas v-show="playlist.length > 0" ref="canvas" id="myChart" width="400" height="100"></canvas>
+        <div class="text vertical-space">
+          <input type="checkbox" v-model="showGraph" class="checkbox"> Show Graph
+        </div>
+        <canvas v-show="showGraph && playlist.length > 0" ref="canvas" id="myChart" width="400" height="100"></canvas>
       </div>
       <orderable-table
         :headers="tableHeaders"
@@ -61,7 +64,7 @@ import {store} from '../stores'
 import { mapGetters, mapActions } from 'vuex'
 import SongList from './song-list'
 import OrderableTable from './table/orderable-table'
-import {orderBy} from 'lodash'
+import {orderBy, get} from 'lodash'
 import {msToTime} from 'src/utils'
 
 export default {
@@ -70,7 +73,9 @@ export default {
     return {
       isEditing: false,
       name: this.playlistName || '',
-      orderedBy: []
+      orderedBy: [],
+      chart: null,
+      showGraph: false
     }
   },
   computed: {
@@ -87,17 +92,24 @@ export default {
     ]),
     tableHeaders () {
       return [
-        {key: 'name', label: 'Name', colspan: 2},
-        {key: 'artists[0].name', label: 'Artist', colspan: 2},
-        {key: 'features.duration_ms', label: 'Duration', parser: this.msToTime},
+        {key: 'name', label: 'Name', colspan: 2, hideOnGraph: true},
+        {key: 'artists[0].name', label: 'Artist', colspan: 2, hideOnGraph: true},
+        {key: 'features.duration_ms', label: 'Duration', parser: this.msToTime, hideOnGraph: true},
         {key: 'features.valence', label: 'Happiness'},
         {key: 'features.instrumentalness', label: 'Instrumental'},
         {key: 'features.energy', label: 'Energy'},
         {key: 'features.acousticness', label: 'Acousticness'},
         {key: 'features.danceability', label: 'Danceability'},
         {key: 'features.speechiness', label: 'Speechiness'},
-        {key: 'features.tempo', label: 'Tempo(BPM)'}
+        {key: 'features.tempo', label: 'Tempo(BPM)', hideOnGraph: true}
       ]
+    }
+  },
+  watch: {
+    showGraph () {
+      if (this.showGraph) {
+        this.mountGraph()
+      }
     }
   },
   methods: {
@@ -134,48 +146,60 @@ export default {
         store.dispatch('reorder', {playlist: reorderedPlaylist})
       }
     },
-    msToTime
+    msToTime,
+    mountGraph () {
+      const ctx = this.$refs.canvas
+
+      // let colors = ['green', 'yellow', 'red', 'blue', 'orange', '#d3c2a1', 'magenta', '#d1d1d1', '#babaca', '#a2b2c2']
+      let datasets = []
+      this.tableHeaders.forEach((th, i) => {
+        let time = 0
+        if (th.hideOnGraph) {
+          // continue
+        } else {
+          let r = Math.floor(Math.random() * 256)
+          let g = Math.floor(Math.random() * 256)
+          let b = Math.floor(Math.random() * 256)
+          let a = 0.2
+
+          let backgroundColor = `rgba(${r}, ${g}, ${b}, ${a})`
+          let borderColor = `rgba(${r}, ${g}, ${b}, 1)`
+          datasets.push({
+            label: th.label,
+            backgroundColor,
+            borderColor,
+            data: this.playlist.map(t => {
+              time += ((t.duration_ms / 1000) / 60) / 60 // minutes
+              // console.log('time', time)
+              return {
+                x: time,
+                y: th.parser ? th.parser(get(t, th.key)) : get(t, th.key)
+              }
+            })
+          })
+        }
+      })
+      this.chart = new window.Chart.Line(ctx, {
+        data: {
+          datasets
+        },
+        options: {
+          responsive: true,
+          scales: {
+            xAxes: [{
+              type: 'linear',
+              position: 'bottom'
+            }],
+            yAxes: [{
+              type: 'linear',
+              stacked: true
+            }]
+          }
+        }
+      })
+    }
   },
   mounted () {
-    const ctx = this.$refs.canvas
-    let myChart = new window.Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-        datasets: [{
-          label: '# of Votes',
-          data: [12, 19, 3, 5, 2, 3],
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-            'rgba(255, 159, 64, 0.2)'
-          ],
-          borderColor: [
-            'rgba(255,99,132,1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)'
-          ],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        responsive: true,
-        scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: true
-            }
-          }]
-        }
-      }
-    })
-    console.log('myChart', myChart)
   },
   components: {
     SongList,
