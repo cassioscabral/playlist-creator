@@ -291,6 +291,11 @@ export default {
   &:hover
     text-decoration: underline
 
+.checkbox
+  transform: scale(1.4)
+  padding: 4px
+  margin: 4px
+
 .header
   display: flex
   width: 100%

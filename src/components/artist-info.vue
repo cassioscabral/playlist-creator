@@ -1,11 +1,12 @@
 <template>
 <div class="artist-info" v-if="selectedArtist.id">
   <div class="row current-artist vertical-space">
-    <div class="column">
+    <div class="column artist-and-genres">
       <img class="image" :src="selectedArtist.images[1].url" :alt="selectedArtist.name">
       <div class="text vertical-space">
         <span class="clickable" @click="unselectGenre">{{selectedArtist.name}}</span>
-        <div class="genres">
+      </div>
+      <div class="genres">
           <span
             class="genre clickable"
             v-for="genre in selectedArtist.genres"
@@ -13,7 +14,6 @@
             {{genre}}
           </span>
         </div>
-      </div>
     </div>
 
     <div class="top-songs column limit-height" v-if="topTracks.length > 0">
@@ -82,6 +82,11 @@ export default {
       genreResults: []
     }
   },
+  watch: {
+    selectedArtist () {
+      this.selectedGenre = null
+    }
+  },
   methods: {
     selectArtist (artist) {
       this.$emit('select-artist', artist)
@@ -114,10 +119,14 @@ export default {
 .genres
   display: flex
   align-items: center
-.genre
-  border-radius: 16px
-  background-color: #84bd00
-  color: #000
-  padding: 0 1rem
-  margin: 0.3rem
+  flex-wrap: wrap
+  .genre
+    border-radius: 16px
+    background-color: #84bd00
+    color: #000
+    padding: 0 1rem
+    margin: 0.3rem
+
+.artist-and-genres
+  max-width: 50%
 </style>

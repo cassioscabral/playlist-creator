@@ -5,7 +5,7 @@
       type="text"
       v-model="artistSearchInput"
       class="artist-input input"
-      placeholder="artist"
+      :placeholder="searchingGenres ? 'genre' : 'artist'"
       autofocus
       @focus="isSearching = true"
       @keyup.alt.49="selectItemWithKey"
@@ -42,14 +42,15 @@
           </div>
         </li>
       </ul>
+      <input class="checkbox clickable" type="checkbox" v-model="searchingGenres">
+      <span v-show="searchingGenres && artistSearchInput.length > 0">genre search</span>
+      </input>
     </div>
   </div>
 </template>
 
 <script>
-const SpotifyApi = require('spotify-web-api-js')
-
-const spotifyApi = new SpotifyApi()
+import spotifyApi from '../loaders/spotifyApi'
 
 export default {
   name: 'search',
@@ -58,7 +59,8 @@ export default {
       artistSearchInput: '',
       searchResult: [],
       isSearching: false,
-      maximumShortcut: 5
+      maximumShortcut: 5,
+      searchingGenres: false
     }
   },
   methods: {
@@ -79,7 +81,8 @@ export default {
     artistSearchInput () {
       if (this.artistSearchInput.length > 0) {
         this.isSearching = true
-        spotifyApi.searchArtists(this.artistSearchInput, {limit: 10})
+        let searchInput = this.searchingGenres ? `genre:${this.artistSearchInput.replace(' ', '+')}` : this.artistSearchInput
+        spotifyApi.searchArtists(searchInput, {limit: 10})
         .then(data => { this.searchResult = data.artists.items })
         .catch(err => { console.log(err) })
       } else {
