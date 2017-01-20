@@ -54,23 +54,47 @@ export default {
       commit('SET_PLAYLIST_OBJ', {playlist})
       spotifyApi.setAccessToken(rootState.accessToken)
       spotifyApi.getPlaylistTracks(rootState.currentUser.id, playlist.id)
-      .then((data) => {
-        const playlistTracks = data.items.map(i => i.track)
+      .then(async ({items, next}) => {
+        let playlistTracks = items.map(i => i.track)
+        let currentNext = next
+        while (currentNext) {
+          let {items: moreTracks, next} = await spotifyApi.getGeneric(currentNext)
+          playlistTracks = playlistTracks.concat(moreTracks.map(i => i.track))
+          currentNext = next
+        }
+
         return playlistTracks
       })
-      .then(playlistTracks => {
+      // TODO this need to iterate over if next
+      .then(async playlistTracks => {
+        console.log('playlistTRacks.length', playlistTracks.length)
         const trackIds = playlistTracks.map(t => t.id)
-        spotifyApi.getAudioFeaturesForTracks(trackIds)
-        .then(({audio_features: features}) => {
-          return playlistTracks.map((t, index) => {
-            t.features = features[index]
-            return t
+        const chunkSize = 50
+        const chunks = chunk(trackIds, chunkSize)
+        try {
+          // TODO move everything to async await
+          await chunks.forEach(async (chunk, i) => {
+            const offset = i * chunkSize
+            const {audio_features: features} = await spotifyApi.getAudioFeaturesForTracks(chunk)
+            let playlistPiece = playlistTracks.slice(offset, offset + chunkSize)
+            playlistPiece.forEach(async (t, i) => {
+              t.features = await features[i]
+            })
           })
-        })
-        .then(tracksWithFeatures => {
-          commit('REPLACE_PLAYLIST', {playlistTracks: tracksWithFeatures})
-          commit('REPLACE_ORIGINAL_PLAYLIST', {playlistTracks: tracksWithFeatures})
-        })
+          console.log('playlistTracks', playlistTracks)
+          return playlistTracks
+        } catch (err) {
+          console.error(err)
+        }
+      })
+      .then(tracksWithFeatures => {
+        console.log('tracksWithFeatures', tracksWithFeatures)
+        commit('REPLACE_PLAYLIST', {playlistTracks: tracksWithFeatures})
+        commit('REPLACE_ORIGINAL_PLAYLIST', {playlistTracks: tracksWithFeatures})
+      })
+      .catch(e => {
+        console.error(e)
+        // commit('CLEAN_ACCESS')
       })
       .then(() => {
         commit('CHANGE_PLAYLIST_NAME', {name: playlist.name})
