@@ -50,10 +50,38 @@ export default {
     resetPlaylistStore ({commit}) {
       commit('RESET_ALL')
     },
-    loadPlaylist ({commit, rootState}, {playlist}) {
+    async loadPlaylist ({commit, rootState}, {playlist}) {
+      // TODO move things into try/catch
       commit('SET_PLAYLIST_OBJ', {playlist})
       spotifyApi.setAccessToken(rootState.accessToken)
-      spotifyApi.getPlaylistTracks(rootState.currentUser.id, playlist.id)
+
+      let {items, next} = await spotifyApi.getPlaylistTracks(rootState.currentUser.id, playlist.id)
+      let playlistTracks = items.map(i => i.track)
+      let currentNext = next
+      // add the rest of the tracks
+      while (currentNext) {
+        let {items: moreTracks, next} = await spotifyApi.getGeneric(currentNext)
+        playlistTracks = playlistTracks.concat(moreTracks.map(i => i.track))
+        currentNext = next
+      }
+
+      console.log('playlistTracks.length', playlistTracks.length)
+
+      const trackIds = playlistTracks.map(t => t.id)
+      const chunkSize = 50
+      const chunks = chunk(trackIds, chunkSize)
+
+      chunks.forEach(async (chunk, i) => {
+        const offset = i * chunkSize
+        const {audio_features: features} = await spotifyApi.getAudioFeaturesForTracks(chunk)
+        let playlistPiece = playlistTracks.slice(offset, offset + chunkSize)
+        playlistPiece.forEach((t, i) => {
+          t.features = features[i]
+        })
+      })
+
+      // TODO remove
+      return playlistTracks // nope
       .then(async ({items, next}) => {
         let playlistTracks = items.map(i => i.track)
         let currentNext = next
