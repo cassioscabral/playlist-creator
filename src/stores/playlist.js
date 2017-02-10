@@ -6,7 +6,7 @@ export default {
     playlist: [], // hold all the tracks
     // to be used on undo action
     previousPlaylist: null,
-    // originalPlaylist is the one before save
+    // originalPlaylist is the one before save, in case want to go back
     originalPlaylist: [],
     orderedBy: [],
     playlistName: 'My Playlist',
@@ -50,35 +50,43 @@ export default {
     resetPlaylistStore ({commit}) {
       commit('RESET_ALL')
     },
-    loadPlaylist ({commit, rootState}, {playlist}) {
-      commit('SET_PLAYLIST_OBJ', {playlist})
-      spotifyApi.setAccessToken(rootState.accessToken)
-      spotifyApi.getPlaylistTracks(rootState.currentUser.id, playlist.id)
-      .then((data) => {
-        const playlistTracks = data.items.map(i => i.track)
-        return playlistTracks
-      })
-      .then(playlistTracks => {
+    async loadPlaylist ({commit, rootState}, {playlist}) {
+      try {
+        // TODO move things into try/catch
+        commit('SET_PLAYLIST_OBJ', {playlist})
+        spotifyApi.setAccessToken(rootState.accessToken)
+
+        let {items, next} = await spotifyApi.getPlaylistTracks(rootState.currentUser.id, playlist.id)
+        let playlistTracks = items.map(i => i.track)
+        let currentNext = next
+        // add the rest of the tracks
+        while (currentNext) {
+          let {items: moreTracks, next} = await spotifyApi.getGeneric(currentNext)
+          playlistTracks = playlistTracks.concat(moreTracks.map(i => i.track))
+          currentNext = next
+        }
+
         const trackIds = playlistTracks.map(t => t.id)
-        spotifyApi.getAudioFeaturesForTracks(trackIds)
-        .then(({audio_features: features}) => {
-          return playlistTracks.map((t, index) => {
-            t.features = features[index]
-            return t
+        const chunkSize = 50
+        const chunks = chunk(trackIds, chunkSize)
+        // TODO needs to change the SpotifyApi(getAudioFeaturesForTracks) to send the request via body instead of params
+        const chunkEntries = chunks.entries()
+
+        for (const [i, chunk] of chunkEntries) {
+          const offset = i * chunkSize
+          const {audio_features: features} = await spotifyApi.getAudioFeaturesForTracks(chunk)
+          let playlistPiece = playlistTracks.slice(offset, offset + chunkSize)
+          playlistPiece.forEach((t, i) => {
+            t.features = features[i]
           })
-        })
-        .then(tracksWithFeatures => {
-          commit('REPLACE_PLAYLIST', {playlistTracks: tracksWithFeatures})
-          commit('REPLACE_ORIGINAL_PLAYLIST', {playlistTracks: tracksWithFeatures})
-        })
-      })
-      .then(() => {
+        }
+        // playlistTracks it has features now, supposedly
+        commit('REPLACE_PLAYLIST', {playlistTracks})
+        commit('REPLACE_ORIGINAL_PLAYLIST', {playlistTracks})
         commit('CHANGE_PLAYLIST_NAME', {name: playlist.name})
-      })
-      .catch(e => {
+      } catch (e) {
         console.error(e)
-        commit('CLEAN_ACCESS')
-      })
+      }
     },
     addTracksToPlaylist ({state, commit, rootState, dispatch}) {
       if (!rootState.accessToken) {
@@ -105,7 +113,6 @@ export default {
       commit('REPLACE_PLAYLIST', {playlistTracks: playlist})
     },
     undo ({commit, state}) {
-      // reordered playlist
       commit('REPLACE_PLAYLIST', {playlistTracks: state.previousPlaylist})
       commit('UPDATE_PREVIOUS_PLAYLIST', {playlist: null})
     },
