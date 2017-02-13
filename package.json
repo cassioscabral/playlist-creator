@@ -10,6 +10,7 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
+    "alertifyjs": "^1.9.0",
     "spotify-web-api-js": "^0.21.1",
     "vue": "^2.1.0",
     "vuex": "^2.1.1",

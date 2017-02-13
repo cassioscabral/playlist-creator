@@ -39,6 +39,9 @@
         <div  class="name">
           {{playlistName}} ({{totalSongs}}) ({{msToTime(totalDurationPlaylist)}})
           <span class="clickable" v-if="previousPlaylist"><a @click="undo() && cleanOrderedBy()">undo ↺</a></span>
+          <button class="button save-button spotify-green" @click="savePlaylist">
+            Save
+          </button>
         </div>
         <div class="text vertical-space">
           <input type="checkbox" v-model="showGraph" class="checkbox"> Show Graph
@@ -52,9 +55,6 @@
         @reorder="reorderBy">
 
       </orderable-table>
-      <button class="button save-button spotify-green" @click="savePlaylist">
-        Save
-      </button>
     </div>
   </div>
 </template>
