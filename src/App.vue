@@ -3,6 +3,7 @@
     <header class="header">
       <div class="left">
         <h1>Playlist Creator</h1>
+        <visual-range-number :value="0.5"></visual-range-number>
       </div>
       <div class="right">
         <button
@@ -93,6 +94,7 @@ import Player from './components/player'
 import AlbumBrowser from './components/album-browser'
 import ArtistInfo from './components/artist-info'
 import PlaylistManager from './components/playlist-manager'
+import VisualRangeNumber from './components/visual-range-number'
 import {uniqBy} from 'lodash'
 import spotifyApi from './loaders/spotifyApi'
 
@@ -230,7 +232,8 @@ export default {
     Player,
     AlbumBrowser,
     ArtistInfo,
-    PlaylistManager
+    PlaylistManager,
+    VisualRangeNumber
   }
 }
 </script>

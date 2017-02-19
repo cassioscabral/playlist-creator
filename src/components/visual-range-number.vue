@@ -4,8 +4,10 @@
   </div>
 </template>
 
-<style>
-
+<style lang="sass" scoped>
+.visual-range-number
+  min-width: 50px
+  border: 1px solid white
 </style>
 
 <script>
