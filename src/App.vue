@@ -3,7 +3,6 @@
     <header class="header">
       <div class="left">
         <h1>Playlist Creator</h1>
-        <visual-range-number :value="0.5"></visual-range-number>
       </div>
       <div class="right">
         <button
@@ -12,9 +11,14 @@
           @click="login">
           Login
         </button>
-        <div v-if="currentUser.id && currentUser.images" class="user-info text">
-          <img :src="currentUser.images[0].url" alt="" class="image">
-          {{currentUser.display_name || currentUser.id }}
+        <div
+          v-if="currentUser.id && currentUser.images"
+          class="user-info text">
+          <img
+            :src="currentUser.images[0].url"
+            alt=""
+            class="image">
+            {{currentUser.display_name || currentUser.id }}
         </div>
       </div>
     </header>
@@ -33,11 +37,13 @@
             </artist-info>
           </div>
           <div class="row">
-
             <div class="current-album-songs column limit-height" v-if="currentSelectedArtistAlbumTracks.length > 0">
               <div class="text vertical-space">
-                <img v-if="currentSelectedAlbum.images.length > 0" class="image" :src="currentSelectedAlbum.images[1].url" :alt="currentSelectedAlbum.name">
-                {{currentSelectedAlbum.name}}
+                <img
+                  v-if="currentSelectedAlbum.images.length > 0"
+                  class="image"
+                  :src="currentSelectedAlbum.images[1].url" :alt="currentSelectedAlbum.name">
+                  {{currentSelectedAlbum.name}}
               </div>
               <song-list
                 :songs="currentSelectedArtistAlbumTracks">
@@ -81,10 +87,6 @@ function generateRandomString (length) {
   }
   return text
 }
-
-// const SpotifyApi = require('spotify-web-api-js')
-
-// const spotifyApi = new SpotifyApi()
 
 import {store} from './stores'
 import { mapGetters } from 'vuex'

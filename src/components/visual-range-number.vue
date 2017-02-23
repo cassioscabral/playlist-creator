@@ -1,13 +1,21 @@
 <template>
   <div class="visual-range-number">
-    {{min}} - {{value}} - {{max}}
+    <div :class="`inner ${size}`" :style="{width: widthPercentage}">
+    </div>
   </div>
+</div>
 </template>
 
 <style lang="sass" scoped>
 .visual-range-number
   min-width: 50px
-  border: 1px solid white
+  border: 1px solid #6f6f6f
+  .inner
+    background-color: #29C45B
+    &.small
+      height: 12px
+    &.large
+      height: 20px
 </style>
 
 <script>
@@ -26,9 +34,20 @@ export default {
         return 1
       }
     },
+    size: {
+      type: String,
+      default: 'small'
+    },
     value: {
       type: Number,
       required: true
+    }
+  },
+  computed: {
+    widthPercentage () {
+      let percentage = (this.value / this.max) * 100
+      console.log(percentage)
+      return `${percentage}%`
     }
   }
 }

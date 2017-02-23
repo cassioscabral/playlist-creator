@@ -1,5 +1,4 @@
-const SpotifyApi = require('spotify-web-api-js')
-const spotifyApi = new SpotifyApi()
+import spotifyApi from '../loaders/spotifyApi'
 import {differenceBy, chunk} from 'lodash'
 export default {
   state: {
