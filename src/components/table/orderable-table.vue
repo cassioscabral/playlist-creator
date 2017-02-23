@@ -22,7 +22,10 @@
             {{header.parser(get(item, header.key))}}
           </span>
           <span v-else>
-            {{get(item, header.key)}}
+            <span v-if="header.showRange">
+              <visual-range-number :value="get(item, header.key)"></visual-range-number>
+            </span>
+            <span v-else>{{get(item, header.key)}}</span>
           </span>
         </td>
       </tr>
@@ -34,6 +37,7 @@
 import Play from '../play'
 import AddToPlaylist from '../add-to-playlist'
 import {get} from 'lodash'
+import VisualRangeNumber from 'src/components/visual-range-number'
 
 export default {
   name: 'orderable-table',
@@ -69,7 +73,8 @@ export default {
   },
   components: {
     Play,
-    AddToPlaylist
+    AddToPlaylist,
+    VisualRangeNumber
   },
   computed: {
     headerWithIcons () {

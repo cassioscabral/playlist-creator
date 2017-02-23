@@ -2,8 +2,7 @@
 <div
   class="album-browser column"
   ref="albums"
-  v-if="albums.length > 0"
-  @mousewheel.prevent="mousewheel">
+  v-if="albums.length > 0">
     <div
       v-for="album in albums"
       class="album clickable"

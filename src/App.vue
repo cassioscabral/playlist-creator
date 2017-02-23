@@ -11,9 +11,14 @@
           @click="login">
           Login
         </button>
-        <div v-if="currentUser.id && currentUser.images" class="user-info text">
-          <img :src="currentUser.images[0].url" alt="" class="image">
-          {{currentUser.display_name || currentUser.id }}
+        <div
+          v-if="currentUser.id && currentUser.images"
+          class="user-info text">
+          <img
+            :src="currentUser.images[0].url"
+            alt=""
+            class="image">
+            {{currentUser.display_name || currentUser.id }}
         </div>
       </div>
     </header>
@@ -32,11 +37,13 @@
             </artist-info>
           </div>
           <div class="row">
-
             <div class="current-album-songs column limit-height" v-if="currentSelectedArtistAlbumTracks.length > 0">
               <div class="text vertical-space">
-                <img v-if="currentSelectedAlbum.images.length > 0" class="image" :src="currentSelectedAlbum.images[1].url" :alt="currentSelectedAlbum.name">
-                {{currentSelectedAlbum.name}}
+                <img
+                  v-if="currentSelectedAlbum.images.length > 0"
+                  class="image"
+                  :src="currentSelectedAlbum.images[1].url" :alt="currentSelectedAlbum.name">
+                  {{currentSelectedAlbum.name}}
               </div>
               <song-list
                 :songs="currentSelectedArtistAlbumTracks">
@@ -81,10 +88,6 @@ function generateRandomString (length) {
   return text
 }
 
-// const SpotifyApi = require('spotify-web-api-js')
-
-// const spotifyApi = new SpotifyApi()
-
 import {store} from './stores'
 import { mapGetters } from 'vuex'
 import Search from './components/search'
@@ -93,6 +96,7 @@ import Player from './components/player'
 import AlbumBrowser from './components/album-browser'
 import ArtistInfo from './components/artist-info'
 import PlaylistManager from './components/playlist-manager'
+import VisualRangeNumber from './components/visual-range-number'
 import {uniqBy} from 'lodash'
 import spotifyApi from './loaders/spotifyApi'
 
@@ -230,7 +234,8 @@ export default {
     Player,
     AlbumBrowser,
     ArtistInfo,
-    PlaylistManager
+    PlaylistManager,
+    VisualRangeNumber
   }
 }
 </script>

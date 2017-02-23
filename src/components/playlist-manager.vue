@@ -39,6 +39,9 @@
         <div  class="name">
           {{playlistName}} ({{totalSongs}}) ({{msToTime(totalDurationPlaylist)}})
           <span class="clickable" v-if="previousPlaylist"><a @click="undo() && cleanOrderedBy()">undo ↺</a></span>
+          <button class="button save-button spotify-green" @click="savePlaylist">
+            Save
+          </button>
         </div>
         <div class="text vertical-space">
           <input type="checkbox" v-model="showGraph" class="checkbox"> Show Graph
@@ -52,9 +55,6 @@
         @reorder="reorderBy">
 
       </orderable-table>
-      <button class="button save-button spotify-green" @click="savePlaylist">
-        Save
-      </button>
     </div>
   </div>
 </template>
@@ -95,12 +95,12 @@ export default {
         {key: 'name', label: 'Name', colspan: 2, hideOnGraph: true},
         {key: 'artists[0].name', label: 'Artist', colspan: 2, hideOnGraph: true},
         {key: 'features.duration_ms', label: 'Duration', parser: this.msToTime, hideOnGraph: true},
-        {key: 'features.valence', label: 'Happiness'},
-        {key: 'features.instrumentalness', label: 'Instrumental'},
-        {key: 'features.energy', label: 'Energy'},
-        {key: 'features.acousticness', label: 'Acousticness'},
-        {key: 'features.danceability', label: 'Danceability'},
-        {key: 'features.speechiness', label: 'Speechiness'},
+        {key: 'features.valence', label: 'Happiness', showRange: true},
+        {key: 'features.instrumentalness', label: 'Instrumental', showRange: true},
+        {key: 'features.energy', label: 'Energy', showRange: true},
+        {key: 'features.acousticness', label: 'Acousticness', showRange: true},
+        {key: 'features.danceability', label: 'Danceability', showRange: true},
+        {key: 'features.speechiness', label: 'Speechiness', showRange: true},
         {key: 'features.tempo', label: 'Tempo(BPM)', hideOnGraph: true}
       ]
     }
@@ -215,15 +215,16 @@ export default {
   display: flex
 
 .user-playlists
-  width: 20%
+  width: 18%
 
 .current-playlist
-  width: 80%
+  width: 82%
 
 .save-button
   background: #1ED760
   width: 20%
   align-self: flex-end
+  float: right
 
 
 
