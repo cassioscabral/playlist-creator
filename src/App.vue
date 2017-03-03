@@ -155,7 +155,8 @@ export default {
         .catch(err => { console.error(err) })
 
         // albums
-        spotifyApi.getArtistAlbums(this.selectedArtist.id)
+        // TODO check if has next url
+        spotifyApi.getArtistAlbums(this.selectedArtist.id, {limit: 50})
         .then(data => {
           this.currentSelectedArtistAlbums = uniqBy(data.items.filter(a => a.album_type === 'album'), 'name')
         })

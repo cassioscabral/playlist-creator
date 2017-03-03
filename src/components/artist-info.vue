@@ -28,7 +28,8 @@
   <div class="vertical-space text">
 
     <span v-if="selectedGenre">
-      <span class="clickable" @click="unselectGenre">{{selectedArtist.name}}</span> > {{selectedGenre}}
+      <span class="clickable" @click="unselectGenre">Back to {{selectedArtist.name}} Related Artists </span>
+      > Artists with the genre: {{selectedGenre}}
     </span>
     <span v-else>Related with {{selectedArtist.name}}</span>
 
