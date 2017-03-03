@@ -127,7 +127,18 @@ export default {
       // album tracks
       if (this.currentSelectedAlbum.id) {
         spotifyApi.getAlbumTracks(this.currentSelectedAlbum.id)
-        .then(data => { this.currentSelectedArtistAlbumTracks = data.items })
+        .then(data => {
+          // this.currentSelectedArtistAlbumTracks = data.items
+          return data.items
+        })
+        .then(tracks => {
+          // GET tracks via tracks API, return tracks with album
+          spotifyApi.getTracks(tracks.map(t => t.id))
+          .then(({tracks}) => {
+            this.currentSelectedArtistAlbumTracks = tracks
+          })
+          .catch(err => { console.error(err) })
+        })
         .catch(err => { console.error(err) })
       }
     },

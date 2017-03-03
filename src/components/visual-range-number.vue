@@ -46,7 +46,6 @@ export default {
   computed: {
     widthPercentage () {
       let percentage = (this.value / this.max) * 100
-      console.log(percentage)
       return `${percentage}%`
     }
   }

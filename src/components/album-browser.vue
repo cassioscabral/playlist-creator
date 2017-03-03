@@ -7,12 +7,14 @@
       v-for="album in albums"
       class="album clickable"
       @click="selectAlbum(album)">
-      <img v-if="album.images.length > 0" class="image" :src="album.images[1].url" :alt="album.name">{{album.name}}
+      <img v-if="album.images.length > 0" class="image" :src="album.images[1].url" :alt="album.name">{{album.name}} {{numberOfSongsInThisAlbum(album)}}
     </div>
 </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'album-browser',
   props: {
@@ -28,11 +30,26 @@ export default {
     selectAlbum (album) {
       this.$emit('select-album', album)
     },
+    numberOfSongsInThisAlbum (album) {
+      if (!album) return ''
+      console.log('playlist', this.playlist)
+      const total = this.playlist.reduce((total, track) => track.album && (track.album.id === album.id) ? total + 1 : total, 0)
+      console.group(album.name)
+      console.log('album', total, album)
+      console.groupEnd(album.name)
+      return total === 0 ? '' : `(${total})`
+    },
+    // Deprecated, used for horizontal scrooling
     mousewheel (e) {
       const {deltaY} = e
 
       this.$refs.albums.scrollLeft -= deltaY / 5
     }
+  },
+  computed: {
+    ...mapGetters([
+      'playlist'
+    ])
   }
 }
 </script>
