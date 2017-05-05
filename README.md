@@ -1,16 +1,7 @@
 # playlist-creator
 
-> Playlist Creator using Spotify API
+Create playlists for Spotify using the Spotify API easily with the option to find Artists, Top Tracks, Albums and Related artists within a single page. You will have a nice graph to show hidden Spotify features for your songs such as BPM, Danceability, Energy and so on.
 
-## Build Setup
+## Check the working demo
 
-``` bash
-# install dependencies
-yarn install
-
-# serve with hot reload at localhost:8080
-yarn run dev
-
-# build for production with minification
-yarn run build
-```
+https://dist-wucqzmqnxb.now.sh/
