@@ -14,3 +14,9 @@ yarn run dev
 # build for production with minification
 yarn run build
 ```
+
+## Deploy to now
+
+- Run build
+- Go to /dist
+- run `now`
