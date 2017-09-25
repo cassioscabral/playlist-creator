@@ -3,8 +3,16 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex)
-
+import { Button, Select } from 'element-ui'
 import App from './App'
+
+// Element-ui components
+Vue.component(Button.name, Button)
+Vue.component(Select.name, Select)
+/* or
+ * Vue.use(Button)
+ * Vue.use(Select)
+ */
 
 import {store} from './stores'
 
