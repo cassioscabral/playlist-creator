@@ -69,25 +69,6 @@
 </template>
 
 <script>
-function getAccessToken () {
-  if (!window.location.hash) return
-  let r = new RegExp('([^&;=]+)=?([^&;]*)', 'g')
-  return window.location.hash.match(r)[0].split('#access_token=')[1]
-}
-/**
- * Generates a random string containing numbers and letters
- * @param  {number} length The length of the string
- * @return {string} The generated string
- */
-function generateRandomString (length) {
-  let text = ''
-  let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-  for (var i = 0; i < length; i++) {
-    text += possible.charAt(Math.floor(Math.random() * possible.length))
-  }
-  return text
-}
-
 import {store} from './stores'
 import { mapGetters } from 'vuex'
 import Search from './components/search'
@@ -99,6 +80,10 @@ import PlaylistManager from './components/playlist-manager'
 import VisualRangeNumber from './components/visual-range-number'
 import {uniqBy} from 'lodash'
 import spotifyApi from './loaders/spotifyApi'
+import {
+  generateRandomString,
+  getAccessToken
+} from './core/spotify-service'
 
 export default {
   name: 'app',
@@ -122,7 +107,7 @@ export default {
         }
       }
     },
-    currentSelectedAlbum () {
+    async currentSelectedAlbum () {
       this.currentSelectedAlbum
       // album tracks
       if (this.currentSelectedAlbum.id) {
