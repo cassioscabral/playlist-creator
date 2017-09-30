@@ -1,4 +1,5 @@
 import spotifyApi from '../loaders/spotifyApi'
+import { get } from 'lodash'
 
 function getAccessToken () {
   if (!window.location.hash) return
@@ -21,15 +22,17 @@ function generateRandomString (length) {
 }
 
 // id :: data
-const getAlbumTracks = async (albumId) => unwrap(await spotifyApi.getAlbumTracks(albumId))
 
-const getAlbumTracksRaw = async (albumId) => await spotifyApi.getAlbumTracks(albumId)
+const getAlbumTracks = async (albumId) => await spotifyApi.getAlbumTracks(albumId)
 
-const unwrap = (data, property = 'items') => data[property]
+const getArtistTopTracks = async (artistId, region = 'US') => await spotifyApi.getArtistTopTracks(artistId, region)
+
+const unwrap = get
 
 module.exports = {
   getAccessToken,
   generateRandomString,
   getAlbumTracks,
-  getAlbumTracksRaw
+  getArtistTopTracks,
+  unwrap
 }
