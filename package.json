@@ -14,9 +14,11 @@
     "element-ui": "^1.4.5",
     "spotify-web-api-js": "^0.21.1",
     "vue": "^2.1.0",
+    "vue-material-design-icons": "^0.7.1",
     "vue-media": "^1.1.1",
     "vuex": "^2.1.1",
-    "vuex-persistedstate": "^1.1.0"
+    "vuex-persistedstate": "^1.1.0",
+    "zingtouch": "^1.0.5"
   },
   "devDependencies": {
     "autoprefixer": "^6.4.0",

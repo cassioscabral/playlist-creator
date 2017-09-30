@@ -5,7 +5,7 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 import { Button, Select } from 'element-ui'
 import App from './App'
-
+import 'vue-material-design-icons/styles.css'
 // Element-ui components
 Vue.component(Button.name, Button)
 Vue.component(Select.name, Select)
