@@ -2,7 +2,7 @@
   <div id="app" ref="app">
     <header-info></header-info>
     <div class="main">
-
+      <router-view></router-view>
     </div>
     <main-menu></main-menu>
   </div>

@@ -1,7 +1,9 @@
 <template>
 <div class="menu">
   <home-icon title="home"></home-icon>
-  <magnify-icon title="search"></magnify-icon>
+  <router-link to="/search">
+    <magnify-icon title="search"></magnify-icon>
+  </router-link>
   <playlist-icon title="playlists"></playlist-icon>
   <person-icon title="account"></person-icon>
 </div>
