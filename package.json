@@ -11,11 +11,12 @@
   },
   "dependencies": {
     "alertifyjs": "^1.9.0",
-    "element-ui": "^1.4.5",
+    "element-ui": "next",
     "spotify-web-api-js": "^0.21.1",
-    "vue": "^2.1.0",
+    "vue": "^2.3.0",
     "vue-material-design-icons": "^0.7.1",
     "vue-media": "^1.1.1",
+    "vue-router": "^2.7.0",
     "vuex": "^2.1.1",
     "vuex-persistedstate": "^1.1.0",
     "zingtouch": "^1.0.5"

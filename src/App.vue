@@ -2,7 +2,7 @@
   <div id="app" ref="app">
     <header-info></header-info>
     <div class="main">
-
+      <router-view></router-view>
     </div>
     <main-menu></main-menu>
   </div>
@@ -38,14 +38,16 @@ export default {
     }
   },
   watch: {
-    accessToken () {
-      // session expired
-      if (this.accessToken === '') {
-        if (window.confirm('Your session is over, do you wish to login again?')) {
-          this.login()
-        }
-      }
-    },
+    // accessToken () {
+    //   // session expired
+    //   if (this.accessToken === '') {
+    //     // if (window.confirm('Your session is over, do you wish to login again?')) {
+
+    //     // }
+    //     this.login()
+    //     console.log('logging in...')
+    //   }
+    // },
     async currentSelectedAlbum () {
       this.currentSelectedAlbum
       // album tracks
@@ -96,17 +98,20 @@ export default {
   mounted () {
     // store.dispatch('resetAll')
     const accessToken = getAccessToken() // comes from URL
-    if (accessToken) {
-      store.dispatch('saveAccessToken', {accessToken})
+    console.log('mounted', accessToken)
+    console.log(typeof accessToken === 'undefined')
+    if (typeof accessToken === 'undefined') {
+      // spotifyApi.setAccessToken(this.accessToken) // from vuex
+      this.login()
+    } else {
+      store.dispatch('saveAccessToken', { accessToken })
       spotifyApi.setAccessToken(accessToken)
       spotifyApi.getMe()
-      .then((me) => {
-        store.dispatch('saveCurrentUser', {currentUser: me})
-        return me
-      })
-      .catch(e => { store.dispatch('cleanAccess') })
-    } else {
-      spotifyApi.setAccessToken(this.accessToken) // from vuex
+        .then((me) => {
+          store.dispatch('saveCurrentUser', { currentUser: me })
+          return me
+        })
+        .catch(e => { store.dispatch('cleanAccess') })
     }
 
     // set user playlists

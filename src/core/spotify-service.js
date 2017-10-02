@@ -3,8 +3,10 @@ import { get } from 'lodash'
 
 function getAccessToken () {
   if (!window.location.hash) return
-  let r = new RegExp('([^&;=]+)=?([^&;]*)', 'g')
-  return window.location.hash.match(r)[0].split('#access_token=')[1]
+  const splittedURL = window.location.href.split('access_token=')
+  if (splittedURL.length <= 1) return // should have at least two parts, URL + token so that the token exists
+  const accessToken = splittedURL[splittedURL.length - 1] // last item
+  return accessToken
 }
 
 /**
@@ -27,12 +29,16 @@ const getAlbumTracks = async (albumId) => await spotifyApi.getAlbumTracks(albumI
 
 const getArtistTopTracks = async (artistId, region = 'US') => await spotifyApi.getArtistTopTracks(artistId, region)
 
+const searchArtists = async (search, opts = {limit: 10}) => await spotifyApi.searchArtists(search, opts)
+
 const unwrap = get
 
 module.exports = {
+  spotifyApi,
   getAccessToken,
   generateRandomString,
   getAlbumTracks,
   getArtistTopTracks,
+  searchArtists,
   unwrap
 }
