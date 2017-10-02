@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex)
+import application from './application'
 import player from './player'
 import playlist from './playlist'
 import createPersistedState from 'vuex-persistedstate'
@@ -53,6 +54,7 @@ export const store = new Vuex.Store({
     }
   },
   modules: {
+    application,
     player,
     playlist
   }
