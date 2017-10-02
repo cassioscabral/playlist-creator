@@ -1,10 +1,15 @@
 <template>
 <div class="menu">
-  <home-icon title="home"></home-icon>
+
+  <router-link to="/">
+    <home-icon title="home"></home-icon>
+  </router-link>
   <router-link to="/search">
     <magnify-icon title="search"></magnify-icon>
   </router-link>
-  <playlist-icon title="playlists"></playlist-icon>
+  <router-link to="/playlists">
+    <playlist-icon title="playlists"></playlist-icon>
+  </router-link>
   <person-icon title="account"></person-icon>
 </div>
 </template>

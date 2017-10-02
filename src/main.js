@@ -8,22 +8,20 @@ Vue.use(VueRouter)
 import { Button, Select } from 'element-ui'
 import App from './App'
 import 'vue-material-design-icons/styles.css'
-
 // Element-ui components
 Vue.component(Button.name, Button)
 Vue.component(Select.name, Select)
-/* or
- * Vue.use(Button)
- * Vue.use(Select)
- */
 
 import {store} from './stores'
 
-// TODO move to another file
-// components
+// route components
+import Home from 'components/views/home'
 import Search from 'components/views/search'
+import Playlists from 'components/views/playlists'
 const routes = [
-  { path: '/search', name: 'search', component: Search }
+  { path: '/', name: 'home', component: Home },
+  { path: '/search', name: 'search', component: Search },
+  { path: '/playlists', name: 'playlists', component: Playlists }
 ]
 
 const router = new VueRouter({
