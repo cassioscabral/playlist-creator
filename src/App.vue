@@ -9,11 +9,11 @@
 </template>
 
 <script>
-import {store} from './stores'
+import { store } from './stores'
 import { mapGetters } from 'vuex'
-import {uniqBy} from 'lodash'
-import spotifyApi from './loaders/spotifyApi'
+import { uniqBy } from 'lodash'
 import {
+  spotifyApi,
   generateRandomString,
   getAccessToken
 } from './core/spotify-service'
@@ -28,7 +28,6 @@ export default {
   name: 'app',
   data () {
     return {
-      selectedArtist: {},
       currentSelectedArtistTopTracks: [],
       currentSelectedArtistAlbums: [],
       currentSelectedAlbum: {},
@@ -98,11 +97,15 @@ export default {
   mounted () {
     // store.dispatch('resetAll')
     const accessToken = getAccessToken() // comes from URL
-    console.log('mounted', accessToken)
-    console.log(typeof accessToken === 'undefined')
+    console.log('mounted - accessToken', accessToken)
+    // TODO try to get from store with this.accessToken
     if (typeof accessToken === 'undefined') {
-      // spotifyApi.setAccessToken(this.accessToken) // from vuex
-      this.login()
+      // from vuex
+      if (typeof this.accessToken === 'undefined' || this.accessToken === '') {
+        console.log('accessToken not defined on vuex')
+        this.login()
+      }
+      spotifyApi.setAccessToken(this.accessToken)// from vuex
     } else {
       store.dispatch('saveAccessToken', { accessToken })
       spotifyApi.setAccessToken(accessToken)
@@ -167,6 +170,9 @@ export default {
       'playlist',
       'playlistName',
       'playlistObject'
+    ]),
+    ...mapGetters('application', [
+      'selectedArtist'
     ])
   },
   components: {
@@ -190,5 +196,32 @@ export default {
 
 .main {
   flex: 1;
+}
+
+// utils
+.flex {
+  display: flex;
+}
+.a-center {
+  align-items: center;
+}
+.clickable {
+  cursor: pointer;
+}
+
+.vertical-space {
+  margin: 20px 0;
+}
+
+.sm-vertical-space {
+  margin: 7px 0;
+}
+
+.m-around {
+  margin: 7px;
+}
+
+.p-around {
+  padding: 7px;
 }
 </style>
