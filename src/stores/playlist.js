@@ -1,11 +1,6 @@
 import spotifyApi from '../loaders/spotifyApi'
 import {differenceBy, chunk} from 'lodash'
-const alertify = window.alertify || {
-  success: (message) => { window.alert(message) },
-  warning: (message) => { console.error(message) }
-}
-// const alertify = require('alertifyjs')
-console.log('alertify', alertify)
+
 export default {
   state: {
     playlist: [], // hold all the tracks
@@ -96,7 +91,6 @@ export default {
     addTracksToPlaylist ({state, commit, rootState, dispatch}) {
       if (!rootState.accessToken) {
         dispatch('cleanAccess')
-        alertify.warning('Please login again')
         return
       }
 
@@ -132,7 +126,6 @@ export default {
       const {currentUser} = rootState
       if (!rootState.accessToken) {
         dispatch('cleanAccess')
-        alertify.warning('Please login again')
         return
       }
 
@@ -155,18 +148,15 @@ export default {
               await spotifyApi.addTracksToPlaylist(userId, playlistId, chunk)
             }
           })
-          alertify.success('Saved')
         }
       } catch (err) {
         console.error(err)
         dispatch('cleanAccess')
-        alertify.warning('Please login again')
       }
     },
     async createPlaylist ({state, dispatch, rootState, commit}, {name, clean = false}) {
       if (!rootState.accessToken || !rootState.currentUser) {
         await dispatch('cleanAccess')
-        alertify.warning('Please login again')
         return
       }
       // clean the playlist
@@ -183,7 +173,6 @@ export default {
       } catch (error) {
         console.error(error)
         await dispatch('cleanAccess')
-        alertify.warning('Please login again')
       }
 
       // return spotifyApi.createPlaylist(rootState.currentUser.id, {name})
@@ -199,7 +188,6 @@ export default {
       // .catch(e => {
       //   console.error(e)
       //   dispatch('cleanAccess')
-      //   alertify.warning('Please login again')
       // })
     }
   },

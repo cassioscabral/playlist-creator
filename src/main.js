@@ -5,12 +5,18 @@ import Vuex from 'vuex'
 import VueRouter from 'vue-router'
 Vue.use(Vuex)
 Vue.use(VueRouter)
-import { Button, Select } from 'element-ui'
+import {
+  Button,
+  Input,
+  Form,
+  FormItem } from 'element-ui'
 import App from './App'
 import 'vue-material-design-icons/styles.css'
 // Element-ui components
 Vue.component(Button.name, Button)
-Vue.component(Select.name, Select)
+Vue.component(Input.name, Input)
+Vue.component(Form.name, Form)
+Vue.component(FormItem.name, FormItem)
 
 import {store} from './stores'
 
