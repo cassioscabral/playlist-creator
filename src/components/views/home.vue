@@ -9,14 +9,16 @@
     </div>
 
     <div class="tracks">
-      <header class="flex">
+      <header class="flex" v-show="selectedAlbumTracks.length > 0">
         <span class="title">Title</span>
-        <div class="duration">Duration</div>
+        <div class="duration"><clock-icon title="duration"></clock-icon></div>
       </header>
-      <trackc
+      <div class="tracks-wrapper">
+        <trackc
         v-for="track in selectedAlbumTracks"
         :key="track.id"
         :track="track"></trackc>
+      </div>
     </div>
   </div>
 </template>
@@ -25,6 +27,8 @@
 import { mapGetters } from 'vuex'
 import Album from 'components/generic/album'
 import Trackc from 'components/generic/track'
+import ClockIcon from 'vue-material-design-icons/clock.vue'
+
 export default {
   name: 'home-page',
   computed: {
@@ -36,7 +40,8 @@ export default {
   },
   components: {
     Album,
-    Trackc
+    Trackc,
+    ClockIcon
   }
 }
 </script>
@@ -46,10 +51,13 @@ export default {
   overflow: auto;
 }
 .tracks {
-  overflow: auto;
-  max-height: 35vh;
+  padding: 0 1rem;
+  .tracks-wrapper {
+    overflow: auto;
+    max-height: 60vh;
+  }
   header {
-    margin-bottom: 1rem;
+    align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid grey;
   }

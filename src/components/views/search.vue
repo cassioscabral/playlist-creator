@@ -1,11 +1,11 @@
 <template>
   <div class="search">
-    <el-input class="sm-vertical-space" placeholder="Search" v-model="input">
+    <el-input class="" placeholder="Search" v-model="input">
       <i slot="prefix" class="el-input__icon el-icon-search"></i>
     </el-input>
 
-    <div class="search-results">
-      <div class="search-result clickable sm-vertical-space"
+    <div class="search-results" v-show="input.length > 0">
+      <div class="search-result clickable"
         v-for="artist in searchResult"
         :key="artist.id"
         @click="selectArtist({artist})">
@@ -60,17 +60,26 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import 'src/assets/colors';
+
 .artist-image {
   width: 38px;
   height: 38px;
   border-radius: 50%;
 }
 
+.search-results {
+  overflow: auto;
+}
+
 .search-result {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #f3f1f1;
-  padding: 0.8rem 0;
+  border-bottom: 1px solid $base-gray;
+  padding: 0.4rem 0.5rem;
+  &:last-child {
+    border: none;
+  }
 }
 </style>

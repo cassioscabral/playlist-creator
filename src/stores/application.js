@@ -3,6 +3,7 @@ import {
   getAlbumTracks
 } from 'src/core/spotify-service'
 import { get } from 'lodash'
+// import router from 'src/router'
 
 export default {
   namespaced: true,
@@ -21,15 +22,19 @@ export default {
   actions: {
     selectArtist ({ commit, dispatch }, { artist, getAlbums = true }) {
       commit('SELECT_ARTIST', { artist })
+      dispatch('cleanSelectedAlbum') // case there is a different artist selected album
       if (getAlbums) {
-        dispatch('getAlbums', { artist })
+        dispatch('getAlbums', { artist, goTo: 'home' })
       }
     },
-    async getAlbums ({ commit }, { artist }) {
+    async getAlbums ({ commit }, { artist, goTo = false }) {
       try {
         const result = await getArtistAlbums(artist.id)
         const albums = get(result, 'items')
         commit('ALBUMS', { albums })
+        if (goTo) {
+          // router.push(goTo)
+        }
       } catch (error) {
         console.error(error)
       }
@@ -48,6 +53,13 @@ export default {
       } catch (error) {
         console.error(error)
       }
+    },
+    cleanSelectedAlbum ({ commit, dispatch }) {
+      commit('SELECT_ALBUM', { album: {} })
+      dispatch('cleanSelectedAlbumTracks')
+    },
+    cleanSelectedAlbumTracks ({ commit }) {
+      commit('ALBUM_TRACKS', { tracks: [] })
     }
   },
   mutations: {

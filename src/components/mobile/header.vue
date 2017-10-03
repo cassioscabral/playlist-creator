@@ -4,7 +4,7 @@
       <avatar class="m-around" :images="selectedArtist.images" :alt="selectedArtist.name"></avatar>
       <span>{{selectedArtist.name}}</span>
     </div>
-    <div v-else class="has-not-selected-artist">
+    <div v-else class="flex a-center has-not-selected-artist">
       <person-outline-icon title="Artist"></person-outline-icon>
       Search for an Artist...
     </div>

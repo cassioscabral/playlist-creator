@@ -1,5 +1,5 @@
 <template>
-  <div class="track clickable" @click="playSong">
+  <div class="track clickable">
     <div class="track-name">
       {{track.name}}
     </div>

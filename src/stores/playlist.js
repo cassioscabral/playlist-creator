@@ -2,6 +2,7 @@ import spotifyApi from '../loaders/spotifyApi'
 import {differenceBy, chunk} from 'lodash'
 
 export default {
+  namespaced: true,
   state: {
     playlist: [], // hold all the tracks
     // to be used on undo action

@@ -20,19 +20,8 @@ Vue.component(FormItem.name, FormItem)
 
 import {store} from './stores'
 
-// route components
-import Home from 'components/views/home'
-import Search from 'components/views/search'
-import Playlists from 'components/views/playlists'
-const routes = [
-  { path: '/', name: 'home', component: Home },
-  { path: '/search', name: 'search', component: Search },
-  { path: '/playlists', name: 'playlists', component: Playlists }
-]
+import router from 'src/router'
 
-const router = new VueRouter({
-  routes // short for `routes: routes`
-})
 /* eslint-disable no-new */
 new Vue({
   router,
