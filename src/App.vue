@@ -114,7 +114,10 @@ export default {
           store.dispatch('saveCurrentUser', { currentUser: me })
           return me
         })
-        .catch(e => { store.dispatch('cleanAccess') })
+        .catch(e => {
+          store.dispatch('cleanAccess')
+          this.login()
+        })
     }
 
     // set user playlists
@@ -137,6 +140,7 @@ export default {
       .catch(e => {
         console.warn(e)
         store.dispatch('cleanAccess')
+        this.login()
       })
     }
   },
@@ -182,6 +186,8 @@ export default {
 }
 </script>
 <style lang="scss">
+@import './assets/reset';
+@import './assets/utils';
 @import './assets/colors';
 
 #app {
@@ -192,36 +198,15 @@ export default {
   flex-direction: column;
   max-width: 100%;
   min-height: 100vh;
+  height: 100vh;
+  max-height: 100vh;
+  border: 0;
+  padding: 0;
+  overflow: auto;
 }
 
 .main {
   flex: 1;
-}
-
-// utils
-.flex {
-  display: flex;
-}
-.a-center {
-  align-items: center;
-}
-.clickable {
-  cursor: pointer;
-}
-
-.vertical-space {
-  margin: 20px 0;
-}
-
-.sm-vertical-space {
-  margin: 7px 0;
-}
-
-.m-around {
-  margin: 7px;
-}
-
-.p-around {
-  padding: 7px;
+  overflow: auto;
 }
 </style>

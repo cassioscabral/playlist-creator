@@ -32,11 +32,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import 'src/assets/colors';
+
 .menu {
   display: flex;
   justify-content: space-between;
   padding-bottom: 0.2rem;
-  border-top: 1px solid gray;
+  border-top: 1px solid $base-gray;
 }
 
 
