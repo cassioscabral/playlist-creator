@@ -31,6 +31,13 @@ const getArtistTopTracks = async (artistId, region = 'US') => await spotifyApi.g
 
 const searchArtists = async (search, opts = {limit: 10}) => await spotifyApi.searchArtists(search, opts)
 
+const getArtistAlbums = async (artistId, opts = {limit: 50}) => await spotifyApi.getArtistAlbums(artistId, opts)
+
+// spotifyApi.getArtistAlbums(this.selectedArtist.id, {limit: 50})
+// .then(data => {
+//   this.currentSelectedArtistAlbums = uniqBy(data.items.filter(a => a.album_type === 'album'), 'name')
+// })
+
 const unwrap = get
 
 module.exports = {
@@ -40,5 +47,6 @@ module.exports = {
   getAlbumTracks,
   getArtistTopTracks,
   searchArtists,
+  getArtistAlbums,
   unwrap
 }
