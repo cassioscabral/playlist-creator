@@ -23,7 +23,7 @@ import { mapActions, mapGetters } from 'vuex'
 import {
   searchArtists
 } from 'src/core/spotify-service'
-import { get } from 'lodash'
+import { get, throttle } from 'lodash'
 
 export default {
   name: 'search-page',
@@ -45,7 +45,7 @@ export default {
     ])
   },
   watch: {
-    async input (search) {
+    input: throttle(async (search) => {
       try {
         if (search.length > 0) {
           const result = await searchArtists(search)
@@ -54,7 +54,7 @@ export default {
       } catch (error) {
         console.error(error)
       }
-    }
+    }, 700)
   }
 }
 </script>
