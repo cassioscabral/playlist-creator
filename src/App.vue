@@ -2,7 +2,9 @@
   <div id="app" ref="app">
     <header-info></header-info>
     <div class="main">
-      <router-view></router-view>
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
     </div>
     <main-menu></main-menu>
   </div>
@@ -37,16 +39,6 @@ export default {
     }
   },
   watch: {
-    // accessToken () {
-    //   // session expired
-    //   if (this.accessToken === '') {
-    //     // if (window.confirm('Your session is over, do you wish to login again?')) {
-
-    //     // }
-    //     this.login()
-    //     console.log('logging in...')
-    //   }
-    // },
     async currentSelectedAlbum () {
       this.currentSelectedAlbum
       // album tracks
@@ -96,53 +88,64 @@ export default {
   },
   mounted () {
     // store.dispatch('resetAll')
-    const accessToken = getAccessToken() // comes from URL
-    console.log('mounted - accessToken', accessToken)
-    // TODO try to get from store with this.accessToken
-    if (typeof accessToken === 'undefined') {
-      // from vuex
-      if (typeof this.accessToken === 'undefined' || this.accessToken === '') {
-        console.log('accessToken not defined on vuex')
-        this.login()
-      }
-      spotifyApi.setAccessToken(this.accessToken)// from vuex
-    } else {
-      store.dispatch('saveAccessToken', { accessToken })
-      spotifyApi.setAccessToken(accessToken)
-      spotifyApi.getMe()
-        .then((me) => {
-          store.dispatch('saveCurrentUser', { currentUser: me })
-          return me
-        })
-        .catch(e => {
-          store.dispatch('cleanAccess')
-          this.login()
-        })
-    }
+    // debugger
+    const accessToken = getAccessToken() || this.accessToken // comes from URL or Vuex
+    store.dispatch('saveAccessToken', { accessToken })
+    spotifyApi.setAccessToken(accessToken)
+    spotifyApi.getMe()
+    .then((me) => {
+      store.dispatch('saveCurrentUser', { currentUser: me })
+      return me
+    })
+    .catch(e => {
+      console.error('error getting me - e:', e)
+      store.dispatch('cleanAccess')
+      this.login()
+    })
+    // if (typeof accessToken === 'undefined') {
+    //   // from vuex
+    //   if (typeof this.accessToken === 'undefined' || this.accessToken === '') {
+    //     console.log('accessToken not defined on vuex')
+    //     this.login()
+    //   }
+    //   spotifyApi.setAccessToken(this.accessToken)// from vuex
+    // } else {
+    //   store.dispatch('saveAccessToken', { accessToken })
+    //   spotifyApi.setAccessToken(accessToken)
+    //   spotifyApi.getMe()
+    //     .then((me) => {
+    //       store.dispatch('saveCurrentUser', { currentUser: me })
+    //       return me
+    //     })
+    //     .catch(e => {
+    //       store.dispatch('cleanAccess')
+    //       this.login()
+    //     })
+    // }
 
     // set user playlists
-    if (this.currentUser.id) {
-      spotifyApi.getUserPlaylists(this.currentUser.id, {limit: 50})
-      .then(data => {
-        // get only playlists owned by the user
-        const playlists = data.items.filter(i => i.owner.id === this.currentUser.id)
-        store.dispatch('saveUserPlaylists', {playlists})
-        return playlists
-      })
-      .then(playlists => {
-        // playlist might not exist and the user just reload
-        let playlistWasDeleted = playlists.filter(p => p.id === this.playlistObject.id).length === 0
-        if (this.playlist.length !== 0 && playlistWasDeleted) {
-          window.alertify.warning('Your playlist was deleted on Spotify, create a new one')
-          store.dispatch('resetPlaylistStore')
-        }
-      })
-      .catch(e => {
-        console.warn(e)
-        store.dispatch('cleanAccess')
-        this.login()
-      })
-    }
+    // if (this.currentUser.id) {
+    //   spotifyApi.getUserPlaylists(this.currentUser.id, {limit: 50})
+    //   .then(data => {
+    //     // get only playlists owned by the user
+    //     const playlists = data.items.filter(i => i.owner.id === this.currentUser.id)
+    //     store.dispatch('saveUserPlaylists', {playlists})
+    //     return playlists
+    //   })
+    //   .then(playlists => {
+    //     // playlist might not exist and the user just reload
+    //     let playlistWasDeleted = playlists.filter(p => p.id === this.playlistObject.id).length === 0
+    //     if (this.playlist.length !== 0 && playlistWasDeleted) {
+    //       window.alertify.warning('Your playlist was deleted on Spotify, create a new one')
+    //       store.dispatch('resetPlaylistStore')
+    //     }
+    //   })
+    //   .catch(e => {
+    //     console.error(e)
+    //     store.dispatch('cleanAccess')
+    //     this.login()
+    //   })
+    // }
   },
   methods: {
     selectAlbum (album) {
@@ -152,6 +155,7 @@ export default {
       this.selectedArtist = artist
     },
     login () {
+      console.log('logging in')
       const stateKey = 'spotify_auth_state'
       const clientId = '49275dd30324422b8bbba8bdea0e7b8c' // Your client id
       let redirectUri = window.location.origin + '/' // Your redirect uri
@@ -170,10 +174,10 @@ export default {
   computed: {
     ...mapGetters([
       'accessToken',
-      'currentUser',
-      'playlist',
-      'playlistName',
-      'playlistObject'
+      'currentUser'
+      // 'playlist',
+      // 'playlistName',
+      // 'playlistObject'
     ]),
     ...mapGetters('application', [
       'selectedArtist'
