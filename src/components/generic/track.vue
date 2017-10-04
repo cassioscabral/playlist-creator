@@ -1,5 +1,5 @@
 <template>
-  <div class="track clickable">
+  <div class="track clickable" @click="emitTrack">
     <div class="track-name">
       {{track.name}}
     </div>
@@ -21,7 +21,10 @@ export default {
     }
   },
   methods: {
-    msToTime
+    msToTime,
+    emitTrack () {
+      this.$emit('select-track', {...this.track})
+    }
   }
 }
 </script>
