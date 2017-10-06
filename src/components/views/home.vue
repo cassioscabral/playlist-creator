@@ -21,7 +21,7 @@
         :track="track"></trackc>
       </div>
     </div>
-    <a-player @change="changeMusic" mutex autoplay :music="currentTrack" ref="player"></a-player>
+    <a-player v-show="hasAlbumSelected && hasTrackSelected" @change="changeMusic" mutex autoplay :music="currentTrack" ref="player"></a-player>
   </div>
 </template>
 
@@ -32,6 +32,7 @@ import Trackc from 'components/generic/track'
 import ClockIcon from 'vue-material-design-icons/clock.vue'
 // import VueAplayer from 'vue-aplayer/src/vue-aplayer'
 import VueAplayer from 'vue-aplayer'
+import { isEmpty } from 'lodash'
 
 export default {
   name: 'home-page',
@@ -50,6 +51,7 @@ export default {
     ...mapActions('player', [
       'playTrack'
     ]),
+    isEmpty,
     changeTrack (track) {
       let { name: title, preview_url: url } = track
       const author = this.selectedArtist.name
@@ -80,7 +82,13 @@ export default {
     ]),
     ...mapGetters('player', [
       'currentTrack'
-    ])
+    ]),
+    hasAlbumSelected () {
+      return !this.isEmpty(this.selectedAlbum)
+    },
+    hasTrackSelected () {
+      return !this.isEmpty(this.currentTrack)
+    }
   },
   components: {
     Album,
