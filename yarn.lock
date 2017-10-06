@@ -4623,9 +4623,9 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
-vue-aplayer@^0.1.1:
+"vue-aplayer@https://github.com/cassioscabral/vue-aplayer.git":
   version "0.1.1"
-  resolved "https://registry.yarnpkg.com/vue-aplayer/-/vue-aplayer-0.1.1.tgz#c5b486c664ac2818618ccf29a6dd1e4e2856dcdc"
+  resolved "https://github.com/cassioscabral/vue-aplayer.git#9fccbda6cb294276720d88b7c8a44bf5b5e5f64f"
   dependencies:
     aplayer "^1.5.8"
 

@@ -2,7 +2,13 @@ export default {
   namespaced: true,
   state: {
     playerPlaylist: [],
-    currentTrack: null,
+    currentTrack: { // default fallback
+      title: 'Preparation',
+      author: 'Hans Zimmer/Richard Harvey',
+      url: 'http://devtest.qiniudn.com/Preparation.mp3',
+      pic: 'http://devtest.qiniudn.com/Preparation.jpg',
+      lrc: '[00:00.00]lrc here\n[00:01.00]aplayer'
+    },
     isPlaying: false
   },
   getters: {
@@ -23,8 +29,8 @@ export default {
   },
   mutations: {
     PLAY_TRACK (state, {track}) {
-      state.currentTrack = Object.assign({}, track)
-      state.isPlaying = true
+      state.currentTrack = {...track}
+      // state.isPlaying = true
     },
     PLAY (state, {track}) {
       state.isPlaying = true

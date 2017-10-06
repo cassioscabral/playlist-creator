@@ -14,7 +14,7 @@
     "element-ui": "next",
     "spotify-web-api-js": "^0.21.1",
     "vue": "^2.3.0",
-    "vue-aplayer": "^0.1.1",
+    "vue-aplayer": "https://github.com/cassioscabral/vue-aplayer.git",
     "vue-material-design-icons": "^0.7.1",
     "vue-media": "^1.1.1",
     "vue-router": "^2.7.0",
