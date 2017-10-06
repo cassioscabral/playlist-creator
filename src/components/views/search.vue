@@ -55,6 +55,16 @@ export default {
         console.error(error)
       }
     }
+    // input: throttle(async (search) => {
+    //   try {
+    //     if (search.length > 0) {
+    //       const result = await searchArtists(search)
+    //       this.searchResult = get(result, 'artists.items')
+    //     }
+    //   } catch (error) {
+    //     console.error(error)
+    //   }
+    // }, 700)
   }
 }
 </script>

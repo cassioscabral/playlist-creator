@@ -5,6 +5,7 @@ import Playlists from 'components/views/playlists'
 
 const routes = [
   { path: '/', name: 'home', component: Home },
+  { path: '/:access-token', component: Home },
   { path: '/search', name: 'search', component: Search },
   { path: '/playlists', name: 'playlists', component: Playlists }
 ]
