@@ -23,7 +23,7 @@ function generateRandomString (length) {
   return text
 }
 
-// id :: data
+const getUserPlaylists = async (userId) => await spotifyApi.getUserPlaylists(userId, {limit: 50})
 
 const getAlbumTracks = async (albumId) => await spotifyApi.getAlbumTracks(albumId)
 
@@ -48,5 +48,6 @@ module.exports = {
   getArtistTopTracks,
   searchArtists,
   getArtistAlbums,
+  getUserPlaylists,
   unwrap
 }

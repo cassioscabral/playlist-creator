@@ -1,6 +1,5 @@
 <template>
   <div id="app" ref="app">
-    <header-info></header-info>
     <div class="main">
       <keep-alive>
         <router-view></router-view>
@@ -13,7 +12,7 @@
 <script>
 import { store } from './stores'
 import { mapGetters } from 'vuex'
-import { uniqBy } from 'lodash'
+// import { uniqBy } from 'lodash'
 import {
   spotifyApi,
   generateRandomString,
@@ -22,7 +21,6 @@ import {
 
 // components
 import MainMenu from './components/mobile/menu.vue'
-import HeaderInfo from './components/mobile/header.vue'
 
 // import ZingTouch from 'zingtouch'
 
@@ -32,59 +30,13 @@ export default {
     return {
       currentSelectedArtistTopTracks: [],
       currentSelectedArtistAlbums: [],
-      currentSelectedAlbum: {},
+      // currentSelectedAlbum: {},
       currentSelectedArtistAlbumTracks: [],
       relatedArtists: [],
       userPlaylists: []
     }
   },
   watch: {
-    async currentSelectedAlbum () {
-      this.currentSelectedAlbum
-      // album tracks
-      if (this.currentSelectedAlbum.id) {
-        spotifyApi.getAlbumTracks(this.currentSelectedAlbum.id)
-        .then(data => {
-          // this.currentSelectedArtistAlbumTracks = data.items
-          return data.items
-        })
-        .then(tracks => {
-          // GET tracks via tracks API, return tracks with album
-          spotifyApi.getTracks(tracks.map(t => t.id))
-          .then(({tracks}) => {
-            this.currentSelectedArtistAlbumTracks = tracks
-          })
-          .catch(err => { console.error(err) })
-        })
-        .catch(err => { console.error(err) })
-      }
-    },
-    selectedArtist () {
-      if (this.selectedArtist.id) {
-        // reset currentSelectedAlbum
-        this.currentSelectedAlbum = {}
-        this.currentSelectedArtistAlbumTracks = []
-        // TODO change 'BR' to geolocation data
-
-        // top tracks
-        spotifyApi.getArtistTopTracks(this.selectedArtist.id, 'US')
-        .then(data => { this.currentSelectedArtistTopTracks = data.tracks })
-        .catch(err => { console.error(err) })
-
-        // albums
-        // TODO check if has next url
-        spotifyApi.getArtistAlbums(this.selectedArtist.id, {limit: 50})
-        .then(data => {
-          this.currentSelectedArtistAlbums = uniqBy(data.items.filter(a => a.album_type === 'album'), 'name')
-        })
-        .catch(err => { console.error(err) })
-
-        // related artists
-        spotifyApi.getArtistRelatedArtists(this.selectedArtist.id)
-        .then(data => { this.relatedArtists = data.artists })
-        .catch(err => { console.error(err) })
-      }
-    }
   },
   mounted () {
     // store.dispatch('resetAll')
@@ -102,26 +54,6 @@ export default {
       store.dispatch('cleanAccess')
       this.login()
     })
-    // if (typeof accessToken === 'undefined') {
-    //   // from vuex
-    //   if (typeof this.accessToken === 'undefined' || this.accessToken === '') {
-    //     console.log('accessToken not defined on vuex')
-    //     this.login()
-    //   }
-    //   spotifyApi.setAccessToken(this.accessToken)// from vuex
-    // } else {
-    //   store.dispatch('saveAccessToken', { accessToken })
-    //   spotifyApi.setAccessToken(accessToken)
-    //   spotifyApi.getMe()
-    //     .then((me) => {
-    //       store.dispatch('saveCurrentUser', { currentUser: me })
-    //       return me
-    //     })
-    //     .catch(e => {
-    //       store.dispatch('cleanAccess')
-    //       this.login()
-    //     })
-    // }
 
     // set user playlists
     // if (this.currentUser.id) {
@@ -184,8 +116,7 @@ export default {
     ])
   },
   components: {
-    MainMenu,
-    HeaderInfo
+    MainMenu
   }
 }
 </script>
@@ -193,6 +124,11 @@ export default {
 @import './assets/reset';
 @import './assets/utils';
 @import './assets/colors';
+
+body {
+  max-width: 100%;
+  overflow: hidden;
+}
 
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -212,5 +148,13 @@ export default {
 .main {
   flex: 1;
   overflow: auto;
+}
+
+.material-design-icon {
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

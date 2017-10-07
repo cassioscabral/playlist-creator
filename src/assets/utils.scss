@@ -5,6 +5,15 @@
 .a-center {
   align-items: center;
 }
+
+.space-between {
+  justify-content: space-between;
+}
+
+.space-around {
+  justify-content: space-around;
+}
+
 .clickable {
   cursor: pointer;
 }
@@ -23,4 +32,8 @@
 
 .p-around {
   padding: 7px;
+}
+
+.w-100 {
+  width: 100%;
 }

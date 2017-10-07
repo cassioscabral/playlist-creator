@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <header-info></header-info>
     <div class="albums flex">
       <album class=""
         v-for="album in albums"
@@ -29,6 +30,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import Album from 'components/generic/album'
 import Trackc from 'components/generic/track'
+import HeaderInfo from 'components/mobile/header.vue'
 import ClockIcon from 'vue-material-design-icons/clock.vue'
 // import VueAplayer from 'vue-aplayer/src/vue-aplayer'
 import VueAplayer from 'vue-aplayer'
@@ -94,6 +96,7 @@ export default {
     Album,
     Trackc,
     ClockIcon,
+    HeaderInfo,
     'a-player': VueAplayer
   }
 }

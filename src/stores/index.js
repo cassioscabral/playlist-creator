@@ -5,7 +5,11 @@ import application from './application'
 import player from './player'
 import playlist from './playlist'
 import createPersistedState from 'vuex-persistedstate'
-
+import { get } from 'lodash'
+import {
+  // spotifyApi,
+  getUserPlaylists
+} from 'src/core/spotify-service'
 export const store = new Vuex.Store({
   plugins: [createPersistedState()],
   state: {
@@ -19,6 +23,12 @@ export const store = new Vuex.Store({
     userPlaylists: state => state.userPlaylists
   },
   actions: {
+    async getUserPlaylists ({commit, state}) {
+      const {currentUser} = state
+      const result = await getUserPlaylists(currentUser.id)
+      const playlists = get(result, 'items').filter(p => p.owner.id === currentUser.id) // my playlists
+      commit('ADD_USER_PLAYLISTS', {playlists})
+    },
     saveAccessToken ({commit}, {accessToken}) {
       commit('ADD_ACESS_TOKEN', {accessToken})
     },
@@ -43,7 +53,7 @@ export const store = new Vuex.Store({
       state.currentUser = currentUser
     },
     ADD_USER_PLAYLISTS (state, {playlists}) {
-      state.userPlaylists = playlists
+      state.userPlaylists = [...playlists]
     },
     CLEAN_ACCESS (state) {
       state.accessToken = ''

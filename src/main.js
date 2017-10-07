@@ -9,6 +9,8 @@ import {
   Button,
   Input,
   Form,
+  Select,
+  Option,
   FormItem } from 'element-ui'
 import App from './App'
 import 'vue-material-design-icons/styles.css'
@@ -17,6 +19,8 @@ Vue.component(Button.name, Button)
 Vue.component(Input.name, Input)
 Vue.component(Form.name, Form)
 Vue.component(FormItem.name, FormItem)
+Vue.component(Select.name, Select)
+Vue.component(Option.name, Option)
 
 import {store} from './stores'
 

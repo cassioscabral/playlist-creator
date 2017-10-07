@@ -1,5 +1,7 @@
 <template>
   <div class="search">
+    <header-info></header-info>
+
     <el-input class="" placeholder="Search" v-model="input">
       <i slot="prefix" class="el-input__icon el-icon-search"></i>
     </el-input>
@@ -18,6 +20,7 @@
 </template>
 
 <script>
+import HeaderInfo from 'components/mobile/header.vue'
 // import { store } from 'src/stores'
 import { mapActions, mapGetters } from 'vuex'
 import {
@@ -65,6 +68,9 @@ export default {
     //     console.error(error)
     //   }
     // }, 700)
+  },
+  components: {
+    HeaderInfo
   }
 }
 </script>

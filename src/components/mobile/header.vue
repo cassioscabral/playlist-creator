@@ -1,13 +1,15 @@
 <template>
   <div class="header">
-    <div v-if="selectedArtistExists" class="flex a-center has-selected-artist">
-      <avatar class="m-around" :images="selectedArtist.images" :alt="selectedArtist.name"></avatar>
-      <span>{{selectedArtist.name}}</span>
-    </div>
-    <div v-else class="flex a-center has-not-selected-artist">
-      <person-outline-icon title="Artist"></person-outline-icon>
-      Search for an Artist...
-    </div>
+    <slot>
+      <div v-if="selectedArtistExists" class="flex a-center has-selected-artist">
+        <avatar class="m-around" :images="selectedArtist.images" :alt="selectedArtist.name"></avatar>
+        <span>{{selectedArtist.name}}</span>
+      </div>
+      <div v-else class="flex a-center has-not-selected-artist">
+        <person-outline-icon title="Artist"></person-outline-icon>
+        Search for an Artist...
+      </div>
+    </slot>
   </div>
 </template>
 
@@ -35,11 +37,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import 'src/assets/colors';
+
 .header {
   display: flex;
   align-items: center;
-  border-bottom: 1px solid gray;
-
+  border-bottom: 1px solid $base-gray;
 }
 
 
