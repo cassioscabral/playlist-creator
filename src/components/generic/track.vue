@@ -30,6 +30,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import 'src/assets/colors';
+
 .track {
   display: flex;
   padding-bottom: 0.4rem;
@@ -38,7 +40,7 @@ export default {
     margin-top: 1.4rem;
   }
   &:not(:last-child) {
-    border-bottom: 1px solid grey;
+    border-bottom: 1px solid $base-gray;
     margin-bottom: 1.4rem;
   }
 }

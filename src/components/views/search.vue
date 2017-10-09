@@ -9,10 +9,11 @@
     <div class="search-results" v-show="input.length > 0">
       <div class="search-result clickable"
         v-for="artist in searchResult"
+        v-if="artist && artist.images && artist.images[1]"
         :key="artist.id"
-        @click="selectArtist({artist})">
+        @click="selectArtist({artist}) && $router.push('/') ">
 
-        <img class="artist-image" v-if="artist && artist.images && artist.images[1]" :src="artist.images[artist.images.length - 1].url" :alt="artist.name">
+        <img class="artist-image" :src="artist.images[artist.images.length - 1].url" :alt="artist.name">
         <span class="artist-name">{{artist.name}}</span>
       </div>
     </div>
