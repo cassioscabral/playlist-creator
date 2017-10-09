@@ -4,11 +4,11 @@
       <div class="flex a-center space-between w-100">
         <playlist-icon title="playlists"></playlist-icon>
         <span class="playlist-name">{{currentPlaylist.name}}</span>
-        <plus-circle-icon title="create new playlist"></plus-circle-icon>
+        <plus-circle-icon class="icon" title="create new playlist"></plus-circle-icon>
       </div>
     </header-info>
 
-    <div class="flex space-between m-around">
+    <div class="selectors flex space-between">
 
       <el-select v-model="orderBy" size="mini" clearable placeholder="Order by">
         <el-option
@@ -56,6 +56,7 @@ export default {
   data () {
     return {
       orderBy: '',
+      playlistSearch: '',
       orderOptions: [
         {
           label: 'BPM',
@@ -105,5 +106,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.selectors {
+  margin: 1.1rem 0.7rem;
+}
 </style>

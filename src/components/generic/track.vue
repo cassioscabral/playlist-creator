@@ -1,10 +1,10 @@
 <template>
-  <div class="track clickable" :class="{'showing-artist': showArtist}" @click="emitTrack">
+  <div class="track clickable" @click="emitTrack">
     <div class="flex-col">
       <div class="track-name">
         {{track.name}}
       </div>
-      <div class="track-artist" v-if="showArtist">
+      <div class="track-artist">
         {{get(track, 'artists[0].name')}} • {{get(track, 'album.name')}}
       </div>
     </div>
@@ -24,12 +24,6 @@ export default {
     track: {
       type: Object,
       required: true
-    },
-    showArtist: {
-      type: Boolean,
-      default () {
-        return false
-      }
     }
   },
   methods: {
@@ -47,24 +41,23 @@ export default {
 
 .track {
   display: flex;
-  padding-bottom: 0.4rem;
+  padding: 0.8rem 0.6rem 0.8rem 1rem;
   justify-content: space-between;
-  font-size: 1.2rem;
+  font-size: 1rem;
+  align-items: center;
   &:first-child {
-    margin-top: 1.4rem;
   }
   &:not(:last-child) {
     border-bottom: 1px solid $base-gray;
-    margin-bottom: 1rem;
   }
-  &.showing-artist {
-    font-size: 0.9rem;
-    .track-artist {
-      font-size: 0.75rem;
-    }
-    .track-name {
-      margin-bottom: 0.5rem;
-    }
+  .track-artist {
+    font-size: 0.75rem;
+  }
+  .track-name {
+    margin-bottom: 0.5rem;
+  }
+  .track-duration {
+    font-size: 0.75rem;
   }
 }
 </style>

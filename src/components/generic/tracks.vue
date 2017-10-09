@@ -2,7 +2,7 @@
 <div class="tracks">
   <header class="flex" v-show="tracks.length > 0">
     <span class="title">Track</span>
-    <div class="duration"><clock-icon title="duration"></clock-icon></div>
+    <div class="flex duration"><clock-icon title="duration"></clock-icon></div>
   </header>
   <div class="tracks-wrapper">
     <trackc
@@ -63,12 +63,13 @@ export default {
   overflow: auto;
 }
 .tracks {
-  padding: 0 1rem;
   .tracks-wrapper {
     overflow: auto;
     max-height: 72vh;
   }
   header {
+    padding: 0.5rem 1rem;
+    display: flex;
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid $base-gray;
