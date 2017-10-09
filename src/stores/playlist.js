@@ -11,12 +11,12 @@ export default {
     originalPlaylist: [],
     orderedBy: [],
     playlistName: 'My Playlist',
-    playlistObject: {} // playlist object from Spotify
+    playlistSpotifyObject: {} // playlist object from Spotify
   },
   getters: {
     playlist: state => state.playlist,
     playlistName: state => state.playlistName,
-    playlistObject: state => state.playlistObject,
+    playlistSpotifyObject: state => state.playlistSpotifyObject,
     playlistIsEmpty: state => state.playlist.length === 0,
     totalDurationPlaylist: ({playlist}) => playlist.reduce((a, b) => a + b.duration_ms, 0),
     totalSongs: ({playlist}) => playlist.length,
@@ -67,20 +67,21 @@ export default {
           currentNext = next
         }
 
-        const trackIds = playlistTracks.map(t => t.id)
-        const chunkSize = 50
-        const chunks = chunk(trackIds, chunkSize)
-        // TODO needs to change the SpotifyApi(getAudioFeaturesForTracks) to send the request via body instead of params
-        const chunkEntries = chunks.entries()
+        // Audio features
+        // const trackIds = playlistTracks.map(t => t.id)
+        // const chunkSize = 50
+        // const chunks = chunk(trackIds, chunkSize)
+        // // TODO needs to change the SpotifyApi(getAudioFeaturesForTracks) to send the request via body instead of params
+        // const chunkEntries = chunks.entries()
 
-        for (const [i, chunk] of chunkEntries) {
-          const offset = i * chunkSize
-          const {audio_features: features} = await spotifyApi.getAudioFeaturesForTracks(chunk)
-          let playlistPiece = playlistTracks.slice(offset, offset + chunkSize)
-          playlistPiece.forEach((t, i) => {
-            t.features = features[i]
-          })
-        }
+        // for (const [i, chunk] of chunkEntries) {
+        //   const offset = i * chunkSize
+        //   const {audio_features: features} = await spotifyApi.getAudioFeaturesForTracks(chunk)
+        //   let playlistPiece = playlistTracks.slice(offset, offset + chunkSize)
+        //   playlistPiece.forEach((t, i) => {
+        //     t.features = features[i]
+        //   })
+        // }
         // playlistTracks it has features now, supposedly
         commit('REPLACE_PLAYLIST', {playlistTracks})
         commit('REPLACE_ORIGINAL_PLAYLIST', {playlistTracks})
@@ -99,7 +100,7 @@ export default {
 
       if (newTracks.length > 0) {
         spotifyApi.setAccessToken(rootState.accessToken)
-        spotifyApi.addTracksToPlaylist(rootState.currentUser.id, state.playlistObject.id, newTracks)
+        spotifyApi.addTracksToPlaylist(rootState.currentUser.id, state.playlistSpotifyObject.id, newTracks)
         .then((data) => {
           // only get a snapshot https://developer.spotify.com/web-api/add-tracks-to-playlist/
         })
@@ -130,12 +131,12 @@ export default {
         return
       }
 
-      if (!state.playlistObject.id) { // playlist was not created
+      if (!state.playlistSpotifyObject.id) { // playlist was not created
         await dispatch('createPlaylist', {name: state.playlistName})
       }
       spotifyApi.setAccessToken(rootState.accessToken)
       const userId = currentUser.id
-      const playlistId = state.playlistObject.id
+      const playlistId = state.playlistSpotifyObject.id
       const playlistURIs = state.playlist.map(track => track.uri)
       const chunks = chunk(playlistURIs, maximumPerRequest)
       try {
@@ -209,7 +210,7 @@ export default {
       state.originalPlaylist = playlistTracks
     },
     SET_PLAYLIST_OBJ (state, {playlist}) {
-      state.playlistObject = playlist
+      state.playlistSpotifyObject = playlist
     },
     UPDATE_PREVIOUS_PLAYLIST (state, {playlist}) {
       state.previousPlaylist = playlist
@@ -220,7 +221,7 @@ export default {
       state.originalPlaylist = []
       state.orderedBy = []
       state.playlistName = 'My Playlist'
-      state.playlistObject = {}
+      state.playlistSpotifyObject = {}
     },
     CLEAN_PLAYLIST (state) {
       state.playlist = []

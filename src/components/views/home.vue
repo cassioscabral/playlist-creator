@@ -22,7 +22,7 @@
         :track="track"></trackc>
       </div>
     </div>
-    <a-player v-show="hasAlbumSelected && hasTrackSelected" @change="changeMusic" mutex autoplay :music="currentTrack" ref="player"></a-player>
+    <a-player mode="order" v-show="hasAlbumSelected && hasTrackSelected" @change="changeMusic" mutex autoplay :music="currentTrack" ref="player"></a-player>
   </div>
 </template>
 

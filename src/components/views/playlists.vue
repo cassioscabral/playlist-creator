@@ -3,7 +3,7 @@
     <header-info>
       <div class="flex a-center space-between w-100">
         <playlist-icon title="playlists"></playlist-icon>
-        <span class="playlist-name">My Playlist</span>
+        <span class="playlist-name">{{currentPlaylist.name}}</span>
         <plus-circle-icon title="create new playlist"></plus-circle-icon>
       </div>
     </header-info>
@@ -19,7 +19,7 @@
         </el-option>
       </el-select>
 
-      <el-select v-model="playlistSearch" no-data-text="Empty" size="mini" filterable placeholder="Playlists">
+      <el-select v-model="playlistSearch" no-data-text="Empty" size="mini" filterable placeholder="Playlists" @change="selectPlaylist">
         <el-option
           v-for="playlist in userPlaylists"
           :key="playlist.id"
@@ -30,7 +30,9 @@
 
     </div>
 
-    <div class="user-playlists">
+    <div class="user-playlist" v-if="playlist.length > 0">
+      <tracks show-artist @select-track="selectTrack" :tracks="playlist">
+      </tracks>
     </div>
 
   </div>
@@ -41,17 +43,18 @@ import { mapGetters, mapActions } from 'vuex'
 import HeaderInfo from 'components/mobile/header.vue'
 import PlaylistIcon from 'vue-material-design-icons/playlist-play.vue'
 import PlusCircleIcon from 'vue-material-design-icons/plus-circle-outline.vue'
+import Tracks from 'components/generic/tracks'
 
 export default {
   name: 'playlists-page',
   beforeRouteEnter (to, from, next) {
     next(vm => {
       vm.getUserPlaylists()
+      vm.playlistSearch = vm.playlistName || ''
     })
   },
   data () {
     return {
-      playlistSearch: '',
       orderBy: '',
       orderOptions: [
         {
@@ -70,21 +73,33 @@ export default {
     ]),
     ...mapActions([
       'getUserPlaylists'
-    ])
+    ]),
+    selectTrack (track) {
+      console.log('track', track)
+    },
+    selectPlaylist (playlistId) { // comes from el-option value
+      const playlist = this.userPlaylists.find(p => p.id === playlistId)
+      this.loadPlaylist({ playlist })
+    }
   },
   computed: {
     ...mapGetters('playlist', [
       'playlist',
-      'playlistName'
+      'playlistName',
+      'playlistSpotifyObject'
     ]),
     ...mapGetters([
       'userPlaylists'
-    ])
+    ]),
+    currentPlaylist () {
+      return this.playlistSpotifyObject
+    }
   },
   components: {
     HeaderInfo,
     PlaylistIcon,
-    PlusCircleIcon
+    PlusCircleIcon,
+    Tracks
   }
 }
 </script>
