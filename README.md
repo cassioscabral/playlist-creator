@@ -1,6 +1,6 @@
 # playlist-creator
 
-Create playlists for Spotify using the Spotify API easily with the option to find Artists, Top Tracks, Albums and Related artists within a single page. You will have a nice graph to show hidden Spotify features for your songs such as BPM, Danceability, Energy and so on.
+Create playlists for Spotify easily with option to preview the best part of the songs, adding songs to your current editing playlist with just a swipe, find related artists in a second.
 
 ## Check the demo
 
