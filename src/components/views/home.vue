@@ -9,19 +9,9 @@
       ></album>
     </div>
 
-    <div class="tracks">
-      <header class="flex" v-show="selectedAlbumTracks.length > 0">
-        <span class="title">Title</span>
-        <div class="duration"><clock-icon title="duration"></clock-icon></div>
-      </header>
-      <div class="tracks-wrapper">
-        <trackc
-        v-for="track in selectedAlbumTracks"
-        :key="track.id"
-        @select-track="changeTrack"
-        :track="track"></trackc>
-      </div>
-    </div>
+    <tracks v-show="selectedAlbumTracks.length > 0" show-artist @select-track="changeTrack" :tracks="selectedAlbumTracks">
+    </tracks>
+
     <a-player mode="order" v-show="hasAlbumSelected && hasTrackSelected" @change="changeMusic" mutex autoplay :music="currentTrack" ref="player"></a-player>
   </div>
 </template>
@@ -29,9 +19,8 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import Album from 'components/generic/album'
-import Trackc from 'components/generic/track'
 import HeaderInfo from 'components/mobile/header.vue'
-import ClockIcon from 'vue-material-design-icons/clock.vue'
+import Tracks from 'components/generic/tracks'
 // import VueAplayer from 'vue-aplayer/src/vue-aplayer'
 import VueAplayer from 'vue-aplayer'
 import { isEmpty } from 'lodash'
@@ -94,9 +83,8 @@ export default {
   },
   components: {
     Album,
-    Trackc,
-    ClockIcon,
     HeaderInfo,
+    Tracks,
     'a-player': VueAplayer
   }
 }
@@ -107,7 +95,6 @@ export default {
   overflow: auto;
 }
 .tracks {
-  padding: 0 1rem;
   .tracks-wrapper {
     overflow: auto;
     max-height: 60vh;

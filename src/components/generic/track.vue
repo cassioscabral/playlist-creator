@@ -5,7 +5,7 @@
         {{track.name}}
       </div>
       <div class="track-artist">
-        {{get(track, 'artists[0].name')}} • {{get(track, 'album.name')}}
+        {{get(track, 'artists[0].name')}} {{albumName ? '•' : ''}} {{albumName}}
       </div>
     </div>
 
@@ -32,6 +32,11 @@ export default {
     emitTrack () {
       this.$emit('select-track', {...this.track})
     }
+  },
+  computed: {
+    albumName () {
+      return get(this.track, 'album.name')
+    }
   }
 }
 </script>
@@ -41,7 +46,7 @@ export default {
 
 .track {
   display: flex;
-  padding: 0.8rem 0.6rem 0.8rem 1rem;
+  padding: 0.8rem 0.6rem 0.8rem 0.3rem;
   justify-content: space-between;
   font-size: 1rem;
   align-items: center;
