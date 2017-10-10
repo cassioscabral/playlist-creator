@@ -8,7 +8,6 @@
     <trackc
     v-for="track in tracks"
     :key="track.id"
-    :show-artist="showArtist"
     @select-track="selectTrack"
     :track="track"></trackc>
   </div>
@@ -16,7 +15,7 @@
 </template>
 
 <script>
-// import { mapGetters, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 import Trackc from 'components/generic/track'
 import ClockIcon from 'vue-material-design-icons/clock.vue'
 
@@ -26,24 +25,28 @@ export default {
     tracks: {
       type: Array,
       required: true
-    },
-    showArtist: {
-      type: Boolean,
-      default () {
-        return false
-      }
     }
+    // autoChangeTrack: {
+    //   type: Boolean,
+    //   default () {
+    //     return true
+    //   }
+    // }
   },
   data () {
     return {
     }
   },
   methods: {
-    // ...mapActions('player', [
-    //   'playTrack'
-    // ]),
+    ...mapActions('player', [
+      'playTrack'
+    ]),
     selectTrack (track) {
       this.$emit('select-track', track)
+      this.changeTrack(track)
+    },
+    changeTrack (track) {
+      this.playTrack({ track })
     }
   },
   computed: {

@@ -1,7 +1,7 @@
 <template>
   <div class="album" @click="selectAlbum({ album })">
     <div class="album-cover">
-      <img :src="album.images[1].url" alt="">
+      <img :src="get(album, 'images[1].url')" alt="">
     </div>
     <div class="album-name">
       {{shortenedName}}
@@ -11,7 +11,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { truncate } from 'lodash'
+import { truncate, get } from 'lodash'
 export default {
   name: 'album',
   props: {
@@ -21,6 +21,7 @@ export default {
     }
   },
   methods: {
+    get,
     ...mapActions('application', [
       'selectAlbum'
     ])

@@ -5,6 +5,7 @@
         <router-view></router-view>
       </keep-alive>
     </div>
+    <a-player mode="order" v-show="hasTrackSelected" @change="changeMusic" mutex :autoplay="autoplay" :music="currentTrack" ref="player"></a-player>
     <main-menu></main-menu>
   </div>
 </template>
@@ -12,7 +13,10 @@
 <script>
 import { store } from './stores'
 import { mapGetters } from 'vuex'
-// import { uniqBy } from 'lodash'
+import { isEmpty } from 'lodash'
+// import VueAplayer from 'vue-aplayer/src/vue-aplayer'
+import VueAplayer from 'vue-aplayer'
+
 import {
   spotifyApi,
   generateRandomString,
@@ -28,12 +32,6 @@ export default {
   name: 'app',
   data () {
     return {
-      currentSelectedArtistTopTracks: [],
-      currentSelectedArtistAlbums: [],
-      // currentSelectedAlbum: {},
-      currentSelectedArtistAlbumTracks: [],
-      relatedArtists: [],
-      userPlaylists: []
     }
   },
   watch: {
@@ -54,32 +52,11 @@ export default {
       store.dispatch('cleanAccess')
       this.login()
     })
-
-    // set user playlists
-    // if (this.currentUser.id) {
-    //   spotifyApi.getUserPlaylists(this.currentUser.id, {limit: 50})
-    //   .then(data => {
-    //     // get only playlists owned by the user
-    //     const playlists = data.items.filter(i => i.owner.id === this.currentUser.id)
-    //     store.dispatch('saveUserPlaylists', {playlists})
-    //     return playlists
-    //   })
-    //   .then(playlists => {
-    //     // playlist might not exist and the user just reload
-    //     let playlistWasDeleted = playlists.filter(p => p.id === this.playlistObject.id).length === 0
-    //     if (this.playlist.length !== 0 && playlistWasDeleted) {
-    //       window.alertify.warning('Your playlist was deleted on Spotify, create a new one')
-    //       store.dispatch('resetPlaylistStore')
-    //     }
-    //   })
-    //   .catch(e => {
-    //     console.error(e)
-    //     store.dispatch('cleanAccess')
-    //     this.login()
-    //   })
-    // }
   },
   methods: {
+    changeMusic (music) {
+      // console.log('music changed', music)
+    },
     selectAlbum (album) {
       this.currentSelectedAlbum = album
     },
@@ -101,7 +78,8 @@ export default {
       url += '&redirect_uri=' + encodeURIComponent(redirectUri)
       url += '&state=' + encodeURIComponent(state)
       window.location = url
-    }
+    },
+    isEmpty
   },
   computed: {
     ...mapGetters([
@@ -113,10 +91,18 @@ export default {
     ]),
     ...mapGetters('application', [
       'selectedArtist'
-    ])
+    ]),
+    ...mapGetters('player', [
+      'autoplay',
+      'currentTrack'
+    ]),
+    hasTrackSelected () {
+      return !this.isEmpty(this.currentTrack)
+    }
   },
   components: {
-    MainMenu
+    MainMenu,
+    'a-player': VueAplayer
   }
 }
 </script>

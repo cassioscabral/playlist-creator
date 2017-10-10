@@ -18,6 +18,7 @@
 <script>
 import {msToTime} from 'src/utils'
 import {get} from 'lodash'
+
 export default {
   name: 'track',
   props: {
