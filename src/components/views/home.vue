@@ -66,12 +66,15 @@ export default {
 
 <style lang="scss" scoped>
 .albums {
-  overflow: auto;
+  scroll-behavior: smooth;
+  overflow-x: scroll; // has to be scroll, not auto
+  -webkit-overflow-scrolling: touch;
 }
 .tracks {
   .tracks-wrapper {
-    overflow: auto;
-    max-height: 60vh;
+    overflow-y: scroll; // has to be scroll, not auto
+    -webkit-overflow-scrolling: touch;
+    // max-height: 60vh;
   }
   header {
     align-items: center;

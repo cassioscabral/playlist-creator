@@ -3,8 +3,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import VueRouter from 'vue-router'
+import VueTouch from 'vue-touch'
 Vue.use(Vuex)
 Vue.use(VueRouter)
+// https://alligator.io/vuejs/vue-touch-events/
+Vue.use(VueTouch)
 import {
   Button,
   Input,

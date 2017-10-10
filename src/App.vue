@@ -128,12 +128,14 @@ body {
   max-height: 100vh;
   border: 0;
   padding: 0;
-  overflow: auto;
+  overflow-y: scroll; // has to be scroll, not auto
+  -webkit-overflow-scrolling: touch;
 }
 
 .main {
   flex: 1;
-  overflow: auto;
+  overflow-y: scroll; // has to be scroll, not auto
+  -webkit-overflow-scrolling: touch;
 }
 
 .material-design-icon {

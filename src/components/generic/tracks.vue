@@ -26,12 +26,6 @@ export default {
       type: Array,
       required: true
     }
-    // autoChangeTrack: {
-    //   type: Boolean,
-    //   default () {
-    //     return true
-    //   }
-    // }
   },
   data () {
     return {
@@ -47,6 +41,9 @@ export default {
     },
     changeTrack (track) {
       this.playTrack({ track })
+    },
+    panning () {
+      console.log('panning')
     }
   },
   computed: {
@@ -62,12 +59,10 @@ export default {
 <style lang="scss" scoped>
 @import 'src/assets/colors';
 
-.albums {
-  overflow: auto;
-}
 .tracks {
   .tracks-wrapper {
-    overflow: auto;
+    overflow-y: scroll; // has to be scroll, not auto
+    -webkit-overflow-scrolling: touch;
     max-height: 72vh;
   }
   header {

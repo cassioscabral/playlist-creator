@@ -2,7 +2,7 @@
   <div class="track clickable" @click="emitTrack">
     <div class="flex-col">
       <div class="track-name">
-        {{track.name}}
+          {{track.name}}
       </div>
       <div class="track-artist">
         {{get(track, 'artists[0].name')}} {{albumName ? '•' : ''}} {{albumName}}
@@ -32,6 +32,9 @@ export default {
     msToTime,
     emitTrack () {
       this.$emit('select-track', {...this.track})
+    },
+    removeTrackFromPlaylist () {
+      console.log()
     }
   },
   computed: {

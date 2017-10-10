@@ -76,7 +76,7 @@ export default {
       'getUserPlaylists'
     ]),
     selectTrack (track) {
-      console.log('track', track)
+      // console.log('track', track)
     },
     selectPlaylist (playlistId) { // comes from el-option value
       const playlist = this.userPlaylists.find(p => p.id === playlistId)
