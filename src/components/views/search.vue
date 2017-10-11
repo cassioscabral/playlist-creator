@@ -27,7 +27,7 @@ import { mapActions, mapGetters } from 'vuex'
 import {
   searchArtists
 } from 'src/core/spotify-service'
-import { get } from 'lodash'
+import { get, debounce } from 'lodash'
 
 export default {
   name: 'search-page',
@@ -40,16 +40,8 @@ export default {
   methods: {
     ...mapActions('application', [
       'selectArtist'
-    ])
-  },
-  computed: {
-    ...mapGetters([
-      'accessToken',
-      'currentUser'
-    ])
-  },
-  watch: {
-    async input (search) {
+    ]),
+    getSearchResults: debounce(async function (search) {
       try {
         if (search.length > 0) {
           const result = await searchArtists(search)
@@ -58,17 +50,33 @@ export default {
       } catch (error) {
         console.error(error)
       }
+    }, 300)
+  },
+  computed: {
+    ...mapGetters([
+      'accessToken',
+      'currentUser'
+    ])
+  },
+  watch: {
+    input (newSearch) {
+      this.getSearchResults(newSearch)
     }
-    // input: throttle(async (search) => {
-    //   try {
-    //     if (search.length > 0) {
-    //       const result = await searchArtists(search)
-    //       this.searchResult = get(result, 'artists.items')
+    // input: function () {
+    //   return debounce(async (search) => {
+    //     try {
+    //       if (search.length > 0) {
+    //         const result = await searchArtists(search)
+    //         this.searchResult = get(result, 'artists.items')
+    //       }
+    //     } catch (error) {
+    //       if (Number(error.status) === 401) {
+    //         console.log('401')
+    //       }
+    //       console.error(error)
     //     }
-    //   } catch (error) {
-    //     console.error(error)
-    //   }
-    // }, 700)
+    //   }, 200)
+    // }
   },
   components: {
     HeaderInfo
@@ -86,7 +94,8 @@ export default {
 }
 
 .search-results {
-  overflow: auto;
+  overflow-y: scroll; // has to be scroll, not auto
+  -webkit-overflow-scrolling: touch;
 }
 
 .search-result {

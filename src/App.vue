@@ -77,7 +77,8 @@ export default {
       url += '&scope=' + encodeURIComponent(scope)
       url += '&redirect_uri=' + encodeURIComponent(redirectUri)
       url += '&state=' + encodeURIComponent(state)
-      window.location = url
+      window.location.href = url
+      // this.$router.push(url)
     },
     isEmpty
   },
