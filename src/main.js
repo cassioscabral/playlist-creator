@@ -14,6 +14,10 @@ import {
   Form,
   Select,
   Option,
+  Loading,
+  Notification,
+  Message,
+  MessageBox,
   FormItem } from 'element-ui'
 import App from './App'
 import 'vue-material-design-icons/styles.css'
@@ -24,6 +28,17 @@ Vue.component(Form.name, Form)
 Vue.component(FormItem.name, FormItem)
 Vue.component(Select.name, Select)
 Vue.component(Option.name, Option)
+Vue.component(MessageBox.name, MessageBox)
+Vue.prototype.$loading = Loading.service
+Vue.prototype.$msgbox = MessageBox
+Vue.prototype.$alert = MessageBox.alert
+Vue.prototype.$confirm = MessageBox.confirm
+Vue.prototype.$prompt = MessageBox.prompt
+Vue.prototype.$notify = Notification
+Vue.prototype.$message = Message
+
+Vue.use(Loading.directive)
+Vue.prototype.$loading = Loading.service
 
 import {store} from './stores'
 

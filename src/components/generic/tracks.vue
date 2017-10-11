@@ -66,7 +66,7 @@ export default {
     max-height: 72vh;
   }
   header {
-    padding: 1.1rem 1rem 0.5rem 0.3rem;
+    padding: 0 1rem 0.5rem 0.3rem;
     display: flex;
     align-items: center;
     justify-content: space-between;

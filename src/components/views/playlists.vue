@@ -4,7 +4,12 @@
       <div class="flex a-center space-between w-100">
         <playlist-icon title="playlists"></playlist-icon>
         <span class="playlist-name">{{currentPlaylist.name}}</span>
-        <plus-circle-icon class="icon" title="create new playlist"></plus-circle-icon>
+        <div class="new-playlist" @click="prompt">
+          <plus-circle-icon
+
+          class="icon"
+          title="create new playlist"></plus-circle-icon>
+        </div>
       </div>
     </header-info>
 
@@ -81,6 +86,25 @@ export default {
     selectPlaylist (playlistId) { // comes from el-option value
       const playlist = this.userPlaylists.find(p => p.id === playlistId)
       this.loadPlaylist({ playlist })
+    },
+    prompt () {
+      console.log('prompt')
+      this.$prompt('Playlist name', 'Tip', {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        // inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
+        inputErrorMessage: 'Invalid playlist Name'
+      }).then(value => {
+        this.$message({
+          type: 'success',
+          message: 'Playlist ' + value + ' created'
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: 'Cancelled'
+        })
+      })
     }
   },
   computed: {
