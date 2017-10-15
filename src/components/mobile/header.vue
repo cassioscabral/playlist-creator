@@ -6,8 +6,10 @@
         <span>{{selectedArtist.name}}</span>
       </div>
       <div v-else class="flex a-center has-not-selected-artist">
-        <person-outline-icon title="Artist"></person-outline-icon>
-        Search for an Artist...
+        <router-link to="/search" class="flex a-center">
+          <person-outline-icon title="Artist"></person-outline-icon>
+          Search for an Artist...
+        </router-link>
       </div>
     </slot>
   </div>

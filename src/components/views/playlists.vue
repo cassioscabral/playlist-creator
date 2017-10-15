@@ -9,12 +9,13 @@
 
           class="icon"
           title="create new playlist"></plus-circle-icon>
+          <div class="multiselect"></div>
         </div>
       </div>
     </header-info>
 
     <div class="selectors flex space-between">
-
+      <!--
       <el-select v-model="orderBy" size="mini" clearable placeholder="Order by">
         <el-option
           v-for="(option, index) in orderOptions"
@@ -32,7 +33,7 @@
           :value="playlist.id">
         </el-option>
       </el-select>
-
+      -->
     </div>
 
     <div class="user-playlist" v-if="playlist.length > 0">
@@ -49,6 +50,7 @@ import HeaderInfo from 'components/mobile/header.vue'
 import PlaylistIcon from 'vue-material-design-icons/playlist-play.vue'
 import PlusCircleIcon from 'vue-material-design-icons/plus-circle-outline.vue'
 import Tracks from 'components/generic/tracks'
+import Multiselect from 'vue-multiselect'
 
 export default {
   name: 'playlists-page',
@@ -68,7 +70,9 @@ export default {
           value: 'BPM'
         }
       ],
-      playlists: []
+      playlists: [],
+      value: null,
+      options: ['list', 'of', 'options']
     }
   },
   methods: {
@@ -88,8 +92,8 @@ export default {
       this.loadPlaylist({ playlist })
     },
     prompt () {
-      console.log('prompt')
-      this.$prompt('Playlist name', 'Tip', {
+      // console.log('prompt')
+      this.$prompt('New playlist', 'Choose a name for your playlist', {
         confirmButtonText: 'OK',
         cancelButtonText: 'Cancel',
         // inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
@@ -100,10 +104,10 @@ export default {
           message: 'Playlist ' + value + ' created'
         })
       }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: 'Cancelled'
-        })
+        // this.$message({
+        //   type: 'info',
+        //   message: 'Cancelled'
+        // })
       })
     }
   },
@@ -124,7 +128,8 @@ export default {
     HeaderInfo,
     PlaylistIcon,
     PlusCircleIcon,
-    Tracks
+    Tracks,
+    Multiselect
   }
 }
 </script>
@@ -134,3 +139,4 @@ export default {
   margin: 1.1rem 0.7rem;
 }
 </style>
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

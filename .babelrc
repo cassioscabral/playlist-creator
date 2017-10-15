@@ -3,8 +3,8 @@
   "plugins": ["transform-runtime", "transform-async-to-generator", [
       "component",
       {
-        "libraryName": "element-ui",
-        "styleLibraryName": "theme-chalk"
+        "libraryName": "mint-ui",
+        "style": true
       }
     ]
   ],
