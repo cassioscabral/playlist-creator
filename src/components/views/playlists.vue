@@ -6,34 +6,35 @@
         <span class="playlist-name">{{currentPlaylist.name}}</span>
         <div class="new-playlist" @click="prompt">
           <plus-circle-icon
-
           class="icon"
           title="create new playlist"></plus-circle-icon>
-          <div class="multiselect"></div>
         </div>
       </div>
     </header-info>
 
-    <div class="selectors flex space-between">
-      <!--
-      <el-select v-model="orderBy" size="mini" clearable placeholder="Order by">
-        <el-option
-          v-for="(option, index) in orderOptions"
-          :key="index"
-          :label="option.label"
-          :value="option.value">
-        </el-option>
-      </el-select>
-
-      <el-select v-model="playlistSearch" no-data-text="Empty" size="mini" filterable placeholder="Playlists" @change="selectPlaylist">
-        <el-option
-          v-for="playlist in userPlaylists"
-          :key="playlist.id"
-          :label="playlist.name"
-          :value="playlist.id">
-        </el-option>
-      </el-select>
-      -->
+    <div class="selectors flex-col space-between">
+      <div class="flex">
+        <multiselect
+          deselect-label=""
+          :searchable="false"
+          v-model="selectedOrder"
+          placeholder="Order By"
+          :options="orderOptions"
+          label="label"
+          track-by="value"></multiselect>
+      </div>
+      <div class="flex sm-vertical-space">
+        <multiselect
+        deselect-label=""
+        :searchable="false"
+        v-model="selectedPlaylist"
+        placeholder="Playlists"
+        :options="playlistsOptions"
+        label="label"
+        track-by="id"
+        :allow-empty="false"
+        @input="selectPlaylist"></multiselect>
+      </div>
     </div>
 
     <div class="user-playlist" v-if="playlist.length > 0">
@@ -58,6 +59,8 @@ export default {
     next(vm => {
       vm.getUserPlaylists()
       vm.playlistSearch = vm.playlistName || ''
+      const selectedPlaylist = vm.playlistSpotifyObject
+      vm.selectedPlaylist = {id: selectedPlaylist.id, label: selectedPlaylist.name}
     })
   },
   data () {
@@ -71,8 +74,8 @@ export default {
         }
       ],
       playlists: [],
-      value: null,
-      options: ['list', 'of', 'options']
+      selectedPlaylist: {},
+      selectedOrder: {}
     }
   },
   methods: {
@@ -87,7 +90,8 @@ export default {
     selectTrack (track) {
       // console.log('track', track)
     },
-    selectPlaylist (playlistId) { // comes from el-option value
+    selectPlaylist (playlistOption) { // comes from el-option value
+      const {id: playlistId} = playlistOption
       const playlist = this.userPlaylists.find(p => p.id === playlistId)
       this.loadPlaylist({ playlist })
     },
@@ -122,6 +126,9 @@ export default {
     ]),
     currentPlaylist () {
       return this.playlistSpotifyObject
+    },
+    playlistsOptions () {
+      return this.userPlaylists.map(p => ({label: p.name, id: p.id}))
     }
   },
   components: {
