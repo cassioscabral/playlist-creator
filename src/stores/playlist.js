@@ -170,11 +170,12 @@ export default {
         const playlist = await spotifyApi.createPlaylist(rootState.currentUser.id, {name})
         await dispatch('changePlaylistName', {name})
         await dispatch('setPlaylistObject', {playlist})
-        await dispatch('pushPlaylist', {playlist})
+        await dispatch('pushPlaylist', {playlist}, { root: true })
+        commit('REPLACE_PLAYLIST', {playlistTracks: []})
         return playlist
       } catch (error) {
         console.error(error)
-        await dispatch('cleanAccess')
+        await dispatch('cleanAccess', null, { root: true })
       }
 
       // return spotifyApi.createPlaylist(rootState.currentUser.id, {name})

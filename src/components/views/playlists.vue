@@ -41,6 +41,9 @@
       <tracks show-artist @select-track="selectTrack" :tracks="playlist">
       </tracks>
     </div>
+    <div class="empty-user-playlist" v-else>
+      <h3>Your playlist is empty</h3>
+    </div>
 
   </div>
 </template>
@@ -75,14 +78,15 @@ export default {
       ],
       playlists: [],
       selectedPlaylist: {},
-      selectedOrder: {}
+      selectedOrder: null
     }
   },
   methods: {
     ...mapActions('playlist', [
       'loadPlaylist',
       'addTracksToPlaylist',
-      'savePlaylist'
+      'savePlaylist',
+      'createPlaylist'
     ]),
     ...mapActions([
       'getUserPlaylists'
@@ -97,12 +101,14 @@ export default {
     },
     prompt () {
       // console.log('prompt')
-      this.$prompt('New playlist', 'Choose a name for your playlist', {
+      this.$prompt('New playlist', '', {
         confirmButtonText: 'OK',
         cancelButtonText: 'Cancel',
         // inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
         inputErrorMessage: 'Invalid playlist Name'
-      }).then(value => {
+      }).then(async (value) => {
+        const {value: name} = value
+        await this.createPlaylist({name})
         this.$message({
           type: 'success',
           message: 'Playlist ' + value + ' created'
@@ -144,6 +150,11 @@ export default {
 <style lang="scss" scoped>
 .selectors {
   margin: 1.1rem 0.7rem;
+}
+
+.empty-user-playlist {
+  display: flex;
+  justify-content: center;
 }
 </style>
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
