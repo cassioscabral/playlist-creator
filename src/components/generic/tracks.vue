@@ -5,11 +5,11 @@
     <div class="flex duration"><clock-icon title="duration"></clock-icon></div>
   </header>
   <div class="tracks-wrapper">
-    <trackc
-    v-for="track in tracks"
-    :key="track.id"
-    @select-track="selectTrack"
-    :track="track"></trackc>
+    <v-touch v-for="track in tracks"  @doubletap="onDoubleTap(track, $event)" :key="track.id">
+      <trackc
+      @select-track="selectTrack"
+      :track="track"></trackc>
+    </v-touch>
   </div>
 </div>
 </template>
@@ -25,6 +25,12 @@ export default {
     tracks: {
       type: Array,
       required: true
+    },
+    onDoubleTap: {
+      type: Function,
+      default () {
+        return function () { console.log('double tapped') }
+      }
     }
   },
   data () {
@@ -34,6 +40,10 @@ export default {
   methods: {
     ...mapActions('player', [
       'playTrack'
+    ]),
+    ...mapActions('playlist', [
+      'push',
+      'remove'
     ]),
     selectTrack (track) {
       this.$emit('select-track', track)

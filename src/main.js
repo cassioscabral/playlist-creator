@@ -7,7 +7,12 @@ import VueTouch from 'vue-touch'
 Vue.use(Vuex)
 Vue.use(VueRouter)
 // https://alligator.io/vuejs/vue-touch-events/
-Vue.use(VueTouch)
+VueTouch.registerCustomEvent('doubletap', {
+  type: 'tap',
+  taps: 2
+})
+Vue.use(VueTouch, {name: 'v-touch'})
+
 import App from './App'
 import 'vue-material-design-icons/styles.css'
 

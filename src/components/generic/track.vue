@@ -1,5 +1,5 @@
 <template>
-  <div class="track clickable" @click="emitTrack">
+  <v-touch class="track clickable" @tap="emitTrack">
     <div class="flex-col">
       <div class="track-name">
           {{track.name}}
@@ -12,7 +12,7 @@
     <div class="track-duration">
       {{msToTime(track.duration_ms)}}
     </div>
-  </div>
+  </v-touch>
 </template>
 
 <script>

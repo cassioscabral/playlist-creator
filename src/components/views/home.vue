@@ -11,6 +11,7 @@
 
     <tracks
       v-show="selectedAlbumTracks.length > 0"
+      :on-double-tap="addToPlaylist"
       :auto-change-track="false"
       :tracks="selectedAlbumTracks">
     </tracks>
@@ -34,7 +35,16 @@ export default {
   methods: {
     ...mapActions('player', [
       'playTrack'
-    ])
+    ]),
+    ...mapActions('playlist', {
+      addTrackToPlaylist: 'push',
+      removeTrackToPlaylist: 'remove'
+    }),
+    addToPlaylist (track, e) {
+      e.preventDefault()
+      console.log('add to playlist', track)
+      this.addTrackToPlaylist({track})
+    }
   },
   computed: {
     ...mapGetters('application', [
@@ -52,9 +62,6 @@ export default {
     hasTrackSelected () {
       return !this.isEmpty(this.currentTrack)
     }
-    // playThisTrack (track) {
-    //   this.playTrack({track, artist: this.selectedArtist, album: this.selectedAlbum})
-    // }
   },
   components: {
     Album,

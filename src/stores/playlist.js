@@ -23,12 +23,16 @@ export default {
     previousPlaylist: ({previousPlaylist}) => previousPlaylist
   },
   actions: {
-    push ({commit}, {track}) {
-      spotifyApi.getAudioFeaturesForTrack(track.id)
-      .then(data => {
-        track.features = data
+    push ({commit}, {track, getAudioFeatures = false}) {
+      if (getAudioFeatures) {
+        spotifyApi.getAudioFeaturesForTrack(track.id)
+        .then(data => {
+          track.features = data
+          commit('PUSH', {track})
+        })
+      } else {
         commit('PUSH', {track})
-      })
+      }
     },
     remove ({commit}, {track}) {
       commit('REMOVE', {track})
@@ -162,9 +166,9 @@ export default {
         return
       }
       // clean the playlist
-      if (clean) {
-        commit('CLEAN_PLAYLIST')
-      }
+      // if (clean) {
+      //   commit('CLEAN_PLAYLIST')
+      // }
 
       try {
         const playlist = await spotifyApi.createPlaylist(rootState.currentUser.id, {name})
@@ -198,6 +202,7 @@ export default {
     PUSH (state, {track}) {
       state.playlist.push(track)
     },
+    // TODO check if Vue has a better way to handle removal
     REMOVE (state, {track}) {
       state.playlist = state.playlist.filter(t => t.id !== track.id)
     },

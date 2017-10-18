@@ -38,7 +38,7 @@
     </div>
 
     <div class="user-playlist" v-if="playlist.length > 0">
-      <tracks show-artist @select-track="selectTrack" :tracks="playlist">
+      <tracks :on-double-tap="removeTrackFromPlaylist" @select-track="selectTrack" :tracks="playlist">
       </tracks>
     </div>
     <div class="empty-user-playlist" v-else>
@@ -88,6 +88,9 @@ export default {
       'savePlaylist',
       'createPlaylist'
     ]),
+    ...mapActions('playlist', {
+      removeFromPlaylist: 'remove'
+    }),
     ...mapActions([
       'getUserPlaylists'
     ]),
@@ -119,6 +122,10 @@ export default {
         //   message: 'Cancelled'
         // })
       })
+    },
+    removeTrackFromPlaylist (track, e) {
+      e.preventDefault()
+      this.removeFromPlaylist({track})
     }
   },
   computed: {
