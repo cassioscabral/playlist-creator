@@ -1,5 +1,5 @@
 import spotifyApi from '../loaders/spotifyApi'
-import {differenceBy, chunk} from 'lodash'
+import {differenceBy, chunk, isEmpty, find} from 'lodash'
 
 export default {
   namespaced: true,
@@ -23,15 +23,18 @@ export default {
     previousPlaylist: ({previousPlaylist}) => previousPlaylist
   },
   actions: {
-    push ({commit}, {track, getAudioFeatures = false}) {
-      if (getAudioFeatures) {
-        spotifyApi.getAudioFeaturesForTrack(track.id)
-        .then(data => {
-          track.features = data
+    push ({commit, state}, {track, getAudioFeatures = false}) {
+      const newTrack = isEmpty(find(state.playlist, {id: track.id}))
+      if (newTrack) { // avoid tracks added to be added again
+        if (getAudioFeatures) {
+          spotifyApi.getAudioFeaturesForTrack(track.id)
+          .then(data => {
+            track.features = data
+            commit('PUSH', {track})
+          })
+        } else {
           commit('PUSH', {track})
-        })
-      } else {
-        commit('PUSH', {track})
+        }
       }
     },
     remove ({commit}, {track}) {
