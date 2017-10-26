@@ -1,7 +1,7 @@
 <template>
   <div class="album" @click="selectAlbum({ album })">
     <div class="album-cover">
-      <img :src="get(album, 'images[1].url')" alt="">
+      <img v-lazy="get(album, 'images[1].url')" alt="">
     </div>
     <div class="album-name">
       {{shortenedName}}
