@@ -15,6 +15,7 @@
     "spotify-web-api-js": "^0.21.1",
     "vue": "^2.3.0",
     "vue-aplayer": "https://github.com/cassioscabral/vue-aplayer.git",
+    "vue-lazyload": "^1.1.4",
     "vue-material-design-icons": "^0.7.1",
     "vue-media": "^1.1.1",
     "vue-multiselect": "^2.0.3",
