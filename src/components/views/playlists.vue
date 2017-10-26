@@ -55,12 +55,12 @@ import PlaylistIcon from 'vue-material-design-icons/playlist-play.vue'
 import PlusCircleIcon from 'vue-material-design-icons/plus-circle-outline.vue'
 import Tracks from 'components/generic/tracks'
 import Multiselect from 'vue-multiselect'
-
+import { isEmpty } from 'lodash'
 export default {
   name: 'playlists-page',
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      vm.getUserPlaylists()
+      isEmpty(vm.playlists) ? vm.getUserPlaylists() : null
       vm.playlistSearch = vm.playlistName || ''
       const selectedPlaylist = vm.playlistSpotifyObject
       vm.selectedPlaylist = {id: selectedPlaylist.id, label: selectedPlaylist.name}

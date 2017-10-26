@@ -5,32 +5,27 @@
     <div class="flex duration"><clock-icon title="duration"></clock-icon></div>
   </header>
   <div class="tracks-wrapper">
-    <v-touch v-for="track in tracks"  @doubletap="onDoubleTap(track, $event)" :key="track.id">
       <trackc
+      v-for="track in tracks" :key="track.id"
+      @doubletap="emitDoubleTap"
       @select-track="selectTrack"
+      :added-to-current-playlist="isInThePlaylist(track)"
       :track="track"></trackc>
-    </v-touch>
   </div>
 </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import Trackc from 'components/generic/track'
 import ClockIcon from 'vue-material-design-icons/clock.vue'
-
+import { find, isEmpty } from 'lodash'
 export default {
   name: 'tracks',
   props: {
     tracks: {
       type: Array,
       required: true
-    },
-    onDoubleTap: {
-      type: Function,
-      default () {
-        return function () { console.log('double tapped') }
-      }
     }
   },
   data () {
@@ -54,10 +49,19 @@ export default {
     },
     panning () {
       console.log('panning')
+    },
+    emitDoubleTap (track) {
+      console.log('emiting doubletap-track')
+      this.$emit('doubletap-track', track)
+    },
+    isInThePlaylist (track) {
+      return !isEmpty(find(this.playlist, {id: track.id}))
     }
   },
   computed: {
-
+    ...mapGetters('playlist', [
+      'playlist'
+    ])
   },
   components: {
     Trackc,

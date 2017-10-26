@@ -2,9 +2,7 @@
   <div class="search">
     <header-info></header-info>
 
-    <el-input class="" placeholder="Search" v-model="input">
-      <i slot="prefix" class="el-input__icon el-icon-search"></i>
-    </el-input>
+    <input type="text" v-model="input">
 
     <div class="search-results" v-show="input.length > 0">
       <div class="search-result clickable"

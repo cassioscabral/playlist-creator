@@ -11,7 +11,7 @@
 
     <tracks
       v-show="selectedAlbumTracks.length > 0"
-      :on-double-tap="addToPlaylist"
+      @doubletap-track="addToPlaylist"
       :auto-change-track="false"
       :tracks="selectedAlbumTracks">
     </tracks>
@@ -41,7 +41,6 @@ export default {
       removeTrackToPlaylist: 'remove'
     }),
     addToPlaylist (track, e) {
-      e.preventDefault()
       console.log('add to playlist', track)
       this.addTrackToPlaylist({track})
     }
