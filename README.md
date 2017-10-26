@@ -5,7 +5,7 @@ Create playlists for Spotify easily with option to preview the best part of the 
 ## Check the demo
 
 
-V2 (work in progress): https://theplaylistcreator-punvzexorr.now.sh
+V2 (work in progress): https://theplaylistcreator-tdfsqcdhig.now.sh/
 
 V1: https://dist-wucqzmqnxb.now.sh/
 
