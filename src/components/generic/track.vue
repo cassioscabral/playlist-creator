@@ -1,6 +1,6 @@
 <template>
-  <v-touch class="track clickable" ref="hammer" @doubletap="emitDoubleTap" @click="emitTrack" click.native="emitTrack" @swipeleft="swipeLeft" @swiperight="swipeRight">
-    <div class="flex track-wrapper" :class="{'swiped-left': swipedLeft, 'swiped-right': swipedRight}">
+  <v-touch class="track clickable" ref="hammer" @doubletap="emitDoubleTap" @click="emitTrack" click.native="emitTrack" @panright="panningRight"  @panleft="panningLeft" @swipeleft="swipeLeft" @swiperight="swipeRight">
+    <div class="flex track-wrapper" :class="{'swiped-left': swipedLeft, 'swiped-right': swipedRight}" :style="{left: panPosition}">
       <div class="flex-col">
         <div class="track-name">
           <span class="name">{{track.name}}</span>
@@ -41,7 +41,8 @@ export default {
   data () {
     return {
       swipedLeft: false,
-      swipedRight: false
+      swipedRight: false,
+      panPosition: 0
     }
   },
   methods: {
@@ -63,10 +64,21 @@ export default {
     swipeRight () {
       console.log('swipeRight')
       this.swipedRight = true
+    },
+    // could be just a horizontal pan
+    panningRight (e) {
+      // console.log('panningRight', e)
+      this.panPosition = `${e.deltaX}px`
+    },
+    panningLeft (e) {
+      // console.log('panningLeft', e)
+      this.panPosition = `${e.deltaX}px`
     }
   },
   mounted () {
-    // const vt = this.$refs.hammer
+    const vt = this.$refs.hammer
+    // console.log('vt', vt)
+    vt.$on('dragright', (e) => { console.log('dragginright', e) })
     // const tap = vt.recognizers['tap']
     // const doubleTap = vt.recognizers['doubletap']
 
