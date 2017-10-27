@@ -12,6 +12,7 @@
     <tracks
       v-show="selectedAlbumTracks.length > 0"
       @doubletap-track="addToPlaylist"
+      @swiped-right="addToPlaylist"
       :auto-change-track="false"
       :tracks="selectedAlbumTracks">
     </tracks>

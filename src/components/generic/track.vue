@@ -1,5 +1,5 @@
 <template>
-  <v-touch class="track clickable" ref="hammer" @doubletap="emitDoubleTap" @click="emitTrack" click.native="emitTrack" @panright="panningRight"  @panleft="panningLeft" @swipeleft="swipeLeft" @swiperight="swipeRight">
+  <v-touch class="track clickable" ref="hammer" @doubletap="emitDoubleTap" @click="emitTrack" click.native="emitTrack" @panright="panningRight"  @panleft="panningLeft" @swipeleft="swipeLeft" @swiperight="swipeRight" @panend="panend">
     <div class="flex track-wrapper" :class="{'swiped-left': swipedLeft, 'swiped-right': swipedRight}" :style="{left: panPosition}">
       <div class="flex-col">
         <div class="track-name">
@@ -60,10 +60,12 @@ export default {
     swipeLeft () {
       console.log('swipeleft')
       this.swipedLeft = true
+      this.$emit('swiped-left', {...this.track})
     },
     swipeRight () {
       console.log('swipeRight')
       this.swipedRight = true
+      this.$emit('swiped-right', {...this.track})
     },
     // could be just a horizontal pan
     panningRight (e) {
@@ -73,6 +75,12 @@ export default {
     panningLeft (e) {
       // console.log('panningLeft', e)
       this.panPosition = `${e.deltaX}px`
+    },
+    panend (e) {
+      console.log('panend e', e)
+      this.swipedRight = false
+      this.swipedLeft = false
+      this.panPosition = 0
     }
   },
   mounted () {

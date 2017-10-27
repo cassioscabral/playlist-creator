@@ -9,6 +9,8 @@
       v-for="track in tracks" :key="track.id"
       @doubletap="emitDoubleTap"
       @select-track="selectTrack"
+      @swiped-right="swipedRight"
+      @swiped-left="swipedLeft"
       :added-to-current-playlist="isInThePlaylist(track)"
       :track="track"></trackc>
   </div>
@@ -53,6 +55,12 @@ export default {
     emitDoubleTap (track) {
       console.log('emiting doubletap-track')
       this.$emit('doubletap-track', track)
+    },
+    swipedLeft (track) {
+      this.$emit('swiped-left', track)
+    },
+    swipedRight (track) {
+      this.$emit('swiped-right', track)
     },
     isInThePlaylist (track) {
       return !isEmpty(find(this.playlist, {id: track.id}))
