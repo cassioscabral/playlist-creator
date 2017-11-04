@@ -1,12 +1,12 @@
 <template>
   <v-touch class="track clickable" ref="hammer" @doubletap="emitDoubleTap" @click="emitTrack" click.native="emitTrack" @panright="panningRight"  @panleft="panningLeft" @swipeleft="swipeLeft" @swiperight="swipeRight" @panend="panend">
-    <div class="flex track-wrapper" :class="{'swiped-left': swipedLeft, 'swiped-right': swipedRight}" :style="{left: panPosition}">
+    <div class="flex track-wrapper animated" :class="{'slideInLeft': swipedLeft, 'slideInRight': swipedRight}" :style="{left: panPosition}">
       <div class="flex-col">
         <div class="track-name">
           <span class="name">{{track.name}}</span>
         </div>
         <div class="track-artist flex">
-          <check-icon :style="{color: 'blue'}" v-if="addedToCurrentPlaylist" title="Added"></check-icon>
+          <check-icon v-if="addedToCurrentPlaylist" title="Added"></check-icon>
           <span class="artist-and-duration">{{get(track, 'artists[0].name')}} {{albumName ? '•' : ''}} {{albumName}}</span>
         </div>
       </div>
@@ -61,11 +61,17 @@ export default {
       console.log('swipeleft')
       this.swipedLeft = true
       this.$emit('swiped-left', {...this.track})
+      setTimeout(() => {
+        this.swipedLeft = false
+      }, 1500)
     },
     swipeRight () {
       console.log('swipeRight')
       this.swipedRight = true
       this.$emit('swiped-right', {...this.track})
+      setTimeout(() => {
+        this.swipedRight = false
+      }, 1200)
     },
     // could be just a horizontal pan
     panningRight (e) {
@@ -121,13 +127,11 @@ export default {
     padding: 0.8rem 0.6rem 0.8rem 0.3rem;
     align-items: center;
     position: relative;
-    &.swiped-left {
-      left: -60px;
-      background-color: #ff3f3f;
+    &.slideInLeft {
+      background-color:rgba(249, 94, 20, 0.54);
     }
-    &.swiped-right {
-      left: 60px;
-      background-color: #09aa09;
+    &.slideInRight {
+      background-color: rgba(105, 249, 15, 0.52);
     }
   }
 

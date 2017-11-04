@@ -108,6 +108,7 @@ export default {
 }
 </script>
 <style lang="scss">
+@import './assets/animate';
 @import './assets/reset';
 @import './assets/utils';
 @import './assets/colors';
