@@ -38,7 +38,10 @@
     </div>
 
     <div class="user-playlist" v-if="playlist.length > 0">
-      <tracks :on-double-tap="removeTrackFromPlaylist" @select-track="selectTrack" :tracks="playlist">
+      <tracks 
+      @swiped-left="removeFromPlaylist" @select-track="selectTrack" 
+      :able-to-swipe-right="false"
+      :tracks="playlist">
       </tracks>
     </div>
     <div class="empty-user-playlist" v-else>
@@ -89,7 +92,7 @@ export default {
       'createPlaylist'
     ]),
     ...mapActions('playlist', {
-      removeFromPlaylist: 'remove'
+      removeTrackToPlaylist: 'remove'
     }),
     ...mapActions([
       'getUserPlaylists'
@@ -123,9 +126,8 @@ export default {
         // })
       })
     },
-    removeTrackFromPlaylist (track, e) {
-      e.preventDefault()
-      this.removeFromPlaylist({track})
+    removeFromPlaylist (track, e) {
+      this.removeTrackToPlaylist({track})
     }
   },
   computed: {

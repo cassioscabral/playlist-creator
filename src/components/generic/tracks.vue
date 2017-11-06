@@ -11,6 +11,8 @@
       @select-track="selectTrack"
       @swiped-right="swipedRight"
       @swiped-left="swipedLeft"
+      :able-to-swipe-right="!isInThePlaylist(track)"
+      :able-to-swipe-left="isInThePlaylist(track)"
       :added-to-current-playlist="isInThePlaylist(track)"
       :track="track"></trackc>
   </div>
@@ -28,6 +30,18 @@ export default {
     tracks: {
       type: Array,
       required: true
+    },
+    ableToSwipeRight: {
+      type: Boolean,
+      default () {
+        return true
+      }
+    },
+    ableToSwipeLeft: {
+      type: Boolean,
+      default () {
+        return true
+      }
     }
   },
   data () {

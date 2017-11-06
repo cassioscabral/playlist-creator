@@ -36,6 +36,18 @@ export default {
       default () {
         return false
       }
+    },
+    ableToSwipeRight: {
+      type: Boolean,
+      default () {
+        return true
+      }
+    },
+    ableToSwipeLeft: {
+      type: Boolean,
+      default () {
+        return true
+      }
     }
   },
   data () {
@@ -58,29 +70,37 @@ export default {
       this.$emit('doubletap', {...this.track})
     },
     swipeLeft () {
-      console.log('swipeleft')
-      this.swipedLeft = true
-      this.$emit('swiped-left', {...this.track})
-      setTimeout(() => {
-        this.swipedLeft = false
-      }, 1500)
+      if (this.ableToSwipeLeft) {
+        console.log('swipeleft')
+        this.swipedLeft = true
+        this.$emit('swiped-left', {...this.track})
+        setTimeout(() => {
+          this.swipedLeft = false
+        }, 1500)
+      }
     },
     swipeRight () {
-      console.log('swipeRight')
-      this.swipedRight = true
-      this.$emit('swiped-right', {...this.track})
-      setTimeout(() => {
-        this.swipedRight = false
-      }, 1200)
+      if (this.ableToSwipeRight) {
+        console.log('swipeRight')
+        this.swipedRight = true
+        this.$emit('swiped-right', {...this.track})
+        setTimeout(() => {
+          this.swipedRight = false
+        }, 1200)
+      }
     },
     // could be just a horizontal pan
     panningRight (e) {
       // console.log('panningRight', e)
-      this.panPosition = `${e.deltaX}px`
+      if (this.ableToSwipeRight) {
+        this.panPosition = `${e.deltaX}px`
+      }
     },
     panningLeft (e) {
       // console.log('panningLeft', e)
-      this.panPosition = `${e.deltaX}px`
+      if (this.ableToSwipeLeft) {
+        this.panPosition = `${e.deltaX}px`
+      }
     },
     panend (e) {
       console.log('panend e', e)
