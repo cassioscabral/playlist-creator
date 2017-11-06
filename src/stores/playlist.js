@@ -23,22 +23,31 @@ export default {
     previousPlaylist: ({previousPlaylist}) => previousPlaylist
   },
   actions: {
-    push ({commit, state}, {track, getAudioFeatures = false}) {
+    async push ({dispatch, commit, state}, {track, getAudioFeatures = false, autoSave = true}) {
       const newTrack = isEmpty(find(state.playlist, {id: track.id}))
       if (newTrack) { // avoid tracks added to be added again
         if (getAudioFeatures) {
           spotifyApi.getAudioFeaturesForTrack(track.id)
-          .then(data => {
+          .then(async data => {
             track.features = data
             commit('PUSH', {track})
+            if (autoSave) {
+              await dispatch('savePlaylist')
+            }
           })
         } else {
           commit('PUSH', {track})
+          if (autoSave) {
+            await dispatch('savePlaylist')
+          }
         }
       }
     },
-    remove ({commit}, {track}) {
+    async remove ({dispatch, commit}, {track, autoSave = true}) {
       commit('REMOVE', {track})
+      if (autoSave) {
+        await dispatch('savePlaylist')
+      }
     },
     replace ({commit}, {playlistTracks}) {
       commit('REPLACE_PLAYLIST', {playlistTracks})
@@ -131,7 +140,7 @@ export default {
      * @param {any} {state, commit, rootState, dispatch}
      * @param {any} {maximumPerRequest = 100}
      */
-    async savePlaylist ({state, commit, rootState, dispatch}, {maximumPerRequest = 100}) {
+    async savePlaylist ({state, commit, rootState, dispatch}, {maximumPerRequest = 100} = {}) {
       const {currentUser} = rootState
       if (!rootState.accessToken) {
         dispatch('cleanAccess')
