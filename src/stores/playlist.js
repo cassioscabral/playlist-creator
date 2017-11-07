@@ -1,5 +1,8 @@
 import spotifyApi from '../loaders/spotifyApi'
 import {differenceBy, chunk, isEmpty, find} from 'lodash'
+import {
+  changePlaylistName as changePName
+} from 'src/core/spotify-service'
 
 export default {
   namespaced: true,
@@ -58,8 +61,20 @@ export default {
     setOriginalPlaylist ({commit}, {playlistTracks}) {
       commit('REPLACE_ORIGINAL_PLAYLIST', {playlistTracks})
     },
-    changePlaylistName ({commit}, {name}) {
-      commit('CHANGE_PLAYLIST_NAME', {name})
+    async changePlaylistName ({commit, state, rootState}, {name}) {
+      // debugger
+      try {
+        const {currentUser} = rootState
+        spotifyApi.setAccessToken(rootState.accessToken)
+        const userId = currentUser.id
+        const playlistId = state.playlistSpotifyObject.id
+        const result = await changePName(userId, playlistId, name)
+        console.log('result', result)
+        // await dispatch('setPlaylistObject', {playlist})
+        commit('CHANGE_PLAYLIST_NAME', {name})
+      } catch (e) {
+        console.error('error changing the name', e)
+      }
     },
     resetAll ({commit}) {
       commit('RESET_ALL')
@@ -219,7 +234,8 @@ export default {
       state.playlist = state.playlist.filter(t => t.id !== track.id)
     },
     CHANGE_PLAYLIST_NAME (state, {name}) {
-      state.playlistName = `${name}`
+      state.playlistName = name
+      state.playlistSpotifyObject.name = name
     },
     REPLACE_PLAYLIST (state, {playlistTracks}) {
       state.playlist = playlistTracks

@@ -3,7 +3,7 @@
     <header-info>
       <div class="flex a-center space-between w-100">
         <playlist-icon title="playlists"></playlist-icon>
-        <span class="playlist-name">{{currentPlaylist.name}}</span>
+        <span @click="changeName" class="playlist-name">{{currentPlaylist.name}}</span>
         <div class="new-playlist" @click="prompt">
           <plus-circle-icon
           class="icon"
@@ -89,7 +89,8 @@ export default {
       'loadPlaylist',
       'addTracksToPlaylist',
       'savePlaylist',
-      'createPlaylist'
+      'createPlaylist',
+      'changePlaylistName'
     ]),
     ...mapActions('playlist', {
       removeTrackToPlaylist: 'remove'
@@ -128,6 +129,13 @@ export default {
     },
     removeFromPlaylist (track, e) {
       this.removeTrackToPlaylist({track})
+    },
+    changeName () {
+      this.$prompt('Change this playlist name').then(async ({ value, action }) => {
+        console.log('value', value)
+        await this.changePlaylistName({name: value})
+        this.selectedPlaylist = {id: this.selectedPlaylist.id, label: value}
+      })
     }
   },
   computed: {

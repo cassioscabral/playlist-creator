@@ -33,6 +33,8 @@ const searchArtists = async (search, opts = {limit: 20}) => await spotifyApi.sea
 
 const getArtistAlbums = async (artistId, opts = {limit: 50}) => await spotifyApi.getArtistAlbums(artistId, opts)
 
+const changePlaylistName = async (userId, playlistId, name) => await spotifyApi.changePlaylistDetails(userId, playlistId, {name})
+
 // spotifyApi.getArtistAlbums(this.selectedArtist.id, {limit: 50})
 // .then(data => {
 //   this.currentSelectedArtistAlbums = uniqBy(data.items.filter(a => a.album_type === 'album'), 'name')
@@ -49,5 +51,6 @@ module.exports = {
   searchArtists,
   getArtistAlbums,
   getUserPlaylists,
+  changePlaylistName,
   unwrap
 }
