@@ -38,8 +38,8 @@
     </div>
 
     <div class="user-playlist" v-if="playlist.length > 0">
-      <tracks 
-      @swiped-left="removeFromPlaylist" @select-track="selectTrack" 
+      <tracks
+      @swiped-left="removeFromPlaylist" @select-track="selectTrack"
       :able-to-swipe-right="false"
       :tracks="playlist">
       </tracks>
@@ -131,10 +131,14 @@ export default {
       this.removeTrackToPlaylist({track})
     },
     changeName () {
-      this.$prompt('Change this playlist name').then(async ({ value, action }) => {
-        console.log('value', value)
+      this.$prompt('Change this playlist name', '', {
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Cancel',
+        inputErrorMessage: 'Invalid Playlist Name'
+      }).then(async ({ value, action }) => {
         await this.changePlaylistName({name: value})
         this.selectedPlaylist = {id: this.selectedPlaylist.id, label: value}
+        this.getUserPlaylists()
       })
     }
   },
