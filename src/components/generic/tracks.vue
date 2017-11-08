@@ -57,10 +57,12 @@ export default {
       'remove'
     ]),
     selectTrack (track) {
+      console.log('tracks - selecting track', track)
       this.$emit('select-track', track)
       this.changeTrack(track)
     },
     changeTrack (track) {
+      console.log('playing track', track)
       this.playTrack({ track })
     },
     panning () {
