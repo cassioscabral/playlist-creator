@@ -101,10 +101,12 @@ export default {
   .tracks-wrapper {
     overflow-y: scroll; // has to be scroll, not auto
     -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+
     max-height: 72vh;
   }
   header {
-    padding: 0 1rem 0.5rem 0.3rem;
+    padding: 0 1rem 1.5rem 0.3rem;
     display: flex;
     align-items: center;
     justify-content: space-between;

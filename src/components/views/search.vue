@@ -2,7 +2,7 @@
   <div class="search">
     <header-info></header-info>
 
-    <input type="text" v-model="input">
+    <input id="search-input" type="text" v-model="input">
 
     <div class="search-results" v-show="input.length > 0">
       <div class="search-result clickable"
@@ -105,5 +105,18 @@ export default {
   &:last-child {
     border: none;
   }
+}
+
+#search-input {
+  width: 97%;
+  border: 1px solid #cccaca;
+  height: 30px;
+  font-size: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem;
+  border-radius: 4px;
+  margin: 0.4rem 0.2rem 1rem 0.2rem;
 }
 </style>

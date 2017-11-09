@@ -1,5 +1,16 @@
 <template>
-  <v-touch class="track clickable" ref="hammer" @click="emitTrack" @click.native="emitTrack" @panright="panningRight"  @panleft="panningLeft" @swipeleft="swipeLeft" @swiperight="swipeRight" @panend="panend">
+  <v-touch
+    class="track clickable"
+    ref="hammer"
+    @click="emitTrack"
+    @click.native="emitTrack"
+    @panright="panningRight"
+    @panleft="panningLeft"
+    @swipeleft="swipeLeft"
+    @swiperight="swipeRight"
+    :pan-options="{ direction: 'horizontal'}"
+    :swipe-options="{ direction: 'horizontal'}"
+    @panend="panend">
     <div class="flex track-wrapper animated" :class="{'slideInLeft': swipedLeft, 'slideInRight': swipedRight}" :style="{left: panPosition}">
       <div class="flex-col">
         <div class="track-name">
