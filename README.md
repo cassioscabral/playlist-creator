@@ -4,7 +4,9 @@ Create playlists for Spotify easily with option to preview the best part of the 
 
 Video demo:
 
-[![Playlist Creator Demo](http://img.youtube.com/vi/KqgxdkspQ4M/0.jpg)](http://www.youtube.com/watch?v=KqgxdkspQ4M)
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=KqgxdkspQ4M
+" target="_blank"><img src="http://img.youtube.com/vi/KqgxdkspQ4M/0.jpg" 
+alt="Playlist Creator Demo" width="360" height="270" border="10" /></a>
 
 ## Check the demo
 
