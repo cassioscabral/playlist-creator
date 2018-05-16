@@ -2,6 +2,10 @@
 
 Create playlists for Spotify easily with option to preview the best part of the songs, adding songs to your current editing playlist with just a swipe, find related artists in a second.
 
+Video demo:
+
+[![Playlist Creator Demo](http://img.youtube.com/vi/KqgxdkspQ4M/0.jpg)](http://www.youtube.com/watch?v=KqgxdkspQ4M)
+
 ## Check the demo
 
 
