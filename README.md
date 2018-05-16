@@ -11,7 +11,7 @@ alt="Playlist Creator Demo" width="360" height="270" border="10" /></a>
 ## Check the demo
 
 
-V2 (work in progress): https://theplaylistcreator-tdfsqcdhig.now.sh/
+V2 (testable build, not final): https://theplaylistcreator-tdfsqcdhig.now.sh/
 
 V1: https://dist-wucqzmqnxb.now.sh/
 
