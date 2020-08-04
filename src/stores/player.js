@@ -8,8 +8,8 @@ export default {
     currentTrack: {
       // default fallback
       title: 'Preparation',
-      author: 'Hans Zimmer/Richard Harvey',
-      url: 'none',
+      artist: 'Hans Zimmer/Richard Harvey',
+      src: 'none',
       pic: 'http://devtest.qiniudn.com/Preparation.jpg',
       lrc: '[00:00.00]lrc here\n[00:01.00]aplayer'
     },
@@ -25,18 +25,18 @@ export default {
     play ({commit}, {track}) {
       commit('PLAY', {track})
     },
-    playTrack ({commit, rootState}, {track, artist, album}) {
-      const { name: title, preview_url: url } = track
-      const author = get(track, 'artists[0].name') || get(rootState.application.selectedArtist, 'name')
+    playTrack ({commit, rootState}, {track}) {
+      const { name: title, preview_url: src } = track
+      const artistName = get(track, 'artists[0].name') || get(rootState.application.selectedArtist, 'name')
       const pic = get(track, 'album.images[1].url') || get(rootState.application.selectedAlbum, 'images[1].url')
       // format to vue-aplayer which has a similar API to aplayer
-      if (!url) {
+      if (!src) {
         console.warn('song without preview')
       }
       const formattedTrack = {
         title,
-        author,
-        url,
+        artist: artistName,
+        src,
         pic
       }
       commit('PLAY_TRACK', {track: formattedTrack})
