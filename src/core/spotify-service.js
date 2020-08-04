@@ -31,7 +31,7 @@ const getArtistTopTracks = async (artistId, region = 'US') => await spotifyApi.g
 
 const searchArtists = async (search, opts = {limit: 20}) => await spotifyApi.searchArtists(search, opts)
 
-const getArtistAlbums = async (artistId, opts = {limit: 50}) => await spotifyApi.getArtistAlbums(artistId, opts)
+const getArtistAlbums = async (artistId, opts = {limit: 50, country: 'DE'}) => await spotifyApi.getArtistAlbums(artistId, opts)
 
 const changePlaylistName = async (userId, playlistId, name) => await spotifyApi.changePlaylistDetails(userId, playlistId, {name})
 
