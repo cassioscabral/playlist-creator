@@ -50,6 +50,6 @@ export default {
   align-items: center;
   width: 100%;
   height: 56px;
-  background-color: wheat;
+  background-color: #1db954;
 }
 </style>

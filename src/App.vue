@@ -50,6 +50,7 @@
         mutex
         :autoplay="true"
         :music="currentTrack"
+        theme="#1DB954"
         ref="vuePlayer"
       ></a-player>
     </v-main>
