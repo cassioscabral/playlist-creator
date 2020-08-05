@@ -24,7 +24,6 @@ export default {
   position: fixed;
   bottom: 0;
   left: 0;
-  z-index: 4;
   display: flex;
   align-items: center;
   width: 100%;

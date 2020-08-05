@@ -1,6 +1,6 @@
 import spotifyApi from '../loaders/spotifyApi'
 import { differenceBy, chunk, isEmpty, find } from 'lodash'
-import { changePlaylistName as changePName } from 'src/core/spotify-service'
+import { changePlaylistName as changePName } from '../services/spotify-service'
 
 export default {
   namespaced: true,

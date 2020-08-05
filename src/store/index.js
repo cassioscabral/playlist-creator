@@ -6,16 +6,14 @@ import player from './player'
 import playlist from './playlist'
 import createPersistedState from 'vuex-persistedstate'
 import { get } from 'lodash'
-import {
-  // spotifyApi,
-  getUserPlaylists
-} from 'src/core/spotify-service'
+import { getUserPlaylists } from '../services/spotify-service'
 export const store = new Vuex.Store({
   plugins: [createPersistedState()],
   state: {
     accessToken: '',
     currentUser: {},
-    userPlaylists: []
+    userPlaylists: [],
+    navDrawer: false
   },
   getters: {
     accessToken: state => state.accessToken,
@@ -63,6 +61,12 @@ export const store = new Vuex.Store({
     },
     PUSH_PLAYLIST(state, { playlist }) {
       state.userPlaylists.unshift(playlist)
+    },
+    SET_NAV_DRAWER: (state, payload) => {
+      state.navDrawer = payload
+    },
+    TOGGLE_NAV_DRAWER: state => {
+      state.navDrawer = !state.navDrawer
     }
   },
   modules: {

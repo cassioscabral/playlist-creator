@@ -1,4 +1,4 @@
-import { getArtistAlbums, getAlbumTracks } from 'src/core/spotify-service'
+import { getArtistAlbums, getAlbumTracks } from '../services/spotify-service'
 import { get } from 'lodash'
 // import router from 'src/router'
 
@@ -38,11 +38,13 @@ export default {
     },
     selectAlbum({ commit, dispatch }, { album, getTracks = true }) {
       commit('SELECT_ALBUM', { album })
+      console.log('selectAlbum album', album)
       if (getTracks) {
         dispatch('getAlbumTracks', { album })
       }
     },
     async getAlbumTracks({ commit }, { album }) {
+      console.log('getAlbumTracks album', album)
       try {
         const result = await getAlbumTracks(album.id)
         const tracks = get(result, 'items')

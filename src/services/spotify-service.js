@@ -48,7 +48,7 @@ const changePlaylistName = async (userId, playlistId, name) =>
 
 const unwrap = get
 
-module.exports = {
+export {
   spotifyApi,
   getAccessToken,
   generateRandomString,
