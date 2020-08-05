@@ -105,7 +105,11 @@
         active-class="primary"
       >
         <template v-for="(track, index) in selectedAlbumTracks">
-          <v-list-item :value="track" :key="track.id">
+          <v-list-item
+            :value="track"
+            :key="track.id"
+            @click="clickTrackHandler(track)"
+          >
             <template v-slot:default="{ active }">
               <v-list-item-content>
                 <v-list-item-title v-text="track.name"></v-list-item-title>
@@ -169,6 +173,7 @@ export default {
   },
   methods: {
     ...mapActions('application', ['selectArtist', 'selectAlbum']),
+    ...mapActions('player', ['playTrack']),
     getSearchResults: debounce(async function(search) {
       console.log('search', search)
       try {
@@ -189,6 +194,9 @@ export default {
       console.log('changeAlbum album', album)
       this.selectAlbum({ album })
       this.search = ''
+    },
+    clickTrackHandler(track) {
+      this.playTrack({ track })
     },
     msToTime,
     get

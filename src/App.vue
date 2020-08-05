@@ -39,8 +39,17 @@
       >
     </v-app-bar>
 
-    <v-main :class="{ 'pb-12': $vuetify.breakpoint.mobile }">
+    <v-main class="pa-0" :class="{ 'is-mobile': $vuetify.breakpoint.mobile }">
       <router-view></router-view>
+      <a-player
+        class="vue-player"
+        mode="order"
+        v-show="hasTrackSelected"
+        mutex
+        :autoplay="true"
+        :music="currentTrack"
+        ref="vuePlayer"
+      ></a-player>
     </v-main>
 
     <app-bottom-bar v-if="$vuetify.breakpoint.smAndDown" />
@@ -56,12 +65,14 @@ import {
   getAccessToken
 } from './services/spotify-service'
 import { store } from './store'
+import isEmpty from 'lodash/isEmpty'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'App',
-
   components: {
-    AppBottomBar
+    AppBottomBar,
+    'a-player': VueAplayer
   },
   mounted() {
     // store.dispatch('resetAll')
@@ -108,6 +119,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('player', ['autoplay', 'currentTrack']),
     navDrawer: {
       get() {
         return this.$store.state.navDrawer
@@ -115,7 +127,30 @@ export default {
       set(val) {
         this.$store.commit('SET_NAV_DRAWER', val)
       }
+    },
+    hasTrackSelected() {
+      return !isEmpty(this.currentTrack)
+    }
+  },
+  watch: {
+    currentTrack(newVal) {
+      console.log('currentTrack newVal', newVal)
+      this.$refs.vuePlayer.play()
     }
   }
 }
 </script>
+<style lang="scss" scoped>
+.v-main {
+  margin-bottom: 66px;
+  &.is-mobile {
+    margin-bottom: 124px;
+  }
+}
+.vue-player {
+  position: fixed;
+  bottom: 56px;
+  margin: 0px;
+  width: 100%;
+}
+</style>
