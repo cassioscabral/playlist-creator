@@ -2,9 +2,10 @@
   <div class="home">
     <!-- Greeting message -->
     <div class="text-h5 pa-3" v-if="currentUser">
-      Hi {{ currentUser.display_name.split(' ')[0] }}, welcome back!
+      Hi
+      {{ currentUser.display_name && currentUser.display_name.split(' ')[0] }},
+      welcome back!
     </div>
-
     <!-- Search field -->
     <v-text-field
       dark
@@ -104,7 +105,7 @@
         active-class="primary"
       >
         <template v-for="(track, index) in selectedAlbumTracks">
-          <v-list-item :key="track.id">
+          <v-list-item :value="track" :key="track.id">
             <template v-slot:default="{ active }">
               <v-list-item-content>
                 <v-list-item-title v-text="track.name"></v-list-item-title>

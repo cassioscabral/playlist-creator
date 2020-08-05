@@ -1,18 +1,40 @@
 <template>
-  <nav app class="bottom-bar">
+  <nav app dark class="bottom-bar pa-3">
     <div class="bottom-bar__logo">
-      <v-btn icon @click.stop="ToggleNavDrawer()">
+      <v-btn icon @click.stop="toggleNavDrawer()">
         <v-icon color="secondary">mdi-menu</v-icon>
       </v-btn>
     </div>
+    <v-spacer></v-spacer>
+    <!-- <v-btn dark color="success" :loading="false" @click.native="savePlaylist">
+      Update
+    </v-btn> -->
+    <v-btn icon to="/playlists">
+      <!-- TODO add tooltip -->
+      <v-icon color="secondary">mdi-playlist-music</v-icon>
+    </v-btn>
   </nav>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   components: {},
   methods: {
-    ToggleNavDrawer() {
+    ...mapActions('playlist', {
+      addTrackToPlaylist: 'push',
+      removeTrackToPlaylist: 'remove'
+    }),
+    addToPlaylist(track) {
+      console.log('add to playlist', track)
+      this.addTrackToPlaylist({ track })
+    },
+    removeFromPlaylist(track) {
+      console.log('remove from playlist', track)
+      this.removeTrackToPlaylist({ track })
+    },
+    toggleNavDrawer() {
       this.$store.commit('TOGGLE_NAV_DRAWER')
     }
   }
@@ -28,5 +50,6 @@ export default {
   align-items: center;
   width: 100%;
   height: 56px;
+  background-color: wheat;
 }
 </style>
