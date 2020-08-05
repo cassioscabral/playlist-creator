@@ -1,9 +1,10 @@
-const SpotifyApi = require('spotify-web-api-js')
-const instance = new SpotifyApi()
+/* eslint-disable @typescript-eslint/no-var-requires */
+const Spotify = require('spotify-web-api-js')
+const instance = new Spotify()
 
-function getAccessToken () {
+function getAccessToken() {
   if (!window.location.hash) return
-  let r = new RegExp('([^&;=]+)=?([^&;]*)', 'g')
+  const r = new RegExp('([^&;=]+)=?([^&;]*)', 'g')
   return window.location.hash.match(r)[0].split('#access_token=')[1]
 }
 
