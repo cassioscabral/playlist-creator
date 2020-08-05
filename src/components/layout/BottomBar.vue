@@ -9,7 +9,14 @@
     <!-- <v-btn dark color="success" :loading="false" @click.native="savePlaylist">
       Update
     </v-btn> -->
-    <v-btn icon to="/playlists">
+    <v-btn
+      v-if="$route.matched.some(({ name }) => name === 'playlists')"
+      icon
+      to="/"
+    >
+      <v-icon color="secondary">mdi-home</v-icon>
+    </v-btn>
+    <v-btn v-else icon to="/playlists">
       <!-- TODO add tooltip -->
       <v-icon color="secondary">mdi-playlist-music</v-icon>
     </v-btn>
