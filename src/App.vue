@@ -2,6 +2,14 @@
   <v-app id="inspire">
     <v-navigation-drawer v-model="navDrawer" app clipped>
       <v-list dense>
+        <v-list-item link @click="$router.push('/')">
+          <v-list-item-action>
+            <v-icon>mdi-home</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Home</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
         <v-list-item link>
           <v-list-item-action>
             <v-icon>mdi-playlist-music</v-icon>
@@ -26,7 +34,9 @@
         v-if="$vuetify.breakpoint.mdAndUp"
         @click.stop="$store.commit('TOGGLE_NAV_DRAWER')"
       ></v-app-bar-nav-icon>
-      <v-toolbar-title>Spotify Playlist Creator</v-toolbar-title>
+      <v-toolbar-title @click="$router.push('/')"
+        >Spotify Playlist Creator</v-toolbar-title
+      >
     </v-app-bar>
 
     <v-main :class="{ 'pb-12': $vuetify.breakpoint.mobile }">
