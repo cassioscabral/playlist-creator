@@ -48,7 +48,7 @@
         mode="order"
         v-show="hasTrackSelected"
         mutex
-        :autoplay="true"
+        :autoplay="false"
         :music="currentTrack"
         theme="#1DB954"
         ref="vuePlayer"
@@ -92,7 +92,9 @@ export default {
       .catch(e => {
         console.error('error getting me - e:', e)
         store.dispatch('cleanAccess')
-        this.login()
+        setTimeout(() => {
+          this.login()
+        }, 300)
       })
   },
   data: () => ({}),
