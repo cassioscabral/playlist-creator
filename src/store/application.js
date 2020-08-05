@@ -38,7 +38,6 @@ export default {
     },
     selectAlbum({ commit, dispatch }, { album, getTracks = true }) {
       commit('SELECT_ALBUM', { album })
-      console.log('selectAlbum album', album)
       if (getTracks) {
         dispatch('getAlbumTracks', { album })
       }

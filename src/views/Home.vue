@@ -50,7 +50,7 @@
           </v-card-subtitle>
         </div>
 
-        <v-avatar class="ma-3" size="125" tile>
+        <v-avatar class="ma-3" size="120" tile>
           <v-img :src="selectedArtist.images[0].url"></v-img>
         </v-avatar>
       </div>
@@ -60,7 +60,7 @@
     <v-slide-group
       v-if="selectedArtist"
       @change="changeAlbum"
-      class="pa-4"
+      class="albums-collection pa-4"
       mandatory
       center-active
     >
@@ -175,11 +175,9 @@ export default {
     ...mapActions('application', ['selectArtist', 'selectAlbum']),
     ...mapActions('player', ['playTrack']),
     getSearchResults: debounce(async function(search) {
-      console.log('search', search)
       try {
         if (search.length > 0) {
           const result = await searchArtists(search)
-          console.log('result', result)
           this.artists = get(result, 'artists.items')
         }
       } catch (error) {
@@ -187,11 +185,9 @@ export default {
       }
     }, 300),
     selectAnArtist(artist) {
-      console.log('selectAnArtist artist', artist)
       this.selectArtist({ artist })
     },
     changeAlbum(album) {
-      console.log('changeAlbum album', album)
       this.selectAlbum({ album })
       this.search = ''
     },
@@ -203,7 +199,6 @@ export default {
   },
   watch: {
     search(newSearch) {
-      console.log('newSearch', newSearch)
       this.getSearchResults(newSearch)
     }
   }
@@ -214,5 +209,9 @@ export default {
   width: 38px;
   height: 38px;
   border-radius: 50%;
+}
+.albums-collection {
+  // Dark Primary color. TODO use vuetify color directly
+  background-color: #191414;
 }
 </style>
