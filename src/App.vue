@@ -39,8 +39,10 @@
       >
     </v-app-bar>
 
-    <v-main class="pa-0" :class="{ 'is-mobile': $vuetify.breakpoint.mobile }">
-      <router-view></router-view>
+    <v-main :class="{ 'is-mobile': $vuetify.breakpoint.mobile }">
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
       <a-player
         class="vue-player"
         mode="order"
@@ -100,7 +102,6 @@ export default {
 
   methods: {
     login() {
-      console.log('logging in')
       const stateKey = 'spotify_auth_state'
       const clientId = '49275dd30324422b8bbba8bdea0e7b8c' // Your client id
       const redirectUri = window.location.origin + '/' // Your redirect uri
@@ -134,8 +135,7 @@ export default {
   },
   watch: {
     currentTrack(newVal) {
-      console.log('currentTrack newVal', newVal)
-      this.$refs.vuePlayer.play()
+      // this.$refs.vuePlayer.play()
     }
   }
 }
