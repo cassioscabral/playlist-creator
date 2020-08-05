@@ -89,6 +89,10 @@ export default {
         store.dispatch('saveCurrentUser', { currentUser: me })
         return me
       })
+      .then(res => {
+        store.dispatch('application/cleanSelectedAlbum')
+        return res
+      })
       .catch(e => {
         console.error('error getting me - e:', e)
         store.dispatch('cleanAccess')
