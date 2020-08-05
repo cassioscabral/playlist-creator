@@ -44,7 +44,6 @@ export default {
       }
     },
     async getAlbumTracks({ commit }, { album }) {
-      console.log('getAlbumTracks album', album)
       try {
         const result = await getAlbumTracks(album.id)
         const tracks = get(result, 'items')

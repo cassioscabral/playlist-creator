@@ -29,7 +29,7 @@
       <v-toolbar-title>Spotify Playlist Creator</v-toolbar-title>
     </v-app-bar>
 
-    <v-main>
+    <v-main :class="{ 'pb-12': $vuetify.breakpoint.mobile }">
       <router-view></router-view>
     </v-main>
 

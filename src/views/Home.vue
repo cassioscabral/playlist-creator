@@ -95,6 +95,50 @@
         </v-card>
       </v-slide-item>
     </v-slide-group>
+
+    <!-- Selected Album tracks -->
+    <v-list v-if="selectedAlbumTracks" two-line>
+      <v-list-item-group
+        v-model="selectedTracks"
+        multiple
+        active-class="primary"
+      >
+        <template v-for="(track, index) in selectedAlbumTracks">
+          <v-list-item :key="track.id">
+            <template v-slot:default="{ active }">
+              <v-list-item-content>
+                <v-list-item-title v-text="track.name"></v-list-item-title>
+                <v-list-item-subtitle
+                  class="text--primary"
+                  v-text="get(track, 'album.name')"
+                ></v-list-item-subtitle>
+                <v-list-item-subtitle
+                  v-text="get(track, 'artists[0].name')"
+                ></v-list-item-subtitle>
+              </v-list-item-content>
+
+              <v-list-item-action>
+                <v-list-item-action-text
+                  v-text="msToTime(track.duration_ms)"
+                ></v-list-item-action-text>
+                <v-icon v-if="!active" color="accent">
+                  mdi-check-box
+                </v-icon>
+
+                <v-icon v-else color="success">
+                  mdi-check-box-outline
+                </v-icon>
+              </v-list-item-action>
+            </template>
+          </v-list-item>
+
+          <v-divider
+            v-if="index + 1 < selectedAlbumTracks.length"
+            :key="index"
+          ></v-divider>
+        </template>
+      </v-list-item-group>
+    </v-list>
   </div>
 </template>
 
@@ -103,6 +147,7 @@ import { searchArtists } from '../services/spotify-service'
 import get from 'lodash/get'
 import debounce from 'lodash/debounce'
 import { mapGetters, mapActions } from 'vuex'
+import { msToTime } from '../utils'
 
 export default {
   name: 'Home',
@@ -110,9 +155,8 @@ export default {
   data: () => ({
     search: '',
     selectedArtist: null,
-    artists: []
-    // selectedAlbum: null,
-    // albums: []
+    artists: [],
+    selectedTracks: []
   }),
   computed: {
     ...mapGetters('application', [
@@ -144,7 +188,9 @@ export default {
       console.log('changeAlbum album', album)
       this.selectAlbum({ album })
       this.search = ''
-    }
+    },
+    msToTime,
+    get
   },
   watch: {
     search(newSearch) {
