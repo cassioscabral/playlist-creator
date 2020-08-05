@@ -24,11 +24,15 @@ export default {
         dispatch('getAlbums', { artist, goTo: 'home' })
       }
     },
-    async getAlbums({ commit }, { artist, goTo = false }) {
+    async getAlbums({ commit, dispatch }, { artist, goTo = false }) {
       try {
         const result = await getArtistAlbums(artist.id)
         const albums = get(result, 'items')
         commit('ALBUMS', { albums })
+        if (albums && albums.length > 0) {
+          // Preselect first album available
+          dispatch('selectAlbum', { album: albums[0] })
+        }
         if (goTo) {
           // router.push(goTo)
         }
