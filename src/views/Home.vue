@@ -8,8 +8,7 @@
     </div>
     <!-- Search field -->
     <v-text-field
-      dark
-      color="secondary"
+      color="secundary"
       label="Search for an artist..."
       hide-details="auto"
       class="pa-3"
