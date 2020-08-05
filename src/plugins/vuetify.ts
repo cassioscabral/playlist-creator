@@ -16,7 +16,7 @@ const opts = {
       },
       dark: {
         primary: "#191414",
-        secondary: "#212121",
+        secondary: "#fff",
         accent: "#8c9eff",
         error: "#b71c1c",
         info: "#2196F3",
