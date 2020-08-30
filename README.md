@@ -1,5 +1,9 @@
 # playlist-creator
 
+V3 is in working progress.
+
+Check the latest demo here: https://playlist-creator-v3.vercel.app/
+
 ## Project setup
 ```
 yarn install
