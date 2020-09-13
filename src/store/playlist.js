@@ -86,14 +86,11 @@ export default {
     },
     async loadPlaylist({ commit, rootState }, { playlist }) {
       try {
-        // TODO move things into try/catch
         commit('SET_PLAYLIST_OBJ', { playlist })
         spotifyApi.setAccessToken(rootState.accessToken)
 
-        const { items, next } = await spotifyApi.getPlaylistTracks(
-          rootState.currentUser.id,
-          playlist.id
-        )
+        const res = await spotifyApi.getPlaylistTracks(playlist.id)
+        const { items, next } = res
         let playlistTracks = items.map(i => i.track)
         let currentNext = next
         // add the rest of the tracks

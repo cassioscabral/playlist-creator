@@ -117,52 +117,10 @@
     </v-slide-group>
 
     <!-- Selected Album tracks -->
-    <v-list v-if="selectedAlbumTracks" two-line>
-      <v-list-item-group
-        v-model="selectedTracks"
-        multiple
-        active-class="primary"
-      >
-        <template v-for="(track, index) in selectedAlbumTracks">
-          <v-list-item
-            :value="track"
-            :key="track.id"
-            @click="clickTrackHandler(track)"
-          >
-            <template v-slot:default="{ active }">
-              <v-list-item-content>
-                <v-list-item-title v-text="track.name"></v-list-item-title>
-                <v-list-item-subtitle
-                  class="text--primary"
-                  v-text="get(track, 'album.name')"
-                ></v-list-item-subtitle>
-                <v-list-item-subtitle
-                  v-text="get(track, 'artists[0].name')"
-                ></v-list-item-subtitle>
-              </v-list-item-content>
-
-              <v-list-item-action>
-                <v-list-item-action-text
-                  v-text="msToTime(track.duration_ms)"
-                ></v-list-item-action-text>
-                <v-icon v-if="!active" color="accent">
-                  mdi-check-box
-                </v-icon>
-
-                <v-icon v-else color="success">
-                  mdi-check-box-outline
-                </v-icon>
-              </v-list-item-action>
-            </template>
-          </v-list-item>
-
-          <v-divider
-            v-if="index + 1 < selectedAlbumTracks.length"
-            :key="index"
-          ></v-divider>
-        </template>
-      </v-list-item-group>
-    </v-list>
+    <tracks-manager
+      :tracks="selectedAlbumTracks"
+      :clickTrackHandler="clickTrackHandler"
+    ></tracks-manager>
   </div>
 </template>
 
@@ -172,10 +130,13 @@ import get from 'lodash/get'
 import debounce from 'lodash/debounce'
 import { mapGetters, mapActions } from 'vuex'
 import { msToTime } from '../utils'
+import TracksManager from '../components/TracksManager.vue'
 
 export default {
   name: 'Home',
-  components: {},
+  components: {
+    TracksManager
+  },
   data: () => ({
     search: '',
     selectedArtist: null,

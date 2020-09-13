@@ -1,6 +1,6 @@
 <template>
-  <v-container class="playlists">
-    <div class="text-h4 my-3">
+  <v-container class="playlists pa-0">
+    <div class="text-h4 my-3 pa-2">
       Your playlists
     </div>
     <v-select
@@ -9,18 +9,27 @@
       :items="playlistsOptions"
       item-text="label"
       filled
+      return-object
       label="Select a playlist"
       @change="selectPlaylist"
     ></v-select>
+    <tracks-manager
+      :tracks="playlist"
+      :clickTrackHandler="clickTrackHandler"
+    ></tracks-manager>
   </v-container>
 </template>
 
 <script>
 import isEmpty from 'lodash/isEmpty'
 import { mapGetters, mapActions } from 'vuex'
+import TracksManager from '../components/TracksManager.vue'
 
 export default {
   name: 'Playlists',
+  components: {
+    TracksManager
+  },
   beforeRouteEnter(to, from, next) {
     next(vm => {
       isEmpty(vm.playlists) ? vm.getUserPlaylists() : null
@@ -56,7 +65,9 @@ export default {
     },
     selectPlaylist(playlistOption) {
       // comes from el-option value
+      console.log('playlistOption', playlistOption)
       const { id: playlistId } = playlistOption
+      // TODO normalization option
       const playlist = this.userPlaylists.find(p => p.id === playlistId)
       this.loadPlaylist({ playlist })
     },
@@ -87,7 +98,7 @@ export default {
       this.removeTrackToPlaylist({ track })
     },
     changeName() {
-      // this.$prompt('Change this playlist name', '', {
+      // this.$prompt('Change this playlist name', '', {arr
       //   confirmButtonText: 'OK',
       //   cancelButtonText: 'Cancel',
       //   inputErrorMessage: 'Invalid Playlist Name'
@@ -96,6 +107,9 @@ export default {
       //   this.selectedPlaylist = { id: this.selectedPlaylist.id, label: value }
       //   this.getUserPlaylists()
       // })
+    },
+    clickTrackHandler(track) {
+      console.log('clickTrackHandler track', track)
     }
   },
   computed: {
