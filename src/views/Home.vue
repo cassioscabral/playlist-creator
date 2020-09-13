@@ -1,11 +1,32 @@
 <template>
   <div class="home">
-    <!-- Greeting message -->
+    <!-- Greeting message TODO this should hide after some time -->
     <div class="text-h5 pa-3" v-if="currentUser">
       Hi
       {{ currentUser.display_name && currentUser.display_name.split(' ')[0] }},
       welcome back!
     </div>
+    <!-- Add or Edit Playlist Journey -->
+    <v-container>
+      <v-row>
+        <v-col cols="12" md="6">
+          <v-btn class="mx-2" light color="primary">
+            <v-icon class="mr-2" dark>mdi-plus</v-icon>
+            Create a fresh new playlist
+          </v-btn>
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-btn
+            class="mx-2"
+            color="secondary"
+            @click="$router.push({ name: 'playlists' })"
+          >
+            <v-icon class="mr-2" dark>mdi-format-list-bulleted-square</v-icon>
+            Change your playlist
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-container>
     <!-- Search field -->
     <v-text-field
       color="secundary"
@@ -14,7 +35,6 @@
       class="pa-3"
       v-model="search"
     ></v-text-field>
-
     <!-- Search results -->
     <v-list v-if="search && search.length > 0">
       <v-list-item-group v-model="selectedArtist" @change="selectAnArtist">

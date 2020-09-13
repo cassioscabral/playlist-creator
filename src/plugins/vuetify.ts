@@ -15,9 +15,9 @@ const opts = {
         warning: "#FB8C00"
       },
       dark: {
-        primary: "#191414",
-        secondary: "#1d1d1d",
-        accent: "#313131",
+        primary: "#1DB954",
+        secondary: "#29C45B",
+        accent: "#4ae54a",
         error: "#b71c1c",
         info: "#2196F3",
         success: "#4CAF50",
