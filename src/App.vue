@@ -2,7 +2,7 @@
   <v-app id="inspire">
     <v-navigation-drawer v-model="navDrawer" app clipped>
       <v-list dense>
-        <v-list-item link @click="$router.push('/')">
+        <v-list-item link @click="$router.push({ name: 'home' })">
           <v-list-item-action>
             <v-icon>mdi-home</v-icon>
           </v-list-item-action>
@@ -10,7 +10,7 @@
             <v-list-item-title>Home</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link>
+        <v-list-item link @click="$router.push({ name: 'playlists' })">
           <v-list-item-action>
             <v-icon>mdi-playlist-music</v-icon>
           </v-list-item-action>
@@ -31,7 +31,6 @@
 
     <v-app-bar app clipped-left>
       <v-app-bar-nav-icon
-        v-if="$vuetify.breakpoint.mdAndUp"
         @click.stop="$store.commit('TOGGLE_NAV_DRAWER')"
       ></v-app-bar-nav-icon>
       <v-toolbar-title @click="$router.push('/')"
@@ -39,7 +38,7 @@
       >
     </v-app-bar>
 
-    <v-main :class="{ 'is-mobile': $vuetify.breakpoint.mobile }">
+    <v-main :class="{ 'is-mobile': $vuetify.breakpoint.smAndDown }">
       <keep-alive>
         <router-view></router-view>
       </keep-alive>
@@ -54,12 +53,9 @@
         ref="vuePlayer"
       ></a-player>
     </v-main>
-
-    <app-bottom-bar v-if="$vuetify.breakpoint.smAndDown" />
   </v-app>
 </template>
 <script>
-import AppBottomBar from './components/layout/BottomBar.vue'
 import VueAplayer from 'vue-aplayer'
 
 import {
@@ -74,7 +70,6 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'App',
   components: {
-    AppBottomBar,
     'a-player': VueAplayer
   },
   mounted() {
@@ -149,15 +144,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 .v-main {
-  margin-bottom: 66px;
-  &.is-mobile {
-    margin-bottom: 124px;
+  .vue-player {
+    position: fixed;
+    bottom: 0;
+    margin: 0px;
+    width: 100%;
   }
-}
-.vue-player {
-  position: fixed;
-  bottom: 56px;
-  margin: 0px;
-  width: 100%;
 }
 </style>

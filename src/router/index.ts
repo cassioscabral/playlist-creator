@@ -8,7 +8,7 @@ Vue.use(VueRouter)
 const routes: Array<RouteConfig> = [
   {
     path: '/',
-    name: 'Home',
+    name: 'home',
     component: Home
   },
   { path: '/:access-token', component: Home },

@@ -1,0 +1,13 @@
+/*
+  @include variant('.is-mobile') {
+    width: 100px;
+  }
+  This will apply the "width: 100px" only when the root element
+  has the variant '.is-mobile'.
+  Suited for changing an element based in root parent variant (e.g. is-active, is-mobile)
+*/
+@mixin variant($selector) {
+  @at-root #{$selector}#{&} {
+    @content;
+  }
+}
