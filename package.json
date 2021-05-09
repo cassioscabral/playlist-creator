@@ -11,7 +11,7 @@
   "dependencies": {
     "@mdi/font": "^3.6.95",
     "core-js": "^3.6.5",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "register-service-worker": "^1.7.1",
     "roboto-fontface": "*",
     "spotify-web-api-js": "^1.5.0",
